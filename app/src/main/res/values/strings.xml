@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">GroupAppProject</string>
+
+
+
+
+
+
+
+    <!-- Write your name under here to test your git. Add your name and push your changes to either
+        your branch or master branch -->
+
+    <string name="collab1">Hari G Kuduva</string>
+
+
 </resources>
