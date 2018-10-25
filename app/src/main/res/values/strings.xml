@@ -1,16 +1,44 @@
 <resources>
     <string name="app_name">GroupAppProject</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
+    <string name="welcome">Welcome!</string>
+    <string name="hint">Please login or register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="registerHint">Please register for an account</string>
+    <string name="empty">Empty field</string>
+    <string name="passNotMatch">Password does not match</string>
+    <string name="passToSmall">Password must be at least 6 characters</string>
+    <string name="success">Login Successful!</string>
+    <string name="missingChar">Field is missing @ symbol</string>
+
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
 
 
+    <string name="ep_base_url">tcss450a18.herokuapp.com</string>
+    <string name="ep_login">login</string>
+    <string name="ep_register">register</string>
 
 
+    <string name="ep_phish">phish</string>
+    <string name="ep_blog">blog</string>
+    <string name="ep_get">get</string>
 
-    <!-- Write your name under here to test your git. Add your name and push your changes to either
-        your branch or master branch -->
 
-    <string name="collab1">Hari G Kuduva</string>
-
+    <string name="ep_setlist">setlists</string>
+    <string name="ep_recent">recent</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
