@@ -1,8 +1,10 @@
 package utility;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 
 import fragments.AddUserFragment;
@@ -81,6 +83,12 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Credentials getUserCreds() {
         return this.userCreds;
+    }
+
+
+
+    public void makeToast(Context context, String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
 }
