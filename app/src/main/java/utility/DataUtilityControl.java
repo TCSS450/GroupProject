@@ -13,6 +13,7 @@ import fragments.CreateGroupFragment;
 import fragments.HomeViewFragment;
 import fragments.LoginFragment;
 import fragments.RegisterFragment;
+import fragments.VerificationFragment;
 import fragments.ViewConnectionsFragment;
 import fragments.ViewRequestsFragment;
 import fragments.ViewWeatherFragment;
@@ -30,6 +31,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private ViewRequestsFragment viewRequestsFragment;
     private ViewWeatherFragment viewWeatherFragment;
     private HomeViewFragment homeViewFragment;
+    private VerificationFragment verificationFragment;
 
 
     private Credentials userCreds;
@@ -71,6 +73,13 @@ public class DataUtilityControl extends AppCompatActivity {
     public Fragment getViewWeatherFragment() {return this.viewWeatherFragment;}
 
     public Fragment getHomeViewFragment() {return this.homeViewFragment;}
+
+    public Fragment getVerificationFragment() {
+        if (verificationFragment == null) {
+            this.verificationFragment = new VerificationFragment();
+        }
+        return verificationFragment;
+    }
 
 
     public Uri getLoginEndPointURI() {

@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">GroupAppProject</string>
+    <string name="app_name">ChitChat</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-
+    <!--registration and password text-->
     <string name="welcome">Welcome!</string>
     <string name="hint">Please login or register</string>
     <string name="nickname">Nickname</string>
@@ -24,6 +24,13 @@
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
 
+    <!--Verification-->
+    <string name="verification_greeting_title">Who Are You?</string>
+    <string name="verification_greeting_subtitle">Go ahead an enter the 4 digit pin you received in your email and you\'ll never have to do this again...</string>
+    <string name="verification_prompt">Enter your 4 digit verification pin</string>
+    <string name="verification_resend_email">Resend Pin</string>
+    <string name="verification_validate_code">Validate Me</string>
+
     <!--End Points-->
     <string name="ep_base_url">tcss450a18.herokuapp.com</string>
     <string name="ep_login">login</string>
@@ -39,19 +46,11 @@
     <string name="home_drawer_weather">Weather</string>
 
 
-    <!--todo: remove old endpoints-->
-    <string name="ep_phish">phish</string>
-    <string name="ep_blog">blog</string>
-    <string name="ep_get">get</string>
-
-
-    <string name="ep_setlist">setlists</string>
-    <string name="ep_recent">recent</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">ChitChat</string>
+    <string name="nav_header_subtitle">Get chatting</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
