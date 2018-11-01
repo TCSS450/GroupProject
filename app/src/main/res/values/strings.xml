@@ -24,12 +24,22 @@
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
 
-
+    <!--End Points-->
     <string name="ep_base_url">tcss450a18.herokuapp.com</string>
     <string name="ep_login">login</string>
     <string name="ep_register">register</string>
 
+    <!--Activity home drawer nav labels-->
+    <string name="home_drawer_home">Home</string>
+    <string name="home_drawer_add_user">Add User</string>
+    <string name="home_drawer_create_chat">Create Chat</string>
+    <string name="home_drawer_create_group">Create Group</string>
+    <string name="home_drawer_connections">Your Connections</string>
+    <string name="home_drawer_requests">View Requests</string>
+    <string name="home_drawer_weather">Weather</string>
 
+
+    <!--todo: remove old endpoints-->
     <string name="ep_phish">phish</string>
     <string name="ep_blog">blog</string>
     <string name="ep_get">get</string>

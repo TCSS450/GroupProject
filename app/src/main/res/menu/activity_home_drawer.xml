@@ -8,37 +8,37 @@
         <item
             android:id="@+id/home"
             android:icon="@drawable/home"
-            android:title="Home" />
+            android:title="@string/home_drawer_home" />
 
         <item
             android:id="@+id/addUser"
             android:icon="@drawable/add_person"
-            android:title="Add User" />
+            android:title="@string/home_drawer_add_user" />
 
         <item
             android:id="@+id/createChat"
             android:icon="@drawable/chat"
-            android:title="Create Chat" />
+            android:title="@string/home_drawer_create_chat" />
 
         <item
             android:id="@+id/createGroup"
             android:icon="@drawable/groupchat"
-            android:title="Create Group" />
+            android:title="@string/home_drawer_create_group" />
 
         <item
             android:id="@+id/connections"
             android:icon="@drawable/connections"
-            android:title="Your Connections" />
+            android:title="@string/home_drawer_connections" />
 
         <item
             android:id="@+id/requests"
             android:icon="@drawable/requests"
-            android:title="View Requests" />
+            android:title="@string/home_drawer_requests" />
 
         <item
             android:id="@+id/weather"
             android:icon="@drawable/weather"
-            android:title="Weather" />
+            android:title="@string/home_drawer_weather" />
     </group>
 
 </menu>
