@@ -68,9 +68,9 @@ public class LoginFragment extends Fragment {
     private void attemptLogin(EditText username, EditText password) {
         if (username.getText().toString().length() == 0) {
             username.setError(getString(R.string.empty));
-        } else if (!username.getText().toString().contains("@")) {
+        } /*else if (!username.getText().toString().contains("@")) {
             username.setError(getString(R.string.missingChar));
-        } else if (password.getText().toString().length() == 0) {
+        }*/ else if (password.getText().toString().length() == 0) {
             password.setError(getString(R.string.empty));
         } else {
             loginCreds = new Credentials.Builder(username.getText().toString(),
@@ -98,6 +98,11 @@ public class LoginFragment extends Fragment {
     }
 
     private void handleLoginOnPost(String result) {
+        /*1- Successful Login
+		2- Email/NN doesn’t exist in DB (prompt user to register)
+		3- Email/NN exists in DB, but password was incorrect (tell user to re-enter pass)
+		4- Email/NN exists, but user is still not verified
+		5-  Incorrect Input to endpoint / any other error */
         try {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
@@ -108,11 +113,14 @@ public class LoginFragment extends Fragment {
             }  else if (status == 2) { // email does not exist in DB, prompt to register
                 mListener.onWaitFragmentInteractionHide();
                 this.duc.makeToast(getContext(),
-                        "Email not in our system, please register");
+                        "Email not in our system/unrecognized nickname, please register");
             } else if (status == 3) {
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.passwordInput))
                         .setError("Password Invalid");
+            } else if (status == 4) {
+                //Email/NN exists but user is still not verified
+                //Handle action here, ie Open up verification fragment
             } else {
                 //mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.usernameInput))

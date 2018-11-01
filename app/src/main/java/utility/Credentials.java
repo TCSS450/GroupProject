@@ -22,6 +22,7 @@ public class Credentials implements Serializable {
     private String mFirstName;
     private String mLastName;
     private String mEmail;
+    
 
     /**
      * Helper class for building Credentials.
