@@ -1,4 +1,4 @@
-package fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments;
 
 
 import android.os.Bundle;
@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ViewWeatherFragment#newInstance} factory method to
+ * Use the {@link CreateChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewWeatherFragment extends Fragment {
+public class CreateChatFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -25,7 +26,7 @@ public class ViewWeatherFragment extends Fragment {
     private String mParam2;
 
 
-    public ViewWeatherFragment() {
+    public CreateChatFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +36,11 @@ public class ViewWeatherFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewWeatherFragment.
+     * @return A new instance of fragment CreateChatFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewWeatherFragment newInstance(String param1, String param2) {
-        ViewWeatherFragment fragment = new ViewWeatherFragment();
+    public static CreateChatFragment newInstance(String param1, String param2) {
+        CreateChatFragment fragment = new CreateChatFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,7 +61,7 @@ public class ViewWeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_weather, container, false);
+        return inflater.inflate(R.layout.fragment_create_chat, container, false);
     }
 
 }

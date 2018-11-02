@@ -1,4 +1,4 @@
-package activities;
+package group3.tcss450.uw.edu.groupappproject.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,10 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import utility.Constants;
-import utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
-public class HomeActivity extends AppCompatActivity
+public class HomeActivity extends MenuOptionsActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private DataUtilityControl duc;
 
@@ -64,7 +64,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.menu_options, menu);
         return true;
     }
 

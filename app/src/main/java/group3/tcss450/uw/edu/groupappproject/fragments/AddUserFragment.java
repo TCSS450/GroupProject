@@ -1,4 +1,4 @@
-package fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments;
 
 
 import android.os.Bundle;

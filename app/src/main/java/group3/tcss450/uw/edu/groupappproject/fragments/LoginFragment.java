@@ -1,4 +1,4 @@
-package fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -16,10 +16,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import utility.Constants;
-import utility.Credentials;
-import utility.DataUtilityControl;
-import utility.SendPostAsyncTask;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 public class LoginFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

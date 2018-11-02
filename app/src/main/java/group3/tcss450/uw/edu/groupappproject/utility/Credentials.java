@@ -1,4 +1,4 @@
-package utility;
+package group3.tcss450.uw.edu.groupappproject.utility;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;

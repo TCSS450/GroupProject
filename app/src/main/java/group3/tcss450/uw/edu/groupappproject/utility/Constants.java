@@ -1,4 +1,4 @@
-package utility;
+package group3.tcss450.uw.edu.groupappproject.utility;
 
 public class Constants {
 

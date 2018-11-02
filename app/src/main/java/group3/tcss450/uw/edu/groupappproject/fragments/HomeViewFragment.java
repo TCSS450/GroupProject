@@ -1,4 +1,4 @@
-package fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments;
 
 
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import group3.tcss450.uw.edu.groupappproject.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ViewRequestsFragment#newInstance} factory method to
+ * Use the {@link HomeViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewRequestsFragment extends Fragment {
+public class HomeViewFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -25,7 +25,7 @@ public class ViewRequestsFragment extends Fragment {
     private String mParam2;
 
 
-    public ViewRequestsFragment() {
+    public HomeViewFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +35,11 @@ public class ViewRequestsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewRequestsFragment.
+     * @return A new instance of fragment HomeViewFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewRequestsFragment newInstance(String param1, String param2) {
-        ViewRequestsFragment fragment = new ViewRequestsFragment();
+    public static HomeViewFragment newInstance(String param1, String param2) {
+        HomeViewFragment fragment = new HomeViewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,7 +60,7 @@ public class ViewRequestsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_requests, container, false);
+        return inflater.inflate(R.layout.fragment_home_view, container, false);
     }
 
 }

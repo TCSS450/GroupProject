@@ -1,4 +1,4 @@
-package utility;
+package group3.tcss450.uw.edu.groupappproject.utility;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,17 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 
-import fragments.AddUserFragment;
-import fragments.CreateChatFragment;
-import fragments.CreateGroupFragment;
-import fragments.HomeViewFragment;
-import fragments.LoginFragment;
-import fragments.RegisterFragment;
-import fragments.VerificationFragment;
-import fragments.ViewConnectionsFragment;
-import fragments.ViewRequestsFragment;
-import fragments.ViewWeatherFragment;
-import fragments.WaitFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.AddUserFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewRequestsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewWeatherFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 
 
 public class DataUtilityControl extends AppCompatActivity {

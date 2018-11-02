@@ -1,4 +1,4 @@
-package fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import utility.Constants;
-import utility.DataUtilityControl;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 /**
  * A simple {@link Fragment} subclass.

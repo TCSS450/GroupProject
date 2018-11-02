@@ -1,11 +1,11 @@
-package activities;
+package group3.tcss450.uw.edu.groupappproject.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import utility.Constants;
-import utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 public class MainActivity extends AppCompatActivity {
     @Override
