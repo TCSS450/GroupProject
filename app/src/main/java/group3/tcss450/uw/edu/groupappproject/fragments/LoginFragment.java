@@ -52,11 +52,11 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
-        EditText username = v.findViewById(R.id.usernameInput);
+        EditText nickname = v.findViewById(R.id.nicknameInput);
         EditText password = v.findViewById(R.id.passwordInput);
 
         Button b = v.findViewById(R.id.loginBtn);
-        b.setOnClickListener(view -> attemptLogin(username, password));
+        b.setOnClickListener(view -> attemptLogin(nickname, password));
 
         b = v.findViewById(R.id.registerBtn);
         b.setOnClickListener(view ->
@@ -65,15 +65,15 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void attemptLogin(EditText username, EditText password) {
-        if (username.getText().toString().length() == 0) {
-            username.setError(getString(R.string.empty));
+    private void attemptLogin(EditText nickname, EditText password) {
+        if (nickname.getText().toString().length() == 0) {
+            nickname.setError(getString(R.string.empty));
         } /*else if (!username.getText().toString().contains("@")) {
             username.setError(getString(R.string.missingChar));
         }*/ else if (password.getText().toString().length() == 0) {
             password.setError(getString(R.string.empty));
         } else {
-            loginCreds = new Credentials.Builder(username.getText().toString(),
+            loginCreds = new Credentials.Builder(nickname.getText().toString(),
                     password.getText().toString()).build();
 
             Uri loginUri = this.duc.getLoginEndPointURI();
@@ -123,7 +123,7 @@ public class LoginFragment extends Fragment {
                 //Handle action here, ie Open up verification fragment
             } else {
                 //mListener.onWaitFragmentInteractionHide();
-                ((TextView) getView().findViewById(R.id.usernameInput))
+                ((TextView) getView().findViewById(R.id.nicknameInput))
                         .setError("Login Unsuccessful");
             }
         } catch (JSONException e) {
@@ -131,18 +131,10 @@ public class LoginFragment extends Fragment {
                     + System.lineSeparator()
                     + e.getMessage());
             mListener.onWaitFragmentInteractionHide();
-            ((TextView) getView().findViewById(R.id.usernameInput))
+            ((TextView) getView().findViewById(R.id.nicknameInput))
                     .setError("Login Unsuccessful");
         }
     }
-
-
-
-
-
-
-
-
 
     @Override
     public void onAttach(Context context) {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
@@ -64,11 +65,18 @@ public class PreLoginRegisterActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Loads the Verification Fragment after user registers.
+     * @param credentials Users credentials
+     */
     @Override
     public void registerUser(Credentials credentials) {
-        //Save new user to db, then login the user
+        this.duc.saveCreds(credentials);
+        loadFragment(duc.getVerificationFragment());
+    }
 
-        OnLogin(credentials);
-
+    public void verifyUser(Credentials credentials) {
+        //Do we still save the credentials?
+        loadFragment(duc.getVerificationFragment());
     }
 }

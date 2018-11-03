@@ -4,17 +4,21 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--registration and password text-->
-    <string name="welcome">Welcome!</string>
+    <string name="welcome">Welcome to ChitChat!</string>
     <string name="hint">Please login or register</string>
     <string name="nickname">Nickname</string>
     <string name="phoneNumber">Phone Number</string>
+    <string name="invalidPhone">Invalid Phone Number. ex: 2531234567</string>
+    <string name="invalidEmail">Invalid Email Address</string>
+    <string name="emailExists">This email already exists. Please login or register with a different email.</string>
+    <string name="nickNameExists">This nick name already exists. Please login or register with a different nickname.</string>
     <string name="email">Email</string>
     <string name="fullName">Full Name</string>
-    <string name="UserDisplayPrefMessage">How would you like to be displayed to the world:</string>
+    <string name="UserDisplayPrefMessage">How would you like to be displayed to others:</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
-    <string name="registerHint">Please register for an account</string>
+    <string name="registerHint">Please register for an account:</string>
     <string name="empty">Empty field</string>
     <string name="passNotMatch">Password does not match</string>
     <string name="passToSmall">Password must be at least 6 characters</string>

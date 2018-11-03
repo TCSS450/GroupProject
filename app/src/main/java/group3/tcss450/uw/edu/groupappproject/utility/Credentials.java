@@ -16,13 +16,16 @@ import java.io.Serializable;
 public class Credentials implements Serializable {
     private static final long serialVersionUID = -1634677417576883013L;
 
-    private final String mUsername;
+
+    private final String mEmail;
     private final String mPassword;
 
     private String mFirstName;
     private String mLastName;
-    private String mEmail;
-    
+    private String mNickName;
+    private String mPhoneNumber;
+    private int mDisplayPref;
+    private int mVerifyCode;
 
     /**
      * Helper class for building Credentials.
@@ -36,7 +39,10 @@ public class Credentials implements Serializable {
 
         private String mFirstName = "";
         private String mLastName = "";
-        private String mUsername = "";
+        private String mNickName = "";
+        private String mPhoneNumber = "";
+        private int mDisplayPref = 0;
+        private int mVerifyCode = 0;
 
 
         /**
@@ -79,8 +85,23 @@ public class Credentials implements Serializable {
          * @param val an optional email
          * @return
          */
-        public Builder addUsername(final String val) {
-            mUsername = val;
+        public Builder addNickName(final String val) {
+            mNickName = val;
+            return this;
+        }
+
+        public Builder addPhoneNumber(final String val) {
+            mPhoneNumber = val;
+            return this;
+        }
+
+        public Builder addDisplayPref(final int val) {
+            mDisplayPref = val;
+            return this;
+        }
+
+        public Builder addVerifyCode(final int val) {
+            mVerifyCode = val;
             return this;
         }
 
@@ -95,19 +116,22 @@ public class Credentials implements Serializable {
      * @param builder the builder used to construct this object
      */
     private Credentials(final Builder builder) {
-        mUsername = builder.mUsername;
+        mNickName = builder.mNickName;
         mPassword = builder.mPassword;
         mFirstName = builder.mFirstName;
         mLastName = builder.mLastName;
         mEmail = builder.mEmail;
+        mPhoneNumber = builder.mPhoneNumber;
+        mDisplayPref = builder.mDisplayPref;
+        mVerifyCode = builder.mVerifyCode;
     }
 
     /**
      * Get the Username.
      * @return the username
      */
-    public String getUsername() {
-        return mUsername;
+    public String getNickName() {
+        return mNickName;
     }
 
     /**
@@ -142,6 +166,11 @@ public class Credentials implements Serializable {
         return mEmail;
     }
 
+    public String getPhoneNumber() { return mPhoneNumber; }
+
+    public int getDisplayPref() { return mDisplayPref; }
+
+    public int getVerifyCode() { return mVerifyCode; }
     /**
      * Get all of the fields in a single JSON object. Note, if no values were provided for the
      * optional fields via the Builder, the JSON object will include the empty string for those
@@ -155,11 +184,14 @@ public class Credentials implements Serializable {
         //build the JSONObject
         JSONObject msg = new JSONObject();
         try {
-            msg.put("username", getUsername());
+            msg.put("nickname", getNickName());
             msg.put("password", mPassword);
             msg.put("first", getFirstName());
             msg.put("last", getLastName());
             msg.put("email", getEmail());
+            msg.put("phoneNumber", getPhoneNumber());
+            msg.put("displayType", getDisplayPref());
+            msg.put("authNumber", getVerifyCode());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }

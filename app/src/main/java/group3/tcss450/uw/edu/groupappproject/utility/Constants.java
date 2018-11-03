@@ -9,7 +9,7 @@ public class Constants {
 
     //CONSTANTS
     public static final String LOGIN_END_POINT_URL = "https://group3-backend.herokuapp.com/login";
-
+    public static final String REGISTER_END_POINT_URL = "https://group3-backend.herokuapp.com/register";
     
 
     //VARIABLES
