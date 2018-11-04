@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/verification_greeting_title"
+        android:textColor="@color/black"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,27 +24,30 @@
     <TextView
         android:id="@+id/text_verification_greeting_subtitle"
         android:layout_width="0dp"
-        android:layout_marginLeft="@dimen/sixteen_gutter_margin"
-        android:layout_marginRight="@dimen/sixteen_gutter_margin"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/verification_greeting_subtitle"
+        android:textAlignment="center"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/verification_greeting_title" />
 
-    <TextView
-        android:id="@+id/verfication_text_pinEntry"
+    <EditText
+        android:id="@+id/editText_verify_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/verification_prompt"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:hint="@string/verification_prompt"
+        android:inputType="number"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_subtitle2" />
 
     <Button
         android:id="@+id/verification_resend_email_button"
@@ -63,5 +68,26 @@
         android:text="@string/verification_validate_code"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_verification_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/holo_blue_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_verification_greeting_subtitle" />
+
+    <TextView
+        android:id="@+id/textView_subtitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/verification_greeting_subtitle2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_verification_email" />
 
 </android.support.constraint.ConstraintLayout>

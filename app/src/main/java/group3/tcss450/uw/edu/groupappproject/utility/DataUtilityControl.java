@@ -48,6 +48,7 @@ public class DataUtilityControl extends AppCompatActivity {
         this.viewRequestsFragment = new ViewRequestsFragment();
         this.viewWeatherFragment = new ViewWeatherFragment();
         this.homeViewFragment = new HomeViewFragment();
+        this.verificationFragment = new VerificationFragment();
     }
 
     public Fragment getLoginFragment() {
@@ -58,35 +59,31 @@ public class DataUtilityControl extends AppCompatActivity {
         return this.registerFragment;
     }
 
-    public Fragment getWaitFragment() {return this.waitFragment;}
+    public Fragment getWaitFragment() { return this.waitFragment;}
 
-    public Fragment getAddUserFragment() {return this.addUserFragment;}
+    public Fragment getAddUserFragment() { return this.addUserFragment;}
 
-    public Fragment getCreateChatFragment() {return this.createChatFragment;}
+    public Fragment getCreateChatFragment() { return this.createChatFragment;}
 
-    public Fragment getCreateGroupFragment() {return this.createGroupFragment;}
+    public Fragment getCreateGroupFragment() { return this.createGroupFragment;}
 
-    public Fragment getViewConnectionsFragment() {return this.viewConnectionsFragment;}
+    public Fragment getViewConnectionsFragment() { return this.viewConnectionsFragment;}
 
-    public Fragment getViewRequestsFragment() {return this.viewRequestsFragment;}
+    public Fragment getViewRequestsFragment() { return this.viewRequestsFragment;}
 
-    public Fragment getViewWeatherFragment() {return this.viewWeatherFragment;}
+    public Fragment getViewWeatherFragment() { return this.viewWeatherFragment;}
 
-    public Fragment getHomeViewFragment() {return this.homeViewFragment;}
+    public Fragment getHomeViewFragment() { return this.homeViewFragment;}
 
-    public Fragment getVerificationFragment() {
-        if (verificationFragment == null) {
-            this.verificationFragment = new VerificationFragment();
-        }
-        return verificationFragment;
-    }
-
+    public Fragment getVerificationFragment() { return this.verificationFragment;}
 
     public Uri getLoginEndPointURI() {
         return Uri.parse(Constants.LOGIN_END_POINT_URL);
     }
 
     public Uri getRegisterEndPointURI() { return Uri.parse(Constants.REGISTER_END_POINT_URL); }
+
+    public Uri getVerifyEndPointURI() { return Uri.parse(Constants.VERIFY_END_POINT_URL); }
 
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;
@@ -95,8 +92,6 @@ public class DataUtilityControl extends AppCompatActivity {
     public Credentials getUserCreds() {
         return this.userCreds;
     }
-
-
 
     public void makeToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();

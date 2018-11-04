@@ -9,13 +9,15 @@ import android.util.Log;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 public class PreLoginRegisterActivity extends AppCompatActivity implements
         LoginFragment.OnLoginWaitFragmentInteractionListener,
-        RegisterFragment.OnWaitRegisterFragmentInteractionListener {
+        RegisterFragment.OnWaitRegisterFragmentInteractionListener,
+        VerificationFragment.OnVerificationFragmentInteractionListener {
 
     private DataUtilityControl duc;
 
@@ -70,13 +72,14 @@ public class PreLoginRegisterActivity extends AppCompatActivity implements
      * @param credentials Users credentials
      */
     @Override
-    public void registerUser(Credentials credentials) {
+    public void registeredUserSendToVerification(Credentials credentials) {
         this.duc.saveCreds(credentials);
         loadFragment(duc.getVerificationFragment());
     }
 
-    public void verifyUser(Credentials credentials) {
+    @Override
+    public void verifiedUserSendToSuccess(Credentials credentials) {
         //Do we still save the credentials?
-        loadFragment(duc.getVerificationFragment());
+        OnLogin(credentials);
     }
 }

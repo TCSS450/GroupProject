@@ -184,8 +184,6 @@ public class SendPostAsyncTask extends AsyncTask<Void, String, String> {
                 urlConnection.disconnect();
             }
         }
-
-
         return response.toString();
     }
 

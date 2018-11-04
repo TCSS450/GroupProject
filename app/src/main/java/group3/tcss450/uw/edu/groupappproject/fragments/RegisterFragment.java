@@ -102,7 +102,6 @@ public class RegisterFragment extends Fragment {
             Uri registerUri = this.duc.getRegisterEndPointURI();
             this.registerCreds = registerCredentials;
             JSONObject msg = registerCreds.asJSONObject();
-            System.out.println(msg.toString());
             new SendPostAsyncTask.Builder(registerUri.toString(), msg)
                     .onPreExecute(this::handleRegisterOnPre)
                     .onPostExecute(this::handleRegisterOnPost)
@@ -162,12 +161,12 @@ public class RegisterFragment extends Fragment {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
-            if (status == 1) { // success
+            if (status == 1) { // success, sends email and user must verify
                 mListener.onWaitFragmentInteractionHide();
-                mListener.registerUser(registerCreds);
+                mListener.registeredUserSendToVerification(registerCreds);
             }  else if (status == 2) { // email exists without Verification
                 mListener.onWaitFragmentInteractionHide();
-                mListener.verifyUser(registerCreds);
+                mListener.registeredUserSendToVerification(registerCreds);
             } else if (status == 3) { //Email already exists.
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.emailInput))
@@ -213,7 +212,6 @@ public class RegisterFragment extends Fragment {
      */
     public interface OnWaitRegisterFragmentInteractionListener extends WaitFragment.OnWaitFragmentInteractionListener {
         // TODO: Update argument type and name
-        void registerUser(Credentials credentials);
-        void verifyUser(Credentials credentials);
+        void registeredUserSendToVerification(Credentials credentials);
     }
 }
