@@ -41,8 +41,8 @@ public class Credentials implements Serializable {
         private String mLastName = "";
         private String mNickName = "";
         private String mPhoneNumber = "";
-        private int mDisplayPref = 0;
-        private int mVerifyCode = 0;
+        private int mDisplayPref = 1;
+        private int mVerifyCode = 1000;
 
 
         /**
@@ -197,5 +197,4 @@ public class Credentials implements Serializable {
         }
         return msg;
     }
-
 }

@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +54,7 @@ public class RegisterFragment extends Fragment {
         RadioButton rb = (RadioButton) v.findViewById(R.id.radioButtonNickname);
         rb = (RadioButton) v.findViewById(R.id.radioButtonNickname);
         rb.setChecked(true);
+        mDisplayPref = 1;
         rb.setOnClickListener((view) -> {onRadioButtonClicked(view);});
         rb = (RadioButton) v.findViewById(R.id.radioButtonFullName);
         rb.setOnClickListener((view) -> {onRadioButtonClicked(view);});
@@ -90,7 +90,7 @@ public class RegisterFragment extends Fragment {
         } else if (!theEmail.getText().toString().contains("@")) {
             theEmail.setError(getString(R.string.invalidEmail));
         } else {
-            Credentials registerCreds = new Credentials.Builder(theEmail.getText().toString(),
+            Credentials registerCredentials = new Credentials.Builder(theEmail.getText().toString(),
                     thePassword.getText().toString())
                     .addFirstName(theFirstName.getText().toString())
                     .addLastName(theLastName.getText().toString())
@@ -100,8 +100,9 @@ public class RegisterFragment extends Fragment {
                     .addVerifyCode((int)(Math.random()*9000)+1000)
                     .build();
             Uri registerUri = this.duc.getRegisterEndPointURI();
+            this.registerCreds = registerCredentials;
             JSONObject msg = registerCreds.asJSONObject();
-            this.registerCreds = registerCreds;
+            System.out.println(msg.toString());
             new SendPostAsyncTask.Builder(registerUri.toString(), msg)
                     .onPreExecute(this::handleRegisterOnPre)
                     .onPostExecute(this::handleRegisterOnPost)
