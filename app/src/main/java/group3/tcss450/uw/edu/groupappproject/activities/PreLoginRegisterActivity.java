@@ -77,6 +77,10 @@ public class PreLoginRegisterActivity extends AppCompatActivity implements
         loadFragment(duc.getVerificationFragment());
     }
 
+    public void unverifiedUserSendToVerification() {
+        loadFragment(duc.getVerificationFragment());
+    }
+
     @Override
     public void verifiedUserSendToSuccess(Credentials credentials) {
         //Do we still save the credentials?

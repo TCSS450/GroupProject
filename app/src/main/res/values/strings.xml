@@ -37,6 +37,7 @@
     <string name="verification_validate_code">Verify</string>
     <string name="invalid_code">Invalid Validation Code. Please re-enter your code.</string>
     <string name="verification_fail">OOPS! Something failed on our end. Verification Failed.</string>
+    <string name="email_sent_msg">We have sent you an email with a new verification code.</string>
 
     <!--End Points-->
     <string name="ep_base_url">tcss450a18.herokuapp.com</string>

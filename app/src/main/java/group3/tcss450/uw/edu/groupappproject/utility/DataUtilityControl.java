@@ -85,6 +85,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getVerifyEndPointURI() { return Uri.parse(Constants.VERIFY_END_POINT_URL); }
 
+    public Uri getResendEndPointURI() { return Uri.parse(Constants.RESEND_END_POINT_URL); }
+
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;
     }
@@ -94,7 +96,7 @@ public class DataUtilityControl extends AppCompatActivity {
     }
 
     public void makeToast(Context context, String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 
 }

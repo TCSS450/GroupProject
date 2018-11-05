@@ -61,9 +61,9 @@ public class VerificationFragment extends Fragment {
         TextView email = view.findViewById(R.id.textView_verification_email);
         email.setText(myCredentials.getEmail());
         Button b = view.findViewById(R.id.verification_verify_button);
-        b.setOnClickListener(this::attemptToVerifyUser);
+        b.setOnClickListener(this::doVerify);
         b = view.findViewById(R.id.verification_resend_email_button);
-        b.setOnClickListener(this::resendVerificationEmail);
+        b.setOnClickListener(this::reSendEmail);
         return view;
     }
 
@@ -71,18 +71,36 @@ public class VerificationFragment extends Fragment {
      * Attempt to verify a user and if successful log the user in.
      * @param view button clicked
      */
-    private void attemptToVerifyUser(View view) {
-        Uri verifyURI = this.duc.getRegisterEndPointURI();
+    private void doVerify(View view) {
+        Uri verifyURI = this.duc.getVerifyEndPointURI();
         JSONObject msg = new JSONObject();
         try {
             msg.put("email", myCredentials.getEmail());
-            msg.put("authNumber", mCode.getText());
+            msg.put("inputToken", Integer.parseInt(mCode.getText().toString()));
+            System.out.println(msg.toString());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
         new SendPostAsyncTask.Builder(verifyURI.toString(), msg)
-                .onPreExecute(this::handleRegisterOnPre)
-                .onPostExecute(this::handleRegisterOnPost)
+                .onPreExecute(this::handleVerifyOnPre)
+                .onPostExecute(this::handleVerifyOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+    }
+
+    private void reSendEmail(View view) {
+        Uri resendEmail = this.duc.getResendEndPointURI();
+        JSONObject msg = new JSONObject();
+        int newCode = (int)(Math.random()*9000)+1000;
+        try {
+            msg.put("email", myCredentials.getEmail());
+            msg.put("inputToken", newCode);
+        }catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(resendEmail.toString(), msg)
+                .onPreExecute(this::handleVerifyOnPre)
+                .onPostExecute(this::handleResendEmailOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
@@ -91,11 +109,11 @@ public class VerificationFragment extends Fragment {
         Log.e("ASYNCT_TASK_ERROR",  result);
     }
 
-    private void handleRegisterOnPre() {
+    private void handleVerifyOnPre() {
         mListener.onWaitFragmentInteractionShow();
     }
 
-    private void handleRegisterOnPost(String result) {
+    private void handleVerifyOnPost(String result) {
         /*
         1- User was verified (User is now eligible to login)
         2- User entered wrong authNumber (Tell them to re-enter)
@@ -114,7 +132,7 @@ public class VerificationFragment extends Fragment {
                         .setError(getString(R.string.invalid_code));
             } else { //Endpoint Error
                 mListener.onWaitFragmentInteractionHide();
-                ((TextView) getView().findViewById(R.id.emailInput))
+                ((TextView) getView().findViewById(R.id.editText_verify_code))
                         .setError(getString(R.string.verification_fail));
             }
         } catch (JSONException e) {
@@ -127,13 +145,31 @@ public class VerificationFragment extends Fragment {
         }
     }
 
-    /**
-     * Resend the verification pin to the users email.
-     * @param view button clicked
-     */
-    private void resendVerificationEmail(View view) {
+    private void handleResendEmailOnPost(String result) {
+        /*
+        1- Email was sent
+        2- Email not sent.
+        */
+        try {
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            int status = resultsJSON.getInt("status");
+            if (status == 1) { // success
+                mListener.onWaitFragmentInteractionHide();
+                duc.makeToast(getActivity(), getString(R.string.email_sent_msg));
+            } else { //Endpoint Error
+                mListener.onWaitFragmentInteractionHide();
+                duc.makeToast(getActivity(), "OOPS! Something went wrong.");
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR",  result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            mListener.onWaitFragmentInteractionHide();
+            ((TextView) getView().findViewById(R.id.editText_verify_code))
+                    .setError("Unsuccessful");
+        }
     }
-
 
     @Override
     public void onAttach(Context context) {

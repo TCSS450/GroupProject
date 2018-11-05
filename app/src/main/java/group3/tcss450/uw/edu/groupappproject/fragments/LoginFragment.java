@@ -29,6 +29,7 @@ public class LoginFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private DataUtilityControl duc;
     private Credentials loginCreds;
+    private EditText mEmail;
 
     private OnLoginWaitFragmentInteractionListener mListener;
 
@@ -52,11 +53,11 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
-        EditText nickname = v.findViewById(R.id.nicknameInput);
+        mEmail = v.findViewById(R.id.nicknameInput);
         EditText password = v.findViewById(R.id.passwordInput);
 
         Button b = v.findViewById(R.id.loginBtn);
-        b.setOnClickListener(view -> attemptLogin(nickname, password));
+        b.setOnClickListener(view -> attemptLogin(mEmail, password));
 
         b = v.findViewById(R.id.registerBtn);
         b.setOnClickListener(view ->
@@ -118,9 +119,21 @@ public class LoginFragment extends Fragment {
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.passwordInput))
                         .setError("Password Invalid");
-            } else if (status == 4) {
-                //Email/NN exists but user is still not verified
-                //Handle action here, ie Open up verification fragment
+            } else if (status == 4) { // Email is unverified. Resend email and go to verification.
+                Uri resendEmail = this.duc.getResendEndPointURI();
+                JSONObject msg = new JSONObject();
+                int newCode = (int)(Math.random()*9000)+1000;
+                try {
+                    msg.put("email", mEmail.getText().toString());
+                    msg.put("inputToken", newCode);
+                }catch (JSONException e) {
+                    Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+                }
+                new SendPostAsyncTask.Builder(resendEmail.toString(), msg)
+                        .onPreExecute(this::handleLoginOnPre)
+                        .onPostExecute(this::handleResendEmailOnPost)
+                        .onCancelled(this::handleErrorsInTask)
+                        .build().execute();
             } else {
                 //mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.nicknameInput))
@@ -133,6 +146,33 @@ public class LoginFragment extends Fragment {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.nicknameInput))
                     .setError("Login Unsuccessful");
+        }
+    }
+
+    private void handleResendEmailOnPost(String result) {
+        /*
+        1- Email was sent
+        2- Email not sent.
+        */
+        try {
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            int status = resultsJSON.getInt("status");
+            if (status == 1) { // success go to verification page
+                mListener.onWaitFragmentInteractionHide();
+                duc.makeToast(getActivity(), mEmail.getText().toString());
+                mListener.registeredUserSendToVerification(loginCreds);
+            } else { //Endpoint Error
+                mListener.onWaitFragmentInteractionHide();
+                duc.makeToast(getActivity(), "OOPS! Something went wrong.");
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR",  result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            mListener.onWaitFragmentInteractionHide();
+            ((TextView) getView().findViewById(R.id.nicknameInput))
+                    .setError("Unsuccessful");
         }
     }
 
@@ -153,6 +193,8 @@ public class LoginFragment extends Fragment {
         mListener = null;
     }
 
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -167,5 +209,6 @@ public class LoginFragment extends Fragment {
         // TODO: Update argument type and name
         void OnLogin(Credentials credentials);
         void onRegisterClickedFromLogin();
+        void registeredUserSendToVerification(Credentials credentials);
     }
 }
