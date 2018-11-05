@@ -115,7 +115,7 @@ public class LoginFragment extends Fragment {
                 mListener.onWaitFragmentInteractionHide();
                 this.duc.makeToast(getContext(),
                         "Email not in our system/unrecognized nickname, please register");
-            } else if (status == 3) {
+            } else if (status == 3) { // Email/NN exists in DB, but password was incorrect (tell user to re-enter pass)
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.passwordInput))
                         .setError("Password Invalid");
@@ -130,7 +130,6 @@ public class LoginFragment extends Fragment {
                     Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
                 }
                 new SendPostAsyncTask.Builder(resendEmail.toString(), msg)
-                        .onPreExecute(this::handleLoginOnPre)
                         .onPostExecute(this::handleResendEmailOnPost)
                         .onCancelled(this::handleErrorsInTask)
                         .build().execute();
