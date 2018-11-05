@@ -120,6 +120,7 @@ public class LoginFragment extends Fragment {
                 ((TextView) getView().findViewById(R.id.passwordInput))
                         .setError("Password Invalid");
             } else if (status == 4) { // Email is unverified. Resend email and go to verification.
+                mListener.onWaitFragmentInteractionHide();
                 Uri resendEmail = this.duc.getResendEndPointURI();
                 JSONObject msg = new JSONObject();
                 int newCode = (int)(Math.random()*9000)+1000;
@@ -149,6 +150,11 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    /**
+     * Method that handles the JSON response from the backend when dealing with a user
+     * needing another Verification Code sent in an email.
+     * @param result The results of the JSON.
+     */
     private void handleResendEmailOnPost(String result) {
         /*
         1- Email was sent
@@ -158,9 +164,11 @@ public class LoginFragment extends Fragment {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
+            String email = resultsJSON.getString("email");
             if (status == 1) { // success go to verification page
                 mListener.onWaitFragmentInteractionHide();
-                duc.makeToast(getActivity(), mEmail.getText().toString());
+                duc.makeToast(getActivity(), getString(R.string.verification_greeting_subtitle) + " " + email);
+                loginCreds = new Credentials.Builder(email,"").build();
                 mListener.registeredUserSendToVerification(loginCreds);
             } else { //Endpoint Error
                 mListener.onWaitFragmentInteractionHide();
