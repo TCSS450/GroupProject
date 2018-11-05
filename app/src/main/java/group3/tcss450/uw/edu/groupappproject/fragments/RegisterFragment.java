@@ -167,17 +167,17 @@ public class RegisterFragment extends Fragment {
             }  else if (status == 2) { // email exists without Verification
                 mListener.onWaitFragmentInteractionHide();
                 mListener.registeredUserSendToVerification(registerCreds);
-            } else if (status == 3) { //Email already exists.
+            } else if (status == 3) { //Email already exists with verification.
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.emailInput))
                         .setError(getString(R.string.emailExists));
             } else if (status == 4) { //Nickname already exists
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.register_nicknameInput))
-                        .setError(getString(R.string.emailExists));
+                        .setError(getString(R.string.nickNameExists));
             } else if (status == 5) {
                 mListener.onWaitFragmentInteractionHide();
-                ((TextView) getView().findViewById(R.id.register_nicknameInput))
+                ((TextView) getView().findViewById(R.id.emailInput))
                         .setError(getString(R.string.invalidEmail));
             } else {
                 mListener.onWaitFragmentInteractionHide();
