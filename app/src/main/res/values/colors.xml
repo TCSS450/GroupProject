@@ -6,4 +6,5 @@
 
     <color name = "black">#000000</color>
     <color name="colorAccent">#0080ff</color>
+    <color name="transparent_black">#29000000</color>
 </resources>
