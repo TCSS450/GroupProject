@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -63,20 +64,42 @@ public class RegisterFragment extends Fragment {
         Button b = v.findViewById(R.id.registerBtn);
         b.setOnClickListener(view -> attemptRegister(nickName, password, firstName,
                 lastName, passwordConf, phoneNumber, email));
+        ImageButton ib = v.findViewById(R.id.imageButton_register_help);
+        ib.setOnClickListener(view -> getPasswordHelp());
         return v;
     }
 
     private void attemptRegister(EditText theNickname, EditText thePassword, EditText theFirstName,
                                  EditText theLastName, EditText thePasswordVerification, EditText thePhoneNumber,
                                  EditText theEmail) {
-        if (theNickname.getText().toString().length() == 0) {
+        Boolean hasUpperCase = false;
+        Boolean hasLowerCase = false;
+        Boolean hasSpecial = false;
+        Boolean hasNumber = false;
+        if (thePassword.getText().toString().length() != 0) {
+            hasUpperCase = !thePassword.getText().toString().equals(thePassword.getText().toString().toLowerCase());
+            hasLowerCase = !thePassword.getText().toString().equals(thePassword.getText().toString().toUpperCase());
+            hasSpecial = !thePassword.getText().toString().matches("[A-Za-z0-9]*");
+            hasNumber = !thePassword.getText().toString().matches("[0-9]*");
+        } else {
+            thePassword.setError(getString(R.string.empty));
+        }
+        if (!hasUpperCase) {
+            thePassword.setError(getString(R.string.uppercase_error));
+        } else if (!hasLowerCase) {
+            thePassword.setError(getString(R.string.lowercase_error));
+        } else if (thePassword.getText().toString().length() < 6) {
+            thePassword.setError(getString(R.string.passToSmall));
+        } else if (!hasSpecial) {
+            thePassword.setError(getString(R.string.special_error));
+        } else if (theNickname.getText().toString().length() == 0) {
             theNickname.setError(getString(R.string.empty));
+        } else if (!hasNumber) {
+            thePassword.setError(getString(R.string.number_error));
         } else if (thePassword.getText().toString().length() == 0) {
             thePassword.setError(getString(R.string.empty));
         } else if (thePasswordVerification.getText().toString().length() == 0) {
             thePasswordVerification.setError(getString(R.string.empty));
-        } else if (thePassword.getText().toString().length() < 6) {
-            thePassword.setError(getString(R.string.passToSmall));
         } else if (!thePassword.getText().toString().equals(thePasswordVerification.getText().toString())) {
             thePasswordVerification.setError(getString(R.string.passNotMatch));
         } else if (theFirstName.getText().toString().length() == 0) {
@@ -108,6 +131,10 @@ public class RegisterFragment extends Fragment {
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
         }
+    }
+
+    private void getPasswordHelp() {
+        this.duc.makeToast(getActivity(), getString(R.string.passwordRequirements));
     }
 
     public void onRadioButtonClicked(View view) {

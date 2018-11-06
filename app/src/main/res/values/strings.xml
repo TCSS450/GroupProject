@@ -24,7 +24,10 @@
     <string name="passToSmall">Password must be at least 6 characters</string>
     <string name="success">Login Successful!</string>
     <string name="missingChar">Field is missing @ symbol</string>
-
+    <string name="uppercase_error">Password must have at least one uppercase letter.</string>
+    <string name="lowercase_error">Password must have at least one lowercase letter.</string>
+    <string name="special_error">Password must contain at least one special character.</string>
+    <string name="number_error">Password must contain at least one number.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
 
@@ -63,5 +66,15 @@
     <string name="nav_header_subtitle">Get chatting</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+
+    <!--password Requirements-->
+    <string name="passwordRequirements">
+        Password must contain:\n
+        6 or more characters\n
+        At least one number\n
+        At least one uppercase letter\n
+        At least one lowercase letter
+    </string>
 
 </resources>
