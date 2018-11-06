@@ -120,13 +120,14 @@ public class LoginFragment extends Fragment {
                 ((TextView) getView().findViewById(R.id.passwordInput))
                         .setError("Password Invalid");
             } else if (status == 4) { // Email is unverified. Resend email and go to verification.
+                Log.d("LoginFragment", "recieved code 4");
                 mListener.onWaitFragmentInteractionHide();
                 Uri resendEmail = this.duc.getResendEndPointURI();
                 JSONObject msg = new JSONObject();
-                int newCode = (int)(Math.random()*9000)+1000;
+
                 try {
                     msg.put("email", mEmail.getText().toString());
-                    msg.put("inputToken", newCode);
+
                 }catch (JSONException e) {
                     Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
                 }

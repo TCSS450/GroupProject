@@ -91,10 +91,9 @@ public class VerificationFragment extends Fragment {
     private void reSendEmail(View view) {
         Uri resendEmail = this.duc.getResendEndPointURI();
         JSONObject msg = new JSONObject();
-        int newCode = (int)(Math.random()*9000)+1000;
         try {
             msg.put("email", myCredentials.getEmail());
-            msg.put("inputToken", newCode);
+//            msg.put("nickname", myCredentials.getNickName());
         }catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }

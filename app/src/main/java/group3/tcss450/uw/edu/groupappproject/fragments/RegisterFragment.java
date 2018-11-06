@@ -120,7 +120,6 @@ public class RegisterFragment extends Fragment {
                     .addNickName(theNickname.getText().toString())
                     .addPhoneNumber(thePhoneNumber.getText().toString())
                     .addDisplayPref(mDisplayPref)
-                    .addVerifyCode((int)(Math.random()*9000)+1000)
                     .build();
             Uri registerUri = this.duc.getRegisterEndPointURI();
             this.registerCreds = registerCredentials;
