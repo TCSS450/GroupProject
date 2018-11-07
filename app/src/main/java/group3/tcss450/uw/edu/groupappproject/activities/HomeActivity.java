@@ -1,9 +1,13 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,12 +18,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.io.IOException;
+
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 public class HomeActivity extends MenuOptionsActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, WaitFragment.OnWaitFragmentInteractionListener {
     private DataUtilityControl duc;
 
     @Override
@@ -74,6 +83,9 @@ public class HomeActivity extends MenuOptionsActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_logout) {
+            logout();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -109,4 +121,81 @@ public class HomeActivity extends MenuOptionsActivity
                 .replace(R.id.homeActivityFrame, frag)
                 .addToBackStack(null).commit();
     }
+    private void logout() {
+
+        SharedPreferences prefs =
+                getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //remove the saved credentials from StoredPrefs
+        prefs.edit().remove(getString(R.string.keys_prefs_password)).apply();
+        prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
+        //close the app
+        new DeleteTokenAsyncTask().execute();
+
+        finishAndRemoveTask();
+        //or close this activity and bring back the Login
+        //Intent i = new Intent(this, MainActivity.class);
+        //startActivity(i);
+        //End this Activity and remove it from the Activity back stack.
+        //finish();
+    }
+
+    //@Override
+    public void onWaitFragmentInteractionShow() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.homeActivityFrame, new WaitFragment(), "WAIT")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onWaitFragmentInteractionHide() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .remove(getSupportFragmentManager().findFragmentByTag("WAIT"))
+                .commit();
+    }
+
+    // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
+    // we have something that allows us to do that.
+    class DeleteTokenAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            onWaitFragmentInteractionShow();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //since we are already doing stuff in the background, go ahead
+            //and remove the credentials from shared prefs here.
+            SharedPreferences prefs =
+                    getSharedPreferences(
+                            getString(R.string.keys_shared_prefs),
+                            Context.MODE_PRIVATE);
+            prefs.edit().remove(getString(R.string.keys_prefs_password)).apply();
+            prefs.edit().remove(getString(R.string.keys_prefs_email)).apply();
+            try {
+                //this call must be done asynchronously.
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                Log.e("FCM", "Delete error!");
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            //close the app
+            finishAndRemoveTask();
+            //or close this activity and bring back the Login
+            // Intent i = new Intent(this, MainActivity.class);
+            // startActivity(i);
+            // //Ends this Activity and removes it from the Activity back stack.
+            // finish();
+        }
+    }
+
 }
