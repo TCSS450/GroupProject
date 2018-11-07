@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "533596266431",
+    "firebase_url": "https://chitchat-fcm-group3.firebaseio.com",
+    "project_id": "chitchat-fcm-group3",
+    "storage_bucket": "chitchat-fcm-group3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533596266431:android:4832b05e15ee774a",
+        "android_client_info": {
+          "package_name": "group3.tcss450.uw.edu.groupappproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533596266431-4tvqda4h1eo82n9leddcm939gtbaik5e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPX5rNADNxIMV03ARW7uleHbpAqziezRo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
