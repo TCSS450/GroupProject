@@ -1,6 +1,7 @@
 package group3.tcss450.uw.edu.groupappproject.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +34,8 @@ public class LoginFragment extends Fragment {
     private DataUtilityControl duc;
     private Credentials loginCreds;
     private EditText mEmail;
+    private EditText mPassword;
+    private String mFirebaseToken;
 
     private OnLoginWaitFragmentInteractionListener mListener;
 
@@ -54,10 +60,11 @@ public class LoginFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
         mEmail = v.findViewById(R.id.nicknameInput);
-        EditText password = v.findViewById(R.id.passwordInput);
+        mPassword = v.findViewById(R.id.passwordInput);
 
         Button b = v.findViewById(R.id.loginBtn);
-        b.setOnClickListener(view -> attemptLogin(mEmail, password));
+        b.setOnClickListener(view -> getFirebaseToken(mEmail.getText().toString(), mPassword.getText().toString()));
+        //attemptLogin(mEmail.getText().toString(), mPassword.getText().toString()));
 
         b = v.findViewById(R.id.registerBtn);
         b.setOnClickListener(view ->
@@ -65,17 +72,39 @@ public class LoginFragment extends Fragment {
         return v;
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //retrieve the stored credentials from SharedPrefs
+        if (prefs.contains(getString(R.string.keys_prefs_email)) &&
+                prefs.contains(getString(R.string.keys_prefs_password))) {
+            final String email = prefs.getString(getString(R.string.keys_prefs_email), "");
+            final String password = prefs.getString(getString(R.string.keys_prefs_password), "");
+            //Load the two login EditTexts with the credentials found in SharedPrefs
+            EditText emailEdit = getActivity().findViewById(R.id.nicknameInput);
+            emailEdit.setText(email);
+            EditText passwordEdit = getActivity().findViewById(R.id.passwordInput);
+            passwordEdit.setText(password);
 
-    private void attemptLogin(EditText nickname, EditText password) {
-        if (nickname.getText().toString().length() == 0) {
-            nickname.setError(getString(R.string.empty));
+            getFirebaseToken(mEmail.getText().toString(),mPassword.getText().toString());
+        }
+    }
+
+
+    private void attemptLogin(String nickname, String password) {
+        if (nickname.length() == 0) {
+            mEmail.setError(getString(R.string.empty));
         } /*else if (!username.getText().toString().contains("@")) {
             username.setError(getString(R.string.missingChar));
-        }*/ else if (password.getText().toString().length() == 0) {
-            password.setError(getString(R.string.empty));
+        }*/ else if (password.length() == 0) {
+            mPassword.setError(getString(R.string.empty));
         } else {
-            loginCreds = new Credentials.Builder(nickname.getText().toString(),
-                    password.getText().toString()).build();
+            loginCreds = new Credentials.Builder(nickname,
+                    password).build();
 
             Uri loginUri = this.duc.getLoginEndPointURI();
             JSONObject msg = loginCreds.asJSONObject();
@@ -90,12 +119,39 @@ public class LoginFragment extends Fragment {
 
     }
 
+    //Retrieve firebase token
+    private void getFirebaseToken(final String email, final String password) {
+        mListener.onWaitFragmentInteractionShow();
+
+        //add this app on this device to listen for the topic all
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+        //the call to getInstanceId happens asynchronously. task is an onCompleteListener
+        //similar to a promise in JS.
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM: ", "getInstanceId failed", task.getException());
+                        mListener.onWaitFragmentInteractionHide();
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    mFirebaseToken = task.getResult().getToken();
+                    Log.d("FCM: ", mFirebaseToken);
+                    //the helper method that initiates login service
+                    attemptLogin(email, password);
+                });
+        //no code here. wait for the Task to complete.
+    }
+
+
     private void handleErrorsInTask(String result) {
         Log.e("ASYNCT_TASK_ERROR",  result);
     }
 
     private void handleLoginOnPre() {
-        mListener.onWaitFragmentInteractionShow();
+        //mListener.onWaitFragmentInteractionShow();
     }
 
     private void handleLoginOnPost(String result) {
@@ -109,6 +165,7 @@ public class LoginFragment extends Fragment {
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
             if (status == 1) { // success
+                saveCredentials(loginCreds);
                 mListener.onWaitFragmentInteractionHide();
                 mListener.OnLogin(this.loginCreds);
             }  else if (status == 2) { // email does not exist in DB, prompt to register
@@ -199,6 +256,16 @@ public class LoginFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void saveCredentials(final Credentials credentials) {
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //Store the credentials in SharedPrefs
+        prefs.edit().putString(getString(R.string.keys_prefs_email), credentials.getEmail()).apply();
+        prefs.edit().putString(getString(R.string.keys_prefs_password), credentials.getPassword()).apply();
     }
 
 

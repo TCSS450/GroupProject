@@ -14,5 +14,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PreLoginRegisterActivity.class);
         Constants.dataUtilityControl = new DataUtilityControl();
         startActivity(intent);
+        //End this Activity and remove it from the Activity back stack.
+        finish();
+
+
     }
 }
