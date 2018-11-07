@@ -30,6 +30,7 @@
     <string name="number_error">Password must contain at least one number.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
+    <string name="forgotPassword">Forgot Password?</string>
 
     <!--Verification-->
     <string name="verification_greeting_title">Who Are You?</string>

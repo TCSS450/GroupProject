@@ -61,7 +61,7 @@ public class LoginFragment extends Fragment {
 
         b = v.findViewById(R.id.registerBtn);
         b.setOnClickListener(view ->
-                mListener.onRegisterClickedFromLogin());
+                mListener.onRegisterClickedFromLogin());    
         return v;
 
     }
