@@ -12,6 +12,7 @@ public class Constants {
     public static final String REGISTER_END_POINT_URL = "https://group3-backend.herokuapp.com/register";
     public static final String VERIFY_END_POINT_URL = "https://group3-backend.herokuapp.com/verify";
     public static final String RESEND_END_POINT_URL = "https://group3-backend.herokuapp.com/resend";
+    public static final String LOGIN_END_POINT_FIREBASE_URL = "https://group3-backend.herokuapp.com/login/with_token";
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;

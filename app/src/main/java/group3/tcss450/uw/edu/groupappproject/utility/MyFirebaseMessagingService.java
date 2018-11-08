@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject;
+package group3.tcss450.uw.edu.groupappproject.utility;
 
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.

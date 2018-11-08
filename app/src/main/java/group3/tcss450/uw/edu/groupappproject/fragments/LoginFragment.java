@@ -106,8 +106,13 @@ public class LoginFragment extends Fragment {
             loginCreds = new Credentials.Builder(nickname,
                     password).build();
 
-            Uri loginUri = this.duc.getLoginEndPointURI();
+            Uri loginUri = this.duc.getLoginEndPointFirebaseURI();
             JSONObject msg = loginCreds.asJSONObject();
+            try {
+                msg.put("token", mFirebaseToken);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             new SendPostAsyncTask.Builder(loginUri.toString(), msg)
                     .onPreExecute(this::handleLoginOnPre)

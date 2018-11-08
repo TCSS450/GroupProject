@@ -33,7 +33,6 @@
     <string name="action_logout">Logout</string>
 
 
-
     <!--Verification-->
     <string name="verification_greeting_title">Who Are You?</string>
     <string name="verification_greeting_subtitle">To verify your email, we have sent a verification code to the email address:</string>
@@ -46,9 +45,12 @@
     <string name="email_sent_msg">We have sent you an email with a new verification code.</string>
 
     <!--End Points-->
-    <string name="ep_base_url">tcss450a18.herokuapp.com</string>
+    <string name="ep_base_url">group3-backend.herokuapp.com</string>
     <string name="ep_login">login</string>
     <string name="ep_register">register</string>
+    <string name="ep_with_token">with_token</string>
+    <string name="ep_messaging_base">messaging</string>
+    <string name="ep_messaging_send">send</string>
 
     <!--Activity menu_options drawer nav labels-->
     <string name="home_drawer_home">Home</string>

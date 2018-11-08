@@ -81,6 +81,9 @@ public class DataUtilityControl extends AppCompatActivity {
         return Uri.parse(Constants.LOGIN_END_POINT_URL);
     }
 
+    public Uri getLoginEndPointFirebaseURI() { return Uri.parse(Constants.LOGIN_END_POINT_FIREBASE_URL);
+    }
+
     public Uri getRegisterEndPointURI() { return Uri.parse(Constants.REGISTER_END_POINT_URL); }
 
     public Uri getVerifyEndPointURI() { return Uri.parse(Constants.VERIFY_END_POINT_URL); }

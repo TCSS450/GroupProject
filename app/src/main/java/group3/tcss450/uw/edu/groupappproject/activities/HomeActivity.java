@@ -23,6 +23,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.io.IOException;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -39,6 +40,7 @@ public class HomeActivity extends MenuOptionsActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +49,7 @@ public class HomeActivity extends MenuOptionsActivity
                         .setAction("Action", null).show();
             }
         });
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,7 +100,9 @@ public class HomeActivity extends MenuOptionsActivity
         if (id == R.id.addUser) {
             loadFragment(this.duc.getAddUserFragment());
         } else if (id == R.id.createChat) {
-            loadFragment(this.duc.getCreateChatFragment());
+            ChatFragment chat = new ChatFragment();
+            loadFragment(chat);
+            //loadFragment(this.duc.getCreateChatFragment());
         } else if (id == R.id.createGroup) {
             loadFragment(this.duc.getCreateGroupFragment());
         } else if (id == R.id.connections) {
