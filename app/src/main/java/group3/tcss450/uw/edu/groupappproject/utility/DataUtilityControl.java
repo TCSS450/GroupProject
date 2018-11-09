@@ -10,6 +10,7 @@ import android.widget.Toast;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
@@ -33,6 +34,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private HomeViewFragment homeViewFragment;
     private VerificationFragment verificationFragment;
 
+    private FriendsFragment friendsFragment;
 
     private Credentials userCreds;
 
@@ -49,6 +51,7 @@ public class DataUtilityControl extends AppCompatActivity {
         this.viewWeatherFragment = new ViewWeatherFragment();
         this.homeViewFragment = new HomeViewFragment();
         this.verificationFragment = new VerificationFragment();
+        this.friendsFragment = new FriendsFragment();
     }
 
     public Fragment getLoginFragment() {
@@ -77,8 +80,13 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getVerificationFragment() { return this.verificationFragment;}
 
+    public Fragment getFriendsFragment() {return this.friendsFragment;}
+
     public Uri getLoginEndPointURI() {
         return Uri.parse(Constants.LOGIN_END_POINT_URL);
+    }
+
+    public Uri getLoginEndPointFirebaseURI() { return Uri.parse(Constants.LOGIN_END_POINT_FIREBASE_URL);
     }
 
     public Uri getRegisterEndPointURI() { return Uri.parse(Constants.REGISTER_END_POINT_URL); }
@@ -86,6 +94,8 @@ public class DataUtilityControl extends AppCompatActivity {
     public Uri getVerifyEndPointURI() { return Uri.parse(Constants.VERIFY_END_POINT_URL); }
 
     public Uri getResendEndPointURI() { return Uri.parse(Constants.RESEND_END_POINT_URL); }
+
+    public Uri getBaseEndPointURI() {return Uri.parse(Constants.BASE_END_POINT_URL); }
 
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;

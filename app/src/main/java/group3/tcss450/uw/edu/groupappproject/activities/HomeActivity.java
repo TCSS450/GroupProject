@@ -4,16 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +19,17 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.io.IOException;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.dummy.DummyContent;
+import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 public class HomeActivity extends MenuOptionsActivity
-        implements NavigationView.OnNavigationItemSelectedListener, WaitFragment.OnWaitFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        FriendsFragment.OnListFragmentInteractionListener,
+        WaitFragment.OnWaitFragmentInteractionListener {
     private DataUtilityControl duc;
 
     @Override
@@ -39,6 +40,7 @@ public class HomeActivity extends MenuOptionsActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +49,7 @@ public class HomeActivity extends MenuOptionsActivity
                         .setAction("Action", null).show();
             }
         });
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,7 +100,9 @@ public class HomeActivity extends MenuOptionsActivity
         if (id == R.id.addUser) {
             loadFragment(this.duc.getAddUserFragment());
         } else if (id == R.id.createChat) {
-            loadFragment(this.duc.getCreateChatFragment());
+            ChatFragment chat = new ChatFragment();
+            loadFragment(chat);
+            //loadFragment(this.duc.getCreateChatFragment());
         } else if (id == R.id.createGroup) {
             loadFragment(this.duc.getCreateGroupFragment());
         } else if (id == R.id.connections) {
@@ -156,6 +161,11 @@ public class HomeActivity extends MenuOptionsActivity
                 .beginTransaction()
                 .remove(getSupportFragmentManager().findFragmentByTag("WAIT"))
                 .commit();
+    }
+
+    @Override
+    public void onFriendListFragmentInteraction(DummyContent.Credentials item) {
+
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
