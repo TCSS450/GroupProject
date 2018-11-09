@@ -9,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.dummy.DummyContent.Credentials;
@@ -27,6 +30,7 @@ public class FriendsFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -49,8 +53,10 @@ public class FriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+
         }
     }
 
@@ -58,6 +64,7 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends_list, container, false);
+
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -68,7 +75,12 @@ public class FriendsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyFriendsRecyclerViewAdapter(Constants.searchResults, mListener));
+
+            MyFriendsRecyclerViewAdapter adapter = new MyFriendsRecyclerViewAdapter(Constants.searchResults, mListener);
+            recyclerView.setAdapter(adapter);
+
+
+            System.out.println("UPDATE LIST");
         }
         return view;
     }

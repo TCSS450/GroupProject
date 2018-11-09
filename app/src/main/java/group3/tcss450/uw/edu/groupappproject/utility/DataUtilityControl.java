@@ -13,6 +13,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.MyFriendsRecyclerViewAdapter;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
@@ -81,6 +82,9 @@ public class DataUtilityControl extends AppCompatActivity {
     public Fragment getVerificationFragment() { return this.verificationFragment;}
 
     public Fragment getFriendsFragment() {return this.friendsFragment;}
+
+
+    public Fragment getNewFriendFragment() {return new FriendsFragment(); }
 
     public Uri getLoginEndPointURI() {
         return Uri.parse(Constants.LOGIN_END_POINT_URL);
