@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.R;
@@ -17,7 +18,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 public class PreLoginRegisterActivity extends AppCompatActivity implements
         LoginFragment.OnLoginWaitFragmentInteractionListener,
         RegisterFragment.OnWaitRegisterFragmentInteractionListener,
-        VerificationFragment.OnVerificationFragmentInteractionListener {
+        VerificationFragment.OnVerificationFragmentInteractionListener,
+        ForgotPasswordFragment.OnForgotPasswordFragmentInteractionListener  {
 
     private DataUtilityControl duc;
 
@@ -75,6 +77,11 @@ public class PreLoginRegisterActivity extends AppCompatActivity implements
     public void registeredUserSendToVerification(Credentials credentials) {
         this.duc.saveCreds(credentials);
         loadFragment(duc.getVerificationFragment());
+    }
+
+    @Override
+    public void onForgotPassword() {
+        loadFragment(duc.getForgotPasswordFragment());
     }
 
     public void unverifiedUserSendToVerification() {

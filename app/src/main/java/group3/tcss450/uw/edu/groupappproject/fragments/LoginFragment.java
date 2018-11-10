@@ -69,6 +69,9 @@ public class LoginFragment extends Fragment {
         b = v.findViewById(R.id.registerBtn);
         b.setOnClickListener(view ->
                 mListener.onRegisterClickedFromLogin());
+
+        b = v.findViewById(R.id.button_loginFrag_frogotPassword);
+        b.setOnClickListener(view -> mListener.onForgotPassword());
         return v;
 
     }
@@ -300,5 +303,6 @@ public class LoginFragment extends Fragment {
         void OnLogin(Credentials credentials);
         void onRegisterClickedFromLogin();
         void registeredUserSendToVerification(Credentials credentials);
+        void onForgotPassword();
     }
 }

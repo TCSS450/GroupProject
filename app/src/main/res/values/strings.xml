@@ -32,6 +32,14 @@
     <string name="lastName">Last Name</string>
     <string name="action_logout">Logout</string>
 
+    <!--Forgot password prompts-->
+    <string name="login_forgot_password_button_txt">Forgot Password</string>
+    <string name="forgotpass_password_prompt_greeting">Oops</string>
+    <string name="forgotpass_password_prompt_message">Looks like someone forgot something. Enter your username or email address and we\'ll send you a new password faster than a hamster running in a wheel...</string>
+    <string name="forgotpass_user_creds_hint">Enter User ID</string>
+    <string name="forgotpass_enter_pin_button">I have a Pin</string>
+    <string name="forgotpass_send_pin_button">Get Pin</string>
+
 
     <!--Verification-->
     <string name="verification_greeting_title">Who Are You?</string>
