@@ -10,9 +10,11 @@ import android.widget.Toast;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.MyFriendsRecyclerViewAdapter;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
@@ -33,6 +35,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private ViewWeatherFragment viewWeatherFragment;
     private HomeViewFragment homeViewFragment;
     private VerificationFragment verificationFragment;
+    private ForgotPasswordFragment forgotPasswordFragment;
 
     private FriendsFragment friendsFragment;
 
@@ -52,8 +55,10 @@ public class DataUtilityControl extends AppCompatActivity {
         this.homeViewFragment = new HomeViewFragment();
         this.verificationFragment = new VerificationFragment();
         this.friendsFragment = new FriendsFragment();
+        this.forgotPasswordFragment = new ForgotPasswordFragment();
     }
 
+    /* ***** Get Fragments **** ***/
     public Fragment getLoginFragment() {
         return this.loginFragment;
     }
@@ -82,12 +87,18 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getFriendsFragment() {return this.friendsFragment;}
 
+    public Fragment getNewFriendFragment() {return new FriendsFragment(); }
+
+    public Fragment getForgotPasswordFragment() {return this.forgotPasswordFragment; }
+
+
+    /* ***** Get Endpoints **** ***/
+
     public Uri getLoginEndPointURI() {
         return Uri.parse(Constants.LOGIN_END_POINT_URL);
     }
 
-    public Uri getLoginEndPointFirebaseURI() { return Uri.parse(Constants.LOGIN_END_POINT_FIREBASE_URL);
-    }
+    public Uri getLoginEndPointFirebaseURI() { return Uri.parse(Constants.LOGIN_END_POINT_FIREBASE_URL); }
 
     public Uri getRegisterEndPointURI() { return Uri.parse(Constants.REGISTER_END_POINT_URL); }
 
@@ -97,6 +108,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getBaseEndPointURI() {return Uri.parse(Constants.BASE_END_POINT_URL); }
 
+
+
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;
     }
@@ -104,6 +117,8 @@ public class DataUtilityControl extends AppCompatActivity {
     public Credentials getUserCreds() {
         return this.userCreds;
     }
+
+
 
     public void makeToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();

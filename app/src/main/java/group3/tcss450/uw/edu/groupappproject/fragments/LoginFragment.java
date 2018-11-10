@@ -68,7 +68,10 @@ public class LoginFragment extends Fragment {
 
         b = v.findViewById(R.id.registerBtn);
         b.setOnClickListener(view ->
-                mListener.onRegisterClickedFromLogin());    
+                mListener.onRegisterClickedFromLogin());
+
+        b = v.findViewById(R.id.button_loginFrag_frogotPassword);
+        b.setOnClickListener(view -> mListener.onForgotPassword());
         return v;
 
     }
@@ -94,15 +97,24 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    private boolean loginFieldsValid(String username, String password) {
+        boolean callServer = true;
+        if (username.length() == 0) {
+            mEmail.setError(getString(R.string.empty));
+            callServer = false;
+        } else if (!username.contains("@")) {
+            mEmail.setError(getString(R.string.missingChar));
+            callServer = false;
+        } else if (password.length() == 0) {
+            mPassword.setError(getString(R.string.empty));
+            callServer = false;
+        }
+        return callServer;
+    }
 
     private void attemptLogin(String nickname, String password) {
-        if (nickname.length() == 0) {
-            mEmail.setError(getString(R.string.empty));
-        } /*else if (!username.getText().toString().contains("@")) {
-            username.setError(getString(R.string.missingChar));
-        }*/ else if (password.length() == 0) {
-            mPassword.setError(getString(R.string.empty));
-        } else {
+
+        if (loginFieldsValid(nickname, password)) {
             loginCreds = new Credentials.Builder(nickname,
                     password).build();
 
@@ -121,33 +133,34 @@ public class LoginFragment extends Fragment {
                     .build()
                     .execute();
         }
-
     }
 
     //Retrieve firebase token
     private void getFirebaseToken(final String email, final String password) {
-        mListener.onWaitFragmentInteractionShow();
+        if (loginFieldsValid(email, password)) {
+            mListener.onWaitFragmentInteractionShow();
 
-        //add this app on this device to listen for the topic all
-        FirebaseMessaging.getInstance().subscribeToTopic("all");
+            //add this app on this device to listen for the topic all
+            FirebaseMessaging.getInstance().subscribeToTopic("all");
 
-        //the call to getInstanceId happens asynchronously. task is an onCompleteListener
-        //similar to a promise in JS.
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("FCM: ", "getInstanceId failed", task.getException());
-                        mListener.onWaitFragmentInteractionHide();
-                        return;
-                    }
+            //the call to getInstanceId happens asynchronously. task is an onCompleteListener
+            //similar to a promise in JS.
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.w("FCM: ", "getInstanceId failed", task.getException());
+                            mListener.onWaitFragmentInteractionHide();
+                            return;
+                        }
 
-                    // Get new Instance ID token
-                    mFirebaseToken = task.getResult().getToken();
-                    Log.d("FCM: ", mFirebaseToken);
-                    //the helper method that initiates login service
-                    attemptLogin(email, password);
-                });
-        //no code here. wait for the Task to complete.
+                        // Get new Instance ID token
+                        mFirebaseToken = task.getResult().getToken();
+                        Log.d("FCM: ", mFirebaseToken);
+                        //the helper method that initiates login service
+                        attemptLogin(email, password);
+                    });
+            //no code here. wait for the Task to complete.
+        }
     }
 
 
@@ -290,5 +303,6 @@ public class LoginFragment extends Fragment {
         void OnLogin(Credentials credentials);
         void onRegisterClickedFromLogin();
         void registeredUserSendToVerification(Credentials credentials);
+        void onForgotPassword();
     }
 }

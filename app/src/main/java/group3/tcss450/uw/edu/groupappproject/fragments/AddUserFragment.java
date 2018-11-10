@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SearchView;
 
@@ -24,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
@@ -50,11 +52,11 @@ public class AddUserFragment extends Fragment {
     private RadioButton all;
 
     private EditText searchView;
-    private Button searchbtn;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
 
     public AddUserFragment() {
@@ -106,6 +108,8 @@ public class AddUserFragment extends Fragment {
         Button b = v.findViewById(R.id.searchbtn);
         b.setOnClickListener(view -> attemptSearch(searchView.getText().toString()));
 
+
+
         nickname.toggle();
         //loadFragment(duc.getFriendsFragment());
 
@@ -115,7 +119,10 @@ public class AddUserFragment extends Fragment {
         return v;
     }
 
+
+
     private void attemptSearch(String input) {
+        System.out.println("BUTTON PRESSED");
 
         if (input.length() > 0) {
             int searchtype =  -1;
@@ -154,6 +161,7 @@ public class AddUserFragment extends Fragment {
                         .beginTransaction()
                         .replace(R.id.framelayoutforlist, frag)
                         .addToBackStack(null);
+
         transaction.commit();
     }
 
@@ -208,18 +216,16 @@ public class AddUserFragment extends Fragment {
                 }
 
                 Constants.searchResults = searchResult;
-                loadFragment(duc.getFriendsFragment());
+
+
+
+                loadFragment(duc.getNewFriendFragment());
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-//            if (result.startsWith("Unable to")) {
-//                ((EditText) findViewById(R.id.inputEditText)).setError(result);
-//            } else {
-//                mTextView.setText(result);
-//            }
         }
     }
 

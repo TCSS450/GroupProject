@@ -38,7 +38,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getFirstName());
+        holder.mIdView.setText(mValues.get(position).getFirstName()+ " "+ mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getNickName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +48,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     //mListener.onFriendListFragmentInteraction(holder.mItem);
+
                 }
             }
         });
@@ -67,8 +68,8 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.fullname_result);
-            mContentView = (TextView) view.findViewById(R.id.nickname_result);
+            mIdView = (TextView) view.findViewById(R.id.nickname_result);
+            mContentView = (TextView) view.findViewById(R.id.fullname_result);
         }
 
         @Override
