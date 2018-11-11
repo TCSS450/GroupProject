@@ -16,6 +16,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewRequestsFragment;
@@ -37,6 +38,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private VerificationFragment verificationFragment;
     private ForgotPasswordFragment forgotPasswordFragment;
     private ForgotPassVerifyFragment forgotPassVerifyFragment;
+    private ChangePasswordFragment changePasswordFragment;
 
     private FriendsFragment friendsFragment;
 
@@ -58,6 +60,7 @@ public class DataUtilityControl extends AppCompatActivity {
         this.friendsFragment = new FriendsFragment();
         this.forgotPasswordFragment = new ForgotPasswordFragment();
         this.forgotPassVerifyFragment = new ForgotPassVerifyFragment();
+        this.changePasswordFragment = new ChangePasswordFragment();
     }
 
     /* ***** Get Fragments **** ***/
@@ -94,6 +97,8 @@ public class DataUtilityControl extends AppCompatActivity {
     public Fragment getForgotPasswordFragment() {return this.forgotPasswordFragment; }
 
     public Fragment getPassForgotVerifyFragment() {return this.forgotPassVerifyFragment; }
+
+    public Fragment getChangePasswordFragment() { return this.changePasswordFragment; }
 
     /* ***** Get Endpoints **** ***/
 
