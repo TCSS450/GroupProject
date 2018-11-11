@@ -1,6 +1,7 @@
 package group3.tcss450.uw.edu.groupappproject.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,7 +42,6 @@ public class ForgotPasswordFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class ForgotPasswordFragment extends Fragment {
         Credentials credentials =
                 new Credentials.Builder(mUserCreds.getText().toString(), "")
                         .addNickName(mUserCreds.getText().toString()).build();
-        duc.saveCreds(credentials);
+//        duc.saveCreds(credentials);
         // setup the task to send to forgotPass endpoint
         Uri uri = duc.getPasswordForgotPointURI();
         JSONObject userName = new JSONObject();
@@ -102,8 +102,10 @@ public class ForgotPasswordFragment extends Fragment {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
+            String email = resultsJSON.getString("email");
             if (status == 1) { // Successful email sent
                 mListener.onGoToForgotPassVerify();
+                saveEmailInUserPrefs(email);
 
             } else if (status == 2) { // User doesn’t exist in DB
                 duc.makeToast(getContext(),
@@ -122,6 +124,19 @@ public class ForgotPasswordFragment extends Fragment {
             Log.wtf("CREDENTIALS", "Error creating JSON: ");
         }
         mListener.onWaitFragmentInteractionHide();
+    }
+
+    private void saveEmailInUserPrefs(final String email) {
+        SharedPreferences settings =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+//        //Store the email in SharedPrefs
+//        prefs.edit().putString(getString(R.string.keys_prefs_email), email).apply();
+
+        SharedPreferences.Editor settingsEdit = settings.edit();
+        settingsEdit.putString(getString(R.string.keys_prefs_email), email);
+        settingsEdit.commit();
     }
 
     @Override
