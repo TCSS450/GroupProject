@@ -40,6 +40,9 @@
     <string name="forgotpass_enter_pin_button">I have a Pin</string>
     <string name="forgotpass_send_pin_button">Get Pin</string>
 
+    <!--Toasts-->
+    <string name="toast_error_unidentified_user">Sorry we could not find that user</string>
+    <string name="toast_error_user_not_verified">It looks like you are not verified yet. Please verify your account</string>
 
     <!--Verification-->
     <string name="verification_greeting_title">Who Are You?</string>

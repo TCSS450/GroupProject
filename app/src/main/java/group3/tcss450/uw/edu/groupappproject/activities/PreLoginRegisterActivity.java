@@ -79,6 +79,7 @@ public class PreLoginRegisterActivity extends AppCompatActivity implements
         loadFragment(duc.getVerificationFragment());
     }
 
+
     @Override
     public void onForgotPassword() {
         loadFragment(duc.getForgotPasswordFragment());
@@ -92,5 +93,11 @@ public class PreLoginRegisterActivity extends AppCompatActivity implements
     public void verifiedUserSendToSuccess(Credentials credentials) {
         //Do we still save the credentials?
         OnLogin(credentials);
+    }
+
+
+    @Override
+    public void onGoToForgotPassVerify() {
+        loadFragment(duc.getPassForgotVerifyFragment());
     }
 }
