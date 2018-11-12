@@ -41,6 +41,13 @@
     <string name="forgotpass_enter_pin_button">I have a Pin</string>
     <string name="forgotpass_send_pin_button">Get Pin</string>
 
+    <string name="changepass_greeting">Change Password</string>
+    <string name="changepass_message">Passwords must be at least 6 characters long contain an uppercase letter and at least one special character</string>
+    <string name="changepass_confirm_button">Submit</string>
+
+    <!--Toasts-->
+    <string name="toast_error_unidentified_user">Sorry we could not find that user</string>
+    <string name="toast_error_user_not_verified">It looks like you are not verified yet. Please verify your account</string>
 
     <!--Verification-->
     <string name="verification_greeting_title">Who Are You?</string>

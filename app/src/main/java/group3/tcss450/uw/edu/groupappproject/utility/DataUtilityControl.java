@@ -10,12 +10,13 @@ import android.widget.Toast;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPassVerifyFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.MyFriendsRecyclerViewAdapter;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewRequestsFragment;
@@ -36,6 +37,8 @@ public class DataUtilityControl extends AppCompatActivity {
     private HomeViewFragment homeViewFragment;
     private VerificationFragment verificationFragment;
     private ForgotPasswordFragment forgotPasswordFragment;
+    private ForgotPassVerifyFragment forgotPassVerifyFragment;
+    private ChangePasswordFragment changePasswordFragment;
 
     private FriendsFragment friendsFragment;
 
@@ -56,6 +59,8 @@ public class DataUtilityControl extends AppCompatActivity {
         this.verificationFragment = new VerificationFragment();
         this.friendsFragment = new FriendsFragment();
         this.forgotPasswordFragment = new ForgotPasswordFragment();
+        this.forgotPassVerifyFragment = new ForgotPassVerifyFragment();
+        this.changePasswordFragment = new ChangePasswordFragment();
     }
 
     /* ***** Get Fragments **** ***/
@@ -91,8 +96,19 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getForgotPasswordFragment() {return this.forgotPasswordFragment; }
 
+    public Fragment getPassForgotVerifyFragment() {return this.forgotPassVerifyFragment; }
+
+    public Fragment getChangePasswordFragment() { return this.changePasswordFragment; }
 
     /* ***** Get Endpoints **** ***/
+
+    public Uri getPasswordChangeEndPointURI() {
+        return Uri.parse(Constants.PASSWORD_CHANGE_END_POINT_URL);
+    }
+
+    public Uri getPasswordForgotPointURI() {
+        return Uri.parse(Constants.PASSWORD_FORGOT_END_POINT_URL);
+    }
 
     public Uri getLoginEndPointURI() {
         return Uri.parse(Constants.LOGIN_END_POINT_URL);
