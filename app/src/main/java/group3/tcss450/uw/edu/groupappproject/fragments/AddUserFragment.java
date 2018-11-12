@@ -108,14 +108,7 @@ public class AddUserFragment extends Fragment {
         Button b = v.findViewById(R.id.searchbtn);
         b.setOnClickListener(view -> attemptSearch(searchView.getText().toString()));
 
-
-
         nickname.toggle();
-        //loadFragment(duc.getFriendsFragment());
-
-
-
-
         return v;
     }
 

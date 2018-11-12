@@ -1,15 +1,23 @@
 package group3.tcss450.uw.edu.groupappproject.fragments;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment.OnListFragmentInteractionListener;
 //import group3.tcss450.uw.edu.groupappproject.dummy.DummyContent.Credentials;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 import java.util.List;
 
@@ -18,20 +26,24 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendsRecyclerViewAdapter.ViewHolder> {
+public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendsRecyclerViewAdapter.ViewHolder>{
 
     private final List<Credentials> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private DataUtilityControl duc;
+    private Button mAddFriendButton;
 
     public MyFriendsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+        this.duc = Constants.dataUtilityControl;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_friends, parent, false);
+        //mAddFriendButton = view.findViewById(R.id.addBtn);
         return new ViewHolder(view);
     }
 
@@ -40,18 +52,28 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getFirstName()+ " "+ mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getNickName());
+        System.out.println("---------------------------------- MEMBER ID: " + duc.getUserCreds().getMemberId());
+        //mAddFriendButton.setOnClickListener(view -> onClick(position));
+    }
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    //mListener.onFriendListFragmentInteraction(holder.mItem);
+    public void onClick(int position) {
+        Uri addFriendUri = this.duc.getAddFriendEndPointURI();
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("userAId", mValues.get(position).getMemberId());
+            msg.put("userBId", mValues.get(position).getMemberId());
+        } catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        }
+//        new SendPostAsyncTask.Builder(addFriendUri.toString(), msg)
+//                .onPreExecute(this::handleRegisterOnPre)
+//                .onPostExecute(this::handleAddFriendRequestOnPost)
+//                .onCancelled(this::handleErrorsInTask)
+//                .build().execute();
 
-                }
-            }
-        });
+        // GETS RESULT
+        // if result == 0, add worked, change icon to CHECKMARK
+        // else, add failed, something went wrong with JSON.
     }
 
     @Override

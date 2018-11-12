@@ -183,6 +183,9 @@ public class LoginFragment extends Fragment {
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
             if (status == 1) { // success
+                int id = resultsJSON.getInt("memberId");
+                loginCreds.setMemberId(id);
+                System.out.println("---------------------------------- MEMBER ID: " + loginCreds.getMemberId());
                 saveCredentials(loginCreds);
                 mListener.onWaitFragmentInteractionHide();
                 mListener.OnLogin(this.loginCreds);
@@ -195,11 +198,12 @@ public class LoginFragment extends Fragment {
                 ((TextView) getView().findViewById(R.id.passwordInput))
                         .setError("Password Invalid");
             } else if (status == 4) { // Email is unverified. Resend email and go to verification.
-                Log.d("LoginFragment", "recieved code 4");
+                Log.d("LoginFragment", "received code 4");
+                int id = resultsJSON.getInt("memberId");
+                loginCreds.setMemberId(id);
                 mListener.onWaitFragmentInteractionHide();
                 Uri resendEmail = this.duc.getResendEndPointURI();
                 JSONObject msg = new JSONObject();
-
                 try {
                     msg.put("email", mEmail.getText().toString());
 

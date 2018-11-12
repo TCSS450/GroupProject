@@ -25,6 +25,7 @@ public class Credentials implements Serializable {
     private String mNickName;
     private String mPhoneNumber;
     private int mDisplayPref;
+    private int mMemberId;
 
     /**
      * Helper class for building Credentials.
@@ -42,7 +43,6 @@ public class Credentials implements Serializable {
         private String mPhoneNumber = "";
         private int mDisplayPref = 1;
         private int mVerifyCode = 1000;
-
 
         /**
          * Constructs a new Builder.
@@ -122,6 +122,7 @@ public class Credentials implements Serializable {
         mEmail = builder.mEmail;
         mPhoneNumber = builder.mPhoneNumber;
         mDisplayPref = builder.mDisplayPref;
+        mMemberId = -1;
     }
 
     /**
@@ -167,6 +168,10 @@ public class Credentials implements Serializable {
     public String getPhoneNumber() { return mPhoneNumber; }
 
     public int getDisplayPref() { return mDisplayPref; }
+
+    public int getMemberId() { return mMemberId; }
+
+    public void setMemberId(int id) { mMemberId = id; }
 
     /**
      * Get all of the fields in a single JSON object. Note, if no values were provided for the

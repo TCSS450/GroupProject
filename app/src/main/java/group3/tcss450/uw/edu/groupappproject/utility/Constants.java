@@ -18,9 +18,11 @@ public class Constants {
     public static final String RESEND_END_POINT_URL = "https://group3-backend.herokuapp.com/resend";
     public static final String LOGIN_END_POINT_FIREBASE_URL = "https://group3-backend.herokuapp.com/login/with_token";
     public static final String BASE_END_POINT_URL = "group3-backend.herokuapp.com";
+    public static final String ADD_FRIEND_URL = "https://group3-backend.herokuapp.com/send-friend-request";
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;
     public static ArrayList<Credentials> searchResults = null;
+    public static ArrayList<Credentials> receivedRequests = null;
 
 }

@@ -124,7 +124,7 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getBaseEndPointURI() {return Uri.parse(Constants.BASE_END_POINT_URL); }
 
-
+    public Uri getAddFriendEndPointURI() { return Uri.parse(Constants.ADD_FRIEND_URL); }
 
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;

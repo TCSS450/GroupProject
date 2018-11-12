@@ -187,7 +187,10 @@ public class RegisterFragment extends Fragment {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
+
             if (status == 1) { // success, sends email and user must verify
+                registerCreds.setMemberId(resultsJSON.getInt("memberId"));
+                System.out.println("---------CHECKING MEMBER ID: " + registerCreds.getMemberId());
                 mListener.onWaitFragmentInteractionHide();
                 mListener.registeredUserSendToVerification(registerCreds);
             }  else if (status == 2) { // email exists without Verification
