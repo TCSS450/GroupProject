@@ -12,14 +12,15 @@ import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPassVerifyFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.ViewRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewWeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 
@@ -32,7 +33,6 @@ public class DataUtilityControl extends AppCompatActivity {
     private CreateChatFragment createChatFragment;
     private CreateGroupFragment createGroupFragment;
     private ViewConnectionsFragment viewConnectionsFragment;
-    private ViewRequestsFragment viewRequestsFragment;
     private ViewWeatherFragment viewWeatherFragment;
     private HomeViewFragment homeViewFragment;
     private VerificationFragment verificationFragment;
@@ -41,7 +41,8 @@ public class DataUtilityControl extends AppCompatActivity {
     private ChangePasswordFragment changePasswordFragment;
 
     private FriendsFragment friendsFragment;
-
+    private FriendRequestsFragment friendRequestsFragment;
+    private SentFriendRequestsFragment sentFriendRequestsFragment;
     private Credentials userCreds;
 
 
@@ -53,11 +54,12 @@ public class DataUtilityControl extends AppCompatActivity {
         this.createChatFragment = new CreateChatFragment();
         this.createGroupFragment = new CreateGroupFragment();
         this.viewConnectionsFragment = new ViewConnectionsFragment();
-        this.viewRequestsFragment = new ViewRequestsFragment();
         this.viewWeatherFragment = new ViewWeatherFragment();
         this.homeViewFragment = new HomeViewFragment();
         this.verificationFragment = new VerificationFragment();
         this.friendsFragment = new FriendsFragment();
+        this.friendRequestsFragment = new FriendRequestsFragment();
+        this.sentFriendRequestsFragment = new SentFriendRequestsFragment();
         this.forgotPasswordFragment = new ForgotPasswordFragment();
         this.forgotPassVerifyFragment = new ForgotPassVerifyFragment();
         this.changePasswordFragment = new ChangePasswordFragment();
@@ -82,17 +84,17 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getViewConnectionsFragment() { return this.viewConnectionsFragment;}
 
-    public Fragment getViewRequestsFragment() { return this.viewRequestsFragment;}
-
     public Fragment getViewWeatherFragment() { return this.viewWeatherFragment;}
 
     public Fragment getHomeViewFragment() { return this.homeViewFragment;}
 
     public Fragment getVerificationFragment() { return this.verificationFragment;}
 
-    public Fragment getFriendsFragment() {return this.friendsFragment;}
+    public Fragment getNewFriendFragment() { return this.friendsFragment; }
 
-    public Fragment getNewFriendFragment() {return new FriendsFragment(); }
+    public Fragment getFriendRequestsFragment() { return this.friendRequestsFragment; }
+
+    public Fragment getSentFriendRequestsFragment() { return this.sentFriendRequestsFragment; }
 
     public Fragment getForgotPasswordFragment() {return this.forgotPasswordFragment; }
 
@@ -125,6 +127,10 @@ public class DataUtilityControl extends AppCompatActivity {
     public Uri getBaseEndPointURI() {return Uri.parse(Constants.BASE_END_POINT_URL); }
 
     public Uri getAddFriendEndPointURI() { return Uri.parse(Constants.ADD_FRIEND_URL); }
+
+    public Uri getFriendRequestsRecievedEndPointURI() { return Uri.parse(Constants.RECEIVED_REQUESTS_END_POINT_URL); }
+
+    public Uri getFriendRequestsSentEndPointURI() { return Uri.parse(Constants.SENT_REQUESTS_END_POINT_URL); }
 
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;

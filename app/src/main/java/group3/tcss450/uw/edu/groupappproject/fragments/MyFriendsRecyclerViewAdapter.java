@@ -43,7 +43,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_friends, parent, false);
-        //mAddFriendButton = view.findViewById(R.id.addBtn);
+        mAddFriendButton = view.findViewById(R.id.addbtn);
         return new ViewHolder(view);
     }
 
@@ -53,14 +53,14 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         holder.mIdView.setText(mValues.get(position).getFirstName()+ " "+ mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getNickName());
         System.out.println("---------------------------------- MEMBER ID: " + duc.getUserCreds().getMemberId());
-        //mAddFriendButton.setOnClickListener(view -> onClick(position));
+        mAddFriendButton.setOnClickListener(view -> onClick(position));
     }
 
     public void onClick(int position) {
         Uri addFriendUri = this.duc.getAddFriendEndPointURI();
         JSONObject msg = new JSONObject();
         try {
-            msg.put("userAId", mValues.get(position).getMemberId());
+            msg.put("userAId", duc.getUserCreds().getMemberId());
             msg.put("userBId", mValues.get(position).getMemberId());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());

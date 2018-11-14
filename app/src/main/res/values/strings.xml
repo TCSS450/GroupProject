@@ -98,4 +98,7 @@
         At least one lowercase letter
     </string>
 
+    <!--Friend Request Strings-->
+    <string name="requests_pending">Pending</string>
+
 </resources>

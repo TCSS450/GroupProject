@@ -21,15 +21,20 @@ import java.io.IOException;
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.dummy.DummyContent;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 public class HomeActivity extends MenuOptionsActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnListFragmentInteractionListener,
-        WaitFragment.OnWaitFragmentInteractionListener {
+        WaitFragment.OnWaitFragmentInteractionListener,
+        FriendRequestsFragment.OnListFragmentInteractionListener,
+        SentFriendRequestsFragment.OnListFragmentInteractionListener {
     private DataUtilityControl duc;
 
     @Override
@@ -108,7 +113,7 @@ public class HomeActivity extends MenuOptionsActivity
         } else if (id == R.id.connections) {
             loadFragment(this.duc.getViewConnectionsFragment());
         } else if (id == R.id.requests) {
-            loadFragment(this.duc.getViewRequestsFragment());
+            loadFragment(this.duc.getFriendRequestsFragment());
         } else if (id == R.id.weather) {
             loadFragment(this.duc.getViewWeatherFragment());
         } else if (id == R.id.home) {
@@ -165,6 +170,11 @@ public class HomeActivity extends MenuOptionsActivity
 
     @Override
     public void onFriendListFragmentInteraction(DummyContent.Credentials item) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(Credentials credentials) {
 
     }
 

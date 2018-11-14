@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment.OnListFragmentInteractionListener;
-import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment.OnListFragmentInteractionListener;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
-import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 import java.util.List;
 
@@ -19,13 +17,12 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRequestsRecyclerViewAdapter.ViewHolder> {
+public class MySentFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<MySentFriendRequestsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Credentials> mValues;
     private final OnListFragmentInteractionListener mListener;
-    private DataUtilityControl duc;
 
-    public MyFriendRequestsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
+    public MySentFriendRequestsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -33,8 +30,7 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_friendrequests, parent, false);
-        this.duc = Constants.dataUtilityControl;
+                .inflate(R.layout.fragment_sentfriendrequests, parent, false);
         return new ViewHolder(view);
     }
 
@@ -64,8 +60,8 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.textView_received_fullName);
-            mContentView = (TextView) view.findViewById(R.id.textView_received_nickname);
+            mIdView = (TextView) view.findViewById(R.id.textView_sent_fullName);
+            mContentView = (TextView) view.findViewById(R.id.textView_sent_nickname);
         }
 
         @Override

@@ -112,38 +112,27 @@ public class AddUserFragment extends Fragment {
         return v;
     }
 
-
-
     private void attemptSearch(String input) {
         System.out.println("BUTTON PRESSED");
-
         if (input.length() > 0) {
             int searchtype =  -1;
-
             if (nickname.isChecked()) {
                 searchtype = 1;
-
             } else if (email.isChecked()) {
                 searchtype = 3;
-
             } else  if (fullname.isChecked()) {
                 searchtype = 2;
-
             } else {
                 searchtype = 4;
-
             }
             AsyncTask<String, Void, String> task = null;
-
             task = new TestWebServiceTask();
-
             Uri uri = new Uri.Builder()
                     .scheme("https")
                     .authority(Constants.BASE_END_POINT_URL)
                     .appendPath("search-members")
                     .appendQueryParameter("searchstring",input).appendQueryParameter("searchtype",searchtype + "")
                     .build();
-
             task.execute(uri.toString());
         }
 
@@ -154,14 +143,12 @@ public class AddUserFragment extends Fragment {
                         .beginTransaction()
                         .replace(R.id.framelayoutforlist, frag)
                         .addToBackStack(null);
-
         transaction.commit();
     }
 
     private class TestWebServiceTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
-
             String response = "";
             HttpURLConnection urlConnection = null;
             String url = strings[0];
@@ -186,35 +173,22 @@ public class AddUserFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-
             try {
                 JSONObject resultsJSON = new JSONObject(result);
-
                 JSONArray data = resultsJSON.getJSONArray("data");
                 System.out.println(data);
-
                 ArrayList<Credentials> searchResult = new ArrayList<>();
-
                 for (int i = 0; i< data.length(); i++) {
                     JSONObject c = data.getJSONObject(i);
-
                     Credentials cred = new Credentials.Builder("","")
                             .addFirstName(c.getString("firstName"))
                             .addLastName(c.getString("lastName"))
                             .addNickName(c.getString("nickname"))
                             .build();
-
                     searchResult.add(cred);
-
                 }
-
                 Constants.searchResults = searchResult;
-
-
-
                 loadFragment(duc.getNewFriendFragment());
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
