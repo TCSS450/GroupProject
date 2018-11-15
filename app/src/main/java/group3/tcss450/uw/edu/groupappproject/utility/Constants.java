@@ -19,10 +19,11 @@ public class Constants {
     public static final String LOGIN_END_POINT_FIREBASE_URL = "https://group3-backend.herokuapp.com/login/with_token";
     public static final String BASE_END_POINT_URL = "group3-backend.herokuapp.com";
     public static final String ADD_FRIEND_URL = "https://group3-backend.herokuapp.com/send-friend-request";
-    public static final String RECEIVED_REQUESTS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-current-requests";
-    public static final String SENT_REQUESTS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-sent-requests";
+    public static final String RECEIVED_REQUESTS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-request-sent-to-me";
+    public static final String SENT_REQUESTS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-request-I-sent";
     public static final String SEARCH_END_POINT_URL = "https://group3-backend.herokuapp.com/search-members";
     public static final String FRIEND_STATUS_URL = "https://group3-backend.herokuapp.com/friend-status";
+
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;

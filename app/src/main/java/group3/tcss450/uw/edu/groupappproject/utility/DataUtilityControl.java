@@ -14,6 +14,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPassVerifyFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequests;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
@@ -43,6 +44,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private ChangePasswordFragment changePasswordFragment;
 
     private FriendsFragment friendsFragment;
+    private FriendRequests friendRequests;
     private FriendRequestsFragment friendRequestsFragment;
     private SentFriendRequestsFragment sentFriendRequestsFragment;
     private Credentials userCreds;
@@ -65,6 +67,8 @@ public class DataUtilityControl extends AppCompatActivity {
         this.forgotPasswordFragment = new ForgotPasswordFragment();
         this.forgotPassVerifyFragment = new ForgotPassVerifyFragment();
         this.changePasswordFragment = new ChangePasswordFragment();
+
+        this.friendRequests = new FriendRequests();
     }
 
     /* ***** Get Fragments **** ***/
@@ -103,6 +107,8 @@ public class DataUtilityControl extends AppCompatActivity {
     public Fragment getPassForgotVerifyFragment() {return this.forgotPassVerifyFragment; }
 
     public Fragment getChangePasswordFragment() { return this.changePasswordFragment; }
+
+    public Fragment getFriendRequests() { return this.friendRequests; }
 
     public ArrayList<Credentials> getCredFromFriendStatusList(ArrayList<FriendStatus> friendStatuses) {
         ArrayList<Credentials> toSend = new ArrayList<Credentials>();

@@ -113,7 +113,7 @@ public class HomeActivity extends MenuOptionsActivity
         } else if (id == R.id.connections) {
             loadFragment(this.duc.getViewConnectionsFragment());
         } else if (id == R.id.requests) {
-            loadFragment(this.duc.getFriendRequestsFragment());
+            loadFragment(this.duc.getFriendRequests());
         } else if (id == R.id.weather) {
             loadFragment(this.duc.getViewWeatherFragment());
         } else if (id == R.id.home) {

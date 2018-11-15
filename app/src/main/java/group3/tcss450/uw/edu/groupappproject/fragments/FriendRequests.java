@@ -56,7 +56,7 @@ public class FriendRequests extends Fragment {
         Uri receivedUri = this.duc.getFriendRequestsRecievedEndPointURI();
         JSONObject msg = new JSONObject();
         try {
-            msg.put("memberId", duc.getUserCreds().getMemberId());
+           msg.put("memberId", duc.getUserCreds().getMemberId());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
@@ -95,8 +95,8 @@ public class FriendRequests extends Fragment {
                     for (int i = 0; i< data.length(); i++) {
                         JSONObject c = data.getJSONObject(i);
                         Credentials cred = new Credentials.Builder("", "")
-                                .addFirstName(c.getString("firstName"))
-                                .addLastName(c.getString("lastName"))
+                                .addFirstName(c.getString("firstname"))
+                                .addLastName(c.getString("lastname"))
                                 .addNickName(c.getString("nickname"))
                                 .build();
                         cred.setMemberId(c.getInt("memberId"));
@@ -137,8 +137,8 @@ public class FriendRequests extends Fragment {
                     for (int i = 0; i< data.length(); i++) {
                         JSONObject c = data.getJSONObject(i);
                         Credentials cred = new Credentials.Builder("", "")
-                                .addFirstName(c.getString("firstName"))
-                                .addLastName(c.getString("lastName"))
+                                .addFirstName(c.getString("firstname"))
+                                .addLastName(c.getString("lastname"))
                                 .addNickName(c.getString("nickname"))
                                 .build();
                         cred.setMemberId(c.getInt("memberId"));
