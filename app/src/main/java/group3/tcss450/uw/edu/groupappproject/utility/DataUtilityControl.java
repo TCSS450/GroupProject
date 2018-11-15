@@ -22,7 +22,6 @@ import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewWeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 

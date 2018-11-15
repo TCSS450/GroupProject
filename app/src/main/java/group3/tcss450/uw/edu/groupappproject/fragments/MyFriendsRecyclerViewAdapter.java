@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment.OnListFragmentInteractionListener;
-//import group3.tcss450.uw.edu.groupappproject.dummy.DummyContent.Credentials;
+//import group3.tcss450.uw.edu.groupappproject.dummy.NameThisBetter.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
