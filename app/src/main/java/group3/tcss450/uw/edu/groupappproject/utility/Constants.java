@@ -24,8 +24,9 @@ public class Constants {
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;
-    public static ArrayList<Credentials> searchResults = null;
+    public static ArrayList<FriendStatus> searchResults = null;
     public static ArrayList<Credentials> receivedRequests = null;
     public static ArrayList<Credentials> sentRequests = null;
+    public static ArrayList<Credentials> temporaryCreds = new ArrayList<>();
 
 }

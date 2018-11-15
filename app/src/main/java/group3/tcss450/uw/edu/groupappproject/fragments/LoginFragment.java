@@ -118,13 +118,18 @@ public class LoginFragment extends Fragment {
             loginCreds = new Credentials.Builder(nickname,
                     password).build();
 
+
             Uri loginUri = this.duc.getLoginEndPointFirebaseURI();
             JSONObject msg = loginCreds.asJSONObject();
             try {
                 msg.put("token", mFirebaseToken);
+                System.out.print("TESTTESTETSTEST" + mFirebaseToken);
             } catch (JSONException e) {
                 e.printStackTrace();
+
             }
+            System.out.print("TESTTESTETSTEST" + loginUri.toString());
+
 
             new SendPostAsyncTask.Builder(loginUri.toString(), msg)
                     .onPreExecute(this::handleLoginOnPre)
@@ -181,8 +186,20 @@ public class LoginFragment extends Fragment {
         try {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
+
+            System.out.println(resultsJSON);
+
+
+            System.out.println("NICKNAME FROM USER "+ resultsJSON.getString("nickname"));
+
+
             int status = resultsJSON.getInt("status");
+            System.out.println("THE STATUS IS " + status);
             if (status == 1) { // success
+                String nn = resultsJSON.getString("nickname");
+
+                loginCreds.setNickname(nn);
+
                 int id = resultsJSON.getInt("memberId");
                 loginCreds.setMemberId(id);
                 System.out.println("---------------------------------- MEMBER ID: " + loginCreds.getMemberId());

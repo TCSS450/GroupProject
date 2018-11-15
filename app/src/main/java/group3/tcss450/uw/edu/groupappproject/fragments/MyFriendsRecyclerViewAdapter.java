@@ -65,15 +65,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
-//        new SendPostAsyncTask.Builder(addFriendUri.toString(), msg)
-//                .onPreExecute(this::handleRegisterOnPre)
-//                .onPostExecute(this::handleAddFriendRequestOnPost)
-//                .onCancelled(this::handleErrorsInTask)
-//                .build().execute();
-
-        // GETS RESULT
-        // if result == 0, add worked, change icon to CHECKMARK
-        // else, add failed, something went wrong with JSON.
+        System.out.println("STH CLICKED   " + position);
     }
 
     @Override

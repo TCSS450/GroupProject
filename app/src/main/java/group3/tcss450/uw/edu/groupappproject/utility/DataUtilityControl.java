@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
+
 import group3.tcss450.uw.edu.groupappproject.fragments.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
@@ -90,7 +92,7 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getVerificationFragment() { return this.verificationFragment;}
 
-    public Fragment getNewFriendFragment() { return this.friendsFragment; }
+    public Fragment getNewFriendFragment() { return new FriendsFragment(); }
 
     public Fragment getFriendRequestsFragment() { return this.friendRequestsFragment; }
 
@@ -102,6 +104,15 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getChangePasswordFragment() { return this.changePasswordFragment; }
 
+    public ArrayList<Credentials> getCredFromFriendStatusList(ArrayList<FriendStatus> friendStatuses) {
+        ArrayList<Credentials> toSend = new ArrayList<Credentials>();
+
+        for (int i = 0; i <friendStatuses.size(); i++) {
+            toSend.add(friendStatuses.get(i).getCred());
+
+        }
+        return toSend;
+    }
     /* ***** Get Endpoints **** ***/
 
     public Uri getPasswordChangeEndPointURI() {

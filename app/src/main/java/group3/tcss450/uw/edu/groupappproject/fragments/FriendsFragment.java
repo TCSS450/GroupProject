@@ -38,6 +38,7 @@ public class FriendsFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private DataUtilityControl duc = Constants.dataUtilityControl;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,6 +70,9 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends_list, container, false);
+
+        Button b = view.findViewById(R.id.addbtn);
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -78,7 +82,7 @@ public class FriendsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            MyFriendsRecyclerViewAdapter adapter = new MyFriendsRecyclerViewAdapter(Constants.searchResults, mListener);
+            MyFriendsRecyclerViewAdapter adapter = new MyFriendsRecyclerViewAdapter(Constants.temporaryCreds, mListener);
             recyclerView.setAdapter(adapter);
 
             System.out.println("UPDATE LIST");

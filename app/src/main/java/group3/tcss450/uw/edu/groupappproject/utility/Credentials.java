@@ -42,6 +42,7 @@ public class Credentials implements Serializable {
         private String mNickName = "";
         private String mPhoneNumber = "";
         private int mDisplayPref = 1;
+        private int mMemberId = -1;
         private int mVerifyCode = 1000;
 
         /**
@@ -104,6 +105,10 @@ public class Credentials implements Serializable {
             return this;
         }
 
+        public  Builder addMemberId(final int val) {
+            mMemberId = val;
+            return this;
+        }
         public Credentials build() {
             return new Credentials(this);
         }
@@ -122,7 +127,7 @@ public class Credentials implements Serializable {
         mEmail = builder.mEmail;
         mPhoneNumber = builder.mPhoneNumber;
         mDisplayPref = builder.mDisplayPref;
-        mMemberId = -1;
+        mMemberId = builder.mMemberId;
     }
 
     /**
@@ -172,6 +177,9 @@ public class Credentials implements Serializable {
     public int getMemberId() { return mMemberId; }
 
     public void setMemberId(int id) { mMemberId = id; }
+
+    public void setNickname(String nn) { mNickName = nn; }
+
 
     /**
      * Get all of the fields in a single JSON object. Note, if no values were provided for the
