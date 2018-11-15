@@ -55,6 +55,9 @@ public class AddUserFragment extends Fragment {
     private boolean firstThreadDone = false;
     private boolean secondThreadDone = false;
 
+    private int firstFriendStatus = -1;
+    private int secondFriendStatus= -1;
+
     private RadioButton nickname;
     private RadioButton email;
     private RadioButton fullname;
@@ -77,15 +80,6 @@ public class AddUserFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddUserFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AddUserFragment newInstance(String param1, String param2) {
         AddUserFragment fragment = new AddUserFragment();
         Bundle args = new Bundle();
@@ -129,37 +123,20 @@ public class AddUserFragment extends Fragment {
         return v;
     }
 
-
-
     private void attemptSearch(String input) {
-
-
         if (input.length() > 0) {
             int searchtype =  -1;
-
             if (nickname.isChecked()) {
                 searchtype = 1;
-
             } else if (email.isChecked()) {
                 searchtype = 3;
-
             } else  if (fullname.isChecked()) {
                 searchtype = 2;
-
             } else {
                 searchtype = 4;
-
             }
 
-
-
-            Uri uri = new Uri.Builder()
-                    .scheme("https")
-                    .authority(Constants.BASE_END_POINT_URL)
-                    .appendPath("search-members")
-                    .build();
-
-
+            Uri uri = duc.getSearchEndPointURI();
             JSONObject msg = new JSONObject();
             try {
                 msg.put("loggedInUserNickname", this.duc.getUserCreds().getNickName());
@@ -169,50 +146,15 @@ public class AddUserFragment extends Fragment {
             }catch (JSONException e) {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
             }
-            System.out.println(msg);
-
 
             new SendPostAsyncTask.Builder(uri.toString(), msg)
                     .onPostExecute(this::handleSearchOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
-            System.out.println("TEMPERRAYYY CRED " + Constants.temporaryCreds.size());
-
-
-//            task.execute(uri.toString());
         }
 
     }
 
-    private void getFriendStatus(ArrayList<Credentials> cred) {
-        int myId =duc.getUserCreds().getMemberId();
-        Uri friendUri = new Uri.Builder()
-                .scheme("https")
-                .authority(Constants.BASE_END_POINT_URL)
-                .appendPath("friend-status")
-                .build();
-        for (int i = 0 ;i < cred.size(); i++) {
-            int searchResultID = cred.get(i).getMemberId();
-
-
-                JSONObject msg = new JSONObject();
-                try {
-                    msg.put("userAId", myId);
-                    msg.put("userBId", searchResultID);
-
-                }catch (JSONException e) {
-                    Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
-                }
-                currentCred = cred.get(i);
-
-            new SendPostAsyncTask.Builder(friendUri.toString(), msg)
-                        .onPostExecute(this::handleRelationshipOnPost)
-                        .onCancelled(this::handleErrorsInTask)
-                        .build().execute();
-
-
-        }
-    }
 
     private void handleErrorsInTask(String result) {
         Log.e("ASYNCT_TASK_ERROR",  result);
@@ -236,32 +178,18 @@ public class AddUserFragment extends Fragment {
             System.out.println(data);
 
             duc.getUserCreds().setMemberId(resultsJSON.getInt("loggedInMemeberId"));
-
             searchResult = new ArrayList<>();
-
-
-            Constants.temporaryCreds.clear();
 
             for (int i = 0; i< data.length(); i++) {
                 JSONObject c = data.getJSONObject(i);
-
                 Credentials cred = new Credentials.Builder("","")
                         .addFirstName(c.getString("firstName"))
                         .addLastName(c.getString("lastName"))
                         .addNickName(c.getString("nickname"))
                         .addMemberId(c.getInt("memberid"))
                         .build();
-
-                Constants.temporaryCreds.add(cred);
                 currentCred = cred;
-
-                Uri friendUri = new Uri.Builder()
-                        .scheme("https")
-                        .authority(Constants.BASE_END_POINT_URL)
-                        .appendPath("friend-status")
-                        .build();
-
-
+                Uri friendUri = duc.getFriendStatusURI();
                 JSONObject msg = new JSONObject();
                 try {
                     msg.put("userAId", this.duc.getUserCreds().getMemberId());
@@ -270,33 +198,35 @@ public class AddUserFragment extends Fragment {
                 }catch (JSONException e) {
                     Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
                 }
-
-
+                currentCred = cred;
                 new SendPostAsyncTask.Builder(friendUri.toString(), msg)
-                        .onPostExecute(this::handleRelationshipOnPost)
+                        .onPostExecute(this::handFirstThreadAfter)
                         .onCancelled(this::handleErrorsInTask)
                         .build().execute();
 
-
-
-//
-
-                //searchResult.add(cred);
-
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
-            //getFriendStatus(Constants.temporaryCreds);
-
-            System.out.println("TEMPERRAYYY CREDDDDDD " + Constants.temporaryCreds.size());
-
-
-           //Constants.searchResults = searchResult;
-
-
-
-            loadFragment(duc.getNewFriendFragment());
-
-
+    private void handFirstThreadAfter(String result) {
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            int relationship = resultsJSON.getInt("status");
+            firstFriendStatus = relationship;
+            Uri uri = duc.getFriendStatusURI();
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("userAId", currentCred.getMemberId());
+                msg.put("userBId", this.duc.getUserCreds().getMemberId());
+            }catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
+            }
+            new SendPostAsyncTask.Builder(uri.toString(), msg)
+                    .onPostExecute(this::handSecondThreadAfter)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -304,40 +234,37 @@ public class AddUserFragment extends Fragment {
 
     }
 
-    private void handleRelationshipOnPost(String result) {
-
-
+    private void handSecondThreadAfter(String result) {
         try {
             JSONObject resultsJSON = new JSONObject(result);
-
             int relationship = resultsJSON.getInt("status");
-
-            System.out.println("RELATIONSHIP " + relationship);
-            searchResult.add(new FriendStatus(currentCred, 1));
-            View v = getView().findViewById(R.id.list);
-            Button b = v.findViewById(R.id.cardlayout).findViewById(R.id.constraintinsidecard).findViewById(R.id.addbtn);
-
-           View test = this.inflater.inflate(R.layout.fragment_friends_list,container,false);
-
-            if (relationship == 1) {
-
-            } else if (relationship == 2) {
-                b.setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
-                System.out.println("ALREADY FRIEND");
-
-            } else if (relationship == 3) {
-                b.setBackgroundResource(R.drawable.ic_pending_black_24dp);
-            } else if (relationship == 4){
-                b.setBackgroundResource(R.drawable.ic_accept_green_24dp);
-            } else {
-
-            }
-
+            secondFriendStatus = relationship;
+            handleRelationshipOnPost();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Constants.searchResults = searchResult;
+    }
 
+
+    private void handleRelationshipOnPost() {
+        if (firstFriendStatus == 1 && secondFriendStatus == 1) {
+            //b.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
+            searchResult.add(new FriendStatus(currentCred, 1));
+        } else if (firstFriendStatus == 2 || secondFriendStatus == 2) {
+            //b.setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
+            searchResult.add(new FriendStatus(currentCred, 2));
+
+        } else if (firstFriendStatus == 3) {
+            //b.setBackgroundResource(R.drawable.ic_pending_black_24dp);
+            searchResult.add(new FriendStatus(currentCred, 3));
+
+        } else if (secondFriendStatus == 3) {
+            //b.setBackgroundResource(R.drawable.ic_accept_green_24dp);
+            searchResult.add(new FriendStatus(currentCred, 4));
+
+        }
+        Constants.searchResults = searchResult;
+        loadFragment(duc.getNewFriendFragment());
     }
 
     private void testMethod() {

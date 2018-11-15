@@ -18,6 +18,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment.OnListFra
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.FriendStatus;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         mValues = items;
         mListener = listener;
         this.duc = Constants.dataUtilityControl;
+        System.out.println();
     }
 
     @Override
@@ -52,7 +54,21 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getFirstName()+ " "+ mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getNickName());
+        FriendStatus currentNode =  Constants.searchResults.get(position);
+
+        //holder.mIdView.setText(currentNode.getCred().getFirstName() + " " + Constants.searchResults.get(position).getCred().getLastName());
+        //holder.mContentView.setText(currentNode.getCred().getNickName());
         System.out.println("---------------------------------- MEMBER ID: " + duc.getUserCreds().getMemberId());
+
+        if (Constants.searchResults.get(position).getRelationship() == 1) {
+            mAddFriendButton.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
+        } else if(Constants.searchResults.get(position).getRelationship() == 2) {
+            mAddFriendButton.setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
+        } else if (Constants.searchResults.get(position).getRelationship() == 3) {
+            mAddFriendButton.setBackgroundResource(R.drawable.ic_pending_black_24dp);
+        } else if (Constants.searchResults.get(position).getRelationship() == 4) {
+            mAddFriendButton.setBackgroundResource(R.drawable.ic_accept_green_24dp);
+        }
         mAddFriendButton.setOnClickListener(view -> onClick(position));
     }
 

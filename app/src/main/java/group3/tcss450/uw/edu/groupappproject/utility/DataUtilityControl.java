@@ -143,6 +143,10 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getFriendRequestsSentEndPointURI() { return Uri.parse(Constants.SENT_REQUESTS_END_POINT_URL); }
 
+    public Uri getSearchEndPointURI() { return Uri.parse(Constants.SEARCH_END_POINT_URL); }
+
+    public Uri getFriendStatusURI() { return Uri.parse(Constants.FRIEND_STATUS_URL); }
+
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;
     }
