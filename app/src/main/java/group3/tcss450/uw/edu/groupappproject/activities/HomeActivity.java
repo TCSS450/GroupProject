@@ -16,6 +16,8 @@ import android.view.MenuItem;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import group3.tcss450.uw.edu.groupappproject.R;
@@ -187,6 +189,16 @@ public class HomeActivity extends MenuOptionsActivity
     @Override
     public void viewFriendsListItemclicked(ViewFriendsItemContent item) {
         //todo: from view my friends stuff
+    }
+
+    @Override
+    public void onAcceptListFragmentInteraction(JSONObject msg) {
+
+    }
+
+    @Override
+    public void onDenyListFragmentInteraction(JSONObject msg) {
+
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
