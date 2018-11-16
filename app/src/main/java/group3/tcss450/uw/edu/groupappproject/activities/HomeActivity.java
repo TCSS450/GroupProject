@@ -24,6 +24,8 @@ import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriendsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriendsItemContent;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
@@ -34,7 +36,10 @@ public class HomeActivity extends MenuOptionsActivity
         FriendsFragment.OnListFragmentInteractionListener,
         WaitFragment.OnWaitFragmentInteractionListener,
         FriendRequestsFragment.OnListFragmentInteractionListener,
-        SentFriendRequestsFragment.OnListFragmentInteractionListener {
+        SentFriendRequestsFragment.OnListFragmentInteractionListener,
+        ViewFriendsFragment.OnViewFriendsListFragmentInteractionListener
+
+{
     private DataUtilityControl duc;
 
     @Override
@@ -111,7 +116,8 @@ public class HomeActivity extends MenuOptionsActivity
         } else if (id == R.id.createGroup) {
             loadFragment(this.duc.getCreateGroupFragment());
         } else if (id == R.id.connections) {
-//            loadFragment(ViewFriendsFragment.newInstance());
+
+            loadFragment(new ViewFriendsFragment()); // todo: update
         } else if (id == R.id.requests) {
             loadFragment(this.duc.getFriendRequestsFragment());
         } else if (id == R.id.weather) {
@@ -176,6 +182,11 @@ public class HomeActivity extends MenuOptionsActivity
     @Override
     public void onListFragmentInteraction(Credentials credentials) {
 
+    }
+
+    @Override
+    public void viewFriendsListItemclicked(ViewFriendsItemContent item) {
+        //todo: from view my friends stuff
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
