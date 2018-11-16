@@ -59,6 +59,9 @@ public class AddUserFragment extends Fragment {
     private SendPostAsyncTask task1;
     private ArrayList<Credentials> tempCreds;
 
+    private int[] firstStatuses;
+    private int[] secondStatuses;
+
     private EditText searchView;
 
     // TODO: Rename and change types of parameters
@@ -174,6 +177,8 @@ public class AddUserFragment extends Fragment {
             tempCreds = new ArrayList<>();
             entered = 0;
             entered2 = 0;
+            firstStatuses = new int[data.length()];
+            secondStatuses = new int[data.length()];
 
 
             duc.getUserCreds().setMemberId(resultsJSON.getInt("loggedInMemeberId"));
@@ -219,6 +224,9 @@ public class AddUserFragment extends Fragment {
             JSONObject resultsJSON = new JSONObject(result);
             int relationship = resultsJSON.getInt("status");
             firstFriendStatus = relationship;
+
+            firstStatuses[entered2] = relationship;
+
             Uri uri = duc.getFriendStatusURI();
             JSONObject msg = new JSONObject();
             System.out.println("DEBUG: IN AFTER FIRST THREAD Loged In " + this.duc.getUserCreds().getNickName());
@@ -229,12 +237,11 @@ public class AddUserFragment extends Fragment {
             }catch (JSONException e) {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
             }
-
+            entered2++;
             new SendPostAsyncTask.Builder(uri.toString(), msg)
                     .onPostExecute(this::handSecondThreadAfter)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
-            entered2++;
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -246,6 +253,7 @@ public class AddUserFragment extends Fragment {
             JSONObject resultsJSON = new JSONObject(result);
             int relationship = resultsJSON.getInt("status");
             secondFriendStatus = relationship;
+            secondStatuses[entered] = relationship;
             handleRelationshipOnPost();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -255,6 +263,19 @@ public class AddUserFragment extends Fragment {
 
     private void handleRelationshipOnPost() {
         System.out.println("DEBUG: IN Final THREAD other " + tempCreds.get(entered).getNickName());
+        int firstStatus = firstStatuses[entered];
+        int secondStatus = secondStatuses[entered];
+        System.out.println("first: " + firstStatus + ", second: " + secondStatus);
+        if (firstStatus == 1 && secondStatus == 1) {
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 1));
+        } else if (firstStatus == 2 || secondStatus == 2) {
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 2));
+        } else if (firstStatus == 3) {
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 3));
+        } else if (secondStatus == 3) {
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 4));
+        }
+        /*
         if (firstFriendStatus == 1 && secondFriendStatus == 1) { // not friends
             //b.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
             //searchResult.add(new FriendStatus(currentCred, 1));
@@ -271,7 +292,7 @@ public class AddUserFragment extends Fragment {
             //b.setBackgroundResource(R.drawable.ic_accept_green_24dp);
             searchResult.add(new FriendStatus(tempCreds.get(entered), 4));
 
-        }
+        }*/
         /*1- User A and User B are not friends
 	2- User A and User B are already Friends
 	3- User A Sent User B a friend Request but User B has not responded
