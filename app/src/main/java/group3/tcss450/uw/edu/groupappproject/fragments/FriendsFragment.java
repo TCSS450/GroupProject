@@ -73,7 +73,7 @@ public class FriendsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            MyFriendsRecyclerViewAdapter adapter = new MyFriendsRecyclerViewAdapter(Constants.temporaryCreds, mListener);
+            MyFriendsRecyclerViewAdapter adapter = new MyFriendsRecyclerViewAdapter(duc.getCredFromFriendStatusList(Constants.searchResults)/*Constants.temporaryCreds*/, mListener);
             recyclerView.setAdapter(adapter);
 
             System.out.println("UPDATE LIST");

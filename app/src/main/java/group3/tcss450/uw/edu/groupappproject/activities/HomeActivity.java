@@ -119,7 +119,7 @@ public class HomeActivity extends MenuOptionsActivity
 
             loadFragment(new ViewFriendsFragment()); // todo: update
         } else if (id == R.id.requests) {
-            loadFragment(this.duc.getFriendRequestsFragment());
+            loadFragment(this.duc.getFriendRequests());
         } else if (id == R.id.weather) {
             loadFragment(this.duc.getViewWeatherFragment());
         } else if (id == R.id.home) {
