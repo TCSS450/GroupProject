@@ -54,11 +54,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getFirstName()+ " "+ mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getNickName());
-        FriendStatus currentNode =  Constants.searchResults.get(position);
 
-        //holder.mIdView.setText(currentNode.getCred().getFirstName() + " " + Constants.searchResults.get(position).getCred().getLastName());
-        //holder.mContentView.setText(currentNode.getCred().getNickName());
-        System.out.println("---------------------------------- MEMBER ID: " + duc.getUserCreds().getMemberId());
 
         if (Constants.searchResults.get(position).getRelationship() == 1) {
             mAddFriendButton.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);

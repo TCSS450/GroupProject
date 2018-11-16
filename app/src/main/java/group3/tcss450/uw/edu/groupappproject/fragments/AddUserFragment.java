@@ -68,7 +68,8 @@ public class AddUserFragment extends Fragment {
 
     private ViewGroup container;
     private LayoutInflater inflater;
-    private int entered =0;
+    private int entered = 0;
+    private int entered2 = 0;
 
     public AddUserFragment() {
         // Required empty public constructor
@@ -171,6 +172,8 @@ public class AddUserFragment extends Fragment {
             JSONArray data = resultsJSON.getJSONArray("data");
             System.out.println(data);
             tempCreds = new ArrayList<>();
+            entered = 0;
+            entered2 = 0;
 
 
             duc.getUserCreds().setMemberId(resultsJSON.getInt("loggedInMemeberId"));
@@ -188,16 +191,15 @@ public class AddUserFragment extends Fragment {
             }
 
             Uri friendUri = duc.getFriendStatusURI();
-            JSONObject msg = new JSONObject();
             for (int i = 0; i < tempCreds.size(); i++) {
+                JSONObject msg = new JSONObject();
+
                 try {
                     msg.put("userAId", this.duc.getUserCreds().getMemberId());
                     msg.put("userBId", tempCreds.get(i).getMemberId());
                 } catch (JSONException e) {
                     Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
                 }
-                currentCred = tempCreds.get(i);
-                System.out.println("DEBUG: IN SEARCH POST Handler " + currentCred.getNickName());
                 task1 = new SendPostAsyncTask.Builder(friendUri.toString(), msg)
                         .onPostExecute(this::handFirstThreadAfter)
                         .onCancelled(this::handleErrorsInTask)
@@ -219,18 +221,21 @@ public class AddUserFragment extends Fragment {
             firstFriendStatus = relationship;
             Uri uri = duc.getFriendStatusURI();
             JSONObject msg = new JSONObject();
-            System.out.println("DEBUG: IN FIRSTTHREAD POST Handler " + tempCreds.get(task1.getIndex()).getNickName());
-
+            System.out.println("DEBUG: IN AFTER FIRST THREAD Loged In " + this.duc.getUserCreds().getNickName());
+            System.out.println("DEBUG: IN AFTER FIRST THREAD other In " + tempCreds.get(entered2).getNickName());
             try {
-                msg.put("userAId", /*task1.getMemberId()*/ tempCreds.get(task1.getIndex()).getMemberId());
+                msg.put("userAId", tempCreds.get(entered2).getMemberId());
                 msg.put("userBId", this.duc.getUserCreds().getMemberId());
             }catch (JSONException e) {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
             }
+
             new SendPostAsyncTask.Builder(uri.toString(), msg)
                     .onPostExecute(this::handSecondThreadAfter)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
+            entered2++;
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -240,7 +245,6 @@ public class AddUserFragment extends Fragment {
         try {
             JSONObject resultsJSON = new JSONObject(result);
             int relationship = resultsJSON.getInt("status");
-            System.out.println("DEBUG: IN SECTHREAD POST Handler " + tempCreds.get(task1.getIndex()).getNickName());
             secondFriendStatus = relationship;
             handleRelationshipOnPost();
         } catch (JSONException e) {
@@ -250,13 +254,12 @@ public class AddUserFragment extends Fragment {
 
 
     private void handleRelationshipOnPost() {
-
-        System.out.println("DEBUG: IN RELATIONSHIP POST Handler " + tempCreds.get(task1.getIndex()).getNickName());
-        if (firstFriendStatus == 1 && secondFriendStatus == 1) {
+        System.out.println("DEBUG: IN Final THREAD other " + tempCreds.get(entered).getNickName());
+        if (firstFriendStatus == 1 && secondFriendStatus == 1) { // not friends
             //b.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
             //searchResult.add(new FriendStatus(currentCred, 1));
             searchResult.add(new FriendStatus(tempCreds.get(entered), 1));
-        } else if (firstFriendStatus == 2 || secondFriendStatus == 2) {
+        } else if (firstFriendStatus == 2 || secondFriendStatus == 2) { // friends
             //b.setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
             searchResult.add(new FriendStatus(tempCreds.get(entered), 2));
 
@@ -269,14 +272,14 @@ public class AddUserFragment extends Fragment {
             searchResult.add(new FriendStatus(tempCreds.get(entered), 4));
 
         }
+        /*1- User A and User B are not friends
+	2- User A and User B are already Friends
+	3- User A Sent User B a friend Request but User B has not responded
+	4- User A Sent User B a friend Request but User B rejected the request
+	5- Incorrect Input to endpoint / any other error
+*/
         entered++;
         Constants.searchResults = searchResult;
         loadFragment(duc.getNewFriendFragment());
     }
-
-    private void testMethod() {
-        System.out.println("BUTTON ACCESSED");
-    }
-
-
 }
