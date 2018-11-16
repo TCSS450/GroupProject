@@ -70,7 +70,7 @@ public class ViewFriendsFragment extends Fragment {
         String email = prefs.getString(getString(R.string.keys_prefs_email), "");
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("email", email);
+            jsonObject.put("user", email);
         } catch (JSONException e) {
             e.printStackTrace();
         }
