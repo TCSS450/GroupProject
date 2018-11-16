@@ -23,7 +23,6 @@ import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.ViewConnectionsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewWeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 
@@ -35,7 +34,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private AddUserFragment addUserFragment;
     private CreateChatFragment createChatFragment;
     private CreateGroupFragment createGroupFragment;
-    private ViewConnectionsFragment viewConnectionsFragment;
+
     private ViewWeatherFragment viewWeatherFragment;
     private HomeViewFragment homeViewFragment;
     private VerificationFragment verificationFragment;
@@ -57,7 +56,7 @@ public class DataUtilityControl extends AppCompatActivity {
         this.addUserFragment = new AddUserFragment();
         this.createChatFragment = new CreateChatFragment();
         this.createGroupFragment = new CreateGroupFragment();
-        this.viewConnectionsFragment = new ViewConnectionsFragment();
+
         this.viewWeatherFragment = new ViewWeatherFragment();
         this.homeViewFragment = new HomeViewFragment();
         this.verificationFragment = new VerificationFragment();
@@ -88,7 +87,7 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getCreateGroupFragment() { return this.createGroupFragment;}
 
-    public Fragment getViewConnectionsFragment() { return this.viewConnectionsFragment;}
+
 
     public Fragment getViewWeatherFragment() { return this.viewWeatherFragment;}
 

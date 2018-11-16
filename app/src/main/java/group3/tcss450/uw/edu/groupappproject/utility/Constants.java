@@ -25,6 +25,8 @@ public class Constants {
     public static final String FRIEND_STATUS_URL = "https://group3-backend.herokuapp.com/friend-status";
 
 
+    public static final String VIEW_FRIENDS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-friends";
+
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;
     public static ArrayList<FriendStatus> searchResults = null;
