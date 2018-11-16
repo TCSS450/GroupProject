@@ -4,6 +4,7 @@ package group3.tcss450.uw.edu.groupappproject.fragments;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
@@ -99,7 +101,22 @@ public class ChatFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
+    }
     /**
      * A BroadcastReceiver setup to listen for messages sent from
      MyFirebaseMessagingService
