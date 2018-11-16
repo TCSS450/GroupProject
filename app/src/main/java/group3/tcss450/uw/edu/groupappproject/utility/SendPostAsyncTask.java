@@ -10,27 +10,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.function.Consumer;
 
-/**
- * Implemented AsyncTask that sends a JSON string via POST to a web service.  Builds the Task
- * requiring a fully formed URL and JSON object.
- *
- * Optional parameters include actions for onPreExecute, onProgressUpdate, onPostExecute, and
- * onCancelled.
- *
- * An action for onProgressUpdate is included but a call to publishProgress is never made in
- * doInBackground rendering onProgressUpdate unused.
- *
- * The method cancel() is called in doInBackGround during exception handling. Use the action
- * onCnCancelled to respond to exceptional situations resulting from doInBackground execution.
- * Note that external cancellation will cause the same action to execute.
- *
- * Created by Charles Bryan on 3/22/2018.
- *
- * @author Charles Bryan
- * @version 4/15/2018
- */
 public class SendPostAsyncTask extends AsyncTask<Void, String, String> {
 
     private final String mUrl;
@@ -40,6 +26,15 @@ public class SendPostAsyncTask extends AsyncTask<Void, String, String> {
     private Consumer<String[]> mOnProgress;
     private Consumer<String> mOnPost;
     private Consumer<String> mOnCancel;
+    private Integer index = -1;
+
+
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public Integer getIndex() {return this.index;}
 
     /**
      * Helper class for building PostAsyncTasks.
@@ -51,6 +46,7 @@ public class SendPostAsyncTask extends AsyncTask<Void, String, String> {
         //Required Parameters
         private final String mUrl;
         private final JSONObject mJsonMsg;
+
 
         //Optional Parameters
         private Runnable onPre = () -> {};
@@ -199,8 +195,8 @@ public class SendPostAsyncTask extends AsyncTask<Void, String, String> {
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
         mOnProgress.accept(values);
-
     }
+
 
     @Override
     protected void onPostExecute(String result) {

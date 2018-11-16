@@ -22,12 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,9 +46,6 @@ public class AddUserFragment extends Fragment {
 
     private DataUtilityControl duc;
 
-    private boolean firstThreadDone = false;
-    private boolean secondThreadDone = false;
-
     private int firstFriendStatus = -1;
     private int secondFriendStatus= -1;
 
@@ -65,6 +56,8 @@ public class AddUserFragment extends Fragment {
 
     private Credentials currentCred;
     private ArrayList<FriendStatus> searchResult;
+    private SendPostAsyncTask task1;
+    private ArrayList<Credentials> tempCreds;
 
     private EditText searchView;
 
@@ -75,6 +68,7 @@ public class AddUserFragment extends Fragment {
 
     private ViewGroup container;
     private LayoutInflater inflater;
+    private int entered =0;
 
     public AddUserFragment() {
         // Required empty public constructor
@@ -176,39 +170,47 @@ public class AddUserFragment extends Fragment {
 
             JSONArray data = resultsJSON.getJSONArray("data");
             System.out.println(data);
+            tempCreds = new ArrayList<>();
+
 
             duc.getUserCreds().setMemberId(resultsJSON.getInt("loggedInMemeberId"));
             searchResult = new ArrayList<>();
 
             for (int i = 0; i< data.length(); i++) {
                 JSONObject c = data.getJSONObject(i);
-                Credentials cred = new Credentials.Builder("","")
+                Credentials cred = new Credentials.Builder("", "")
                         .addFirstName(c.getString("firstName"))
                         .addLastName(c.getString("lastName"))
                         .addNickName(c.getString("nickname"))
                         .addMemberId(c.getInt("memberid"))
                         .build();
-                currentCred = cred;
-                Uri friendUri = duc.getFriendStatusURI();
-                JSONObject msg = new JSONObject();
+                tempCreds.add(cred);
+            }
+
+            Uri friendUri = duc.getFriendStatusURI();
+            JSONObject msg = new JSONObject();
+            for (int i = 0; i < tempCreds.size(); i++) {
                 try {
                     msg.put("userAId", this.duc.getUserCreds().getMemberId());
-                    msg.put("userBId", cred.getMemberId());
-
-                }catch (JSONException e) {
+                    msg.put("userBId", tempCreds.get(i).getMemberId());
+                } catch (JSONException e) {
                     Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
                 }
-                currentCred = cred;
-                new SendPostAsyncTask.Builder(friendUri.toString(), msg)
+                currentCred = tempCreds.get(i);
+                System.out.println("DEBUG: IN SEARCH POST Handler " + currentCred.getNickName());
+                task1 = new SendPostAsyncTask.Builder(friendUri.toString(), msg)
                         .onPostExecute(this::handFirstThreadAfter)
                         .onCancelled(this::handleErrorsInTask)
-                        .build().execute();
-
+                        .build();
+                task1.setIndex(i);
+                task1.execute();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException e1) {
+            e1.printStackTrace();
         }
+
     }
+
 
     private void handFirstThreadAfter(String result) {
         try {
@@ -217,8 +219,10 @@ public class AddUserFragment extends Fragment {
             firstFriendStatus = relationship;
             Uri uri = duc.getFriendStatusURI();
             JSONObject msg = new JSONObject();
+            System.out.println("DEBUG: IN FIRSTTHREAD POST Handler " + tempCreds.get(task1.getIndex()).getNickName());
+
             try {
-                msg.put("userAId", currentCred.getMemberId());
+                msg.put("userAId", /*task1.getMemberId()*/ tempCreds.get(task1.getIndex()).getMemberId());
                 msg.put("userBId", this.duc.getUserCreds().getMemberId());
             }catch (JSONException e) {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
@@ -230,14 +234,13 @@ public class AddUserFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void handSecondThreadAfter(String result) {
         try {
             JSONObject resultsJSON = new JSONObject(result);
             int relationship = resultsJSON.getInt("status");
+            System.out.println("DEBUG: IN SECTHREAD POST Handler " + tempCreds.get(task1.getIndex()).getNickName());
             secondFriendStatus = relationship;
             handleRelationshipOnPost();
         } catch (JSONException e) {
@@ -247,22 +250,26 @@ public class AddUserFragment extends Fragment {
 
 
     private void handleRelationshipOnPost() {
+
+        System.out.println("DEBUG: IN RELATIONSHIP POST Handler " + tempCreds.get(task1.getIndex()).getNickName());
         if (firstFriendStatus == 1 && secondFriendStatus == 1) {
             //b.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
-            searchResult.add(new FriendStatus(currentCred, 1));
+            //searchResult.add(new FriendStatus(currentCred, 1));
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 1));
         } else if (firstFriendStatus == 2 || secondFriendStatus == 2) {
             //b.setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
-            searchResult.add(new FriendStatus(currentCred, 2));
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 2));
 
         } else if (firstFriendStatus == 3) {
             //b.setBackgroundResource(R.drawable.ic_pending_black_24dp);
-            searchResult.add(new FriendStatus(currentCred, 3));
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 3));
 
         } else if (secondFriendStatus == 3) {
             //b.setBackgroundResource(R.drawable.ic_accept_green_24dp);
-            searchResult.add(new FriendStatus(currentCred, 4));
+            searchResult.add(new FriendStatus(tempCreds.get(entered), 4));
 
         }
+        entered++;
         Constants.searchResults = searchResult;
         loadFragment(duc.getNewFriendFragment());
     }
