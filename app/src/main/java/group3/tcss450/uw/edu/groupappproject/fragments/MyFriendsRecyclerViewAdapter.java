@@ -1,6 +1,9 @@
 package group3.tcss450.uw.edu.groupappproject.fragments;
 
+import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,12 +16,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.activities.HomeActivity;
 import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment.OnListFragmentInteractionListener;
 //import group3.tcss450.uw.edu.groupappproject.dummy.NameThisBetter.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.FriendStatus;
+import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 import java.util.List;
 
@@ -33,6 +38,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
     private final OnListFragmentInteractionListener mListener;
     private DataUtilityControl duc;
     private Button mAddFriendButton;
+    private Context context;
 
     public MyFriendsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -46,6 +52,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_friends, parent, false);
         mAddFriendButton = view.findViewById(R.id.addbtn);
+        context = view.getContext();
         return new ViewHolder(view);
     }
 
@@ -55,34 +62,80 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         holder.mIdView.setText(mValues.get(position).getFirstName()+ " "+ mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getNickName());
 
-
-        if (Constants.searchResults.get(position).getRelationship() == 1) {
+        int relationship = Constants.searchResults.get(position).getRelationship();
+        if (relationship == 1) {
             mAddFriendButton.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
-        } else if(Constants.searchResults.get(position).getRelationship() == 2) {
+            mAddFriendButton.setOnClickListener(v-> onClick(position, 1));
+        } else if(relationship == 2) {
             mAddFriendButton.setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
-        } else if (Constants.searchResults.get(position).getRelationship() == 3) {
+            mAddFriendButton.setOnClickListener(v-> onClick(position, 2));
+        } else if (relationship == 3) {
             mAddFriendButton.setBackgroundResource(R.drawable.ic_pending_black_24dp);
-        } else if (Constants.searchResults.get(position).getRelationship() == 4) {
+            mAddFriendButton.setOnClickListener(v-> onClick(position, 3));
+        } else if (relationship == 4) {
             mAddFriendButton.setBackgroundResource(R.drawable.ic_accept_green_24dp);
+            mAddFriendButton.setOnClickListener(v-> onClick(position, 4));
         }
-        mAddFriendButton.setOnClickListener(view -> onClick(position));
     }
 
-    public void onClick(int position) {
-        Uri addFriendUri = this.duc.getAddFriendEndPointURI();
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("userAId", duc.getUserCreds().getMemberId());
-            msg.put("userBId", mValues.get(position).getMemberId());
-        } catch (JSONException e) {
-            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+    public void onClick(int position, int clickBehavior) {
+        System.out.println(position);
+        if (clickBehavior == 1) { // add friend behavior
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("userAId", this.duc.getUserCreds().getMemberId());
+                msg.put("userBId", Constants.searchResults.get(position).getCred().getMemberId());
+            } catch (JSONException e) { e.printStackTrace(); }
+
+            new SendPostAsyncTask.Builder(this.duc.getAddFriendEndPointURI().toString(), msg)
+                    .onPostExecute(this::handleAddFriendOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
+
+            //duc.makeShortToast(context, "Add friend");
+        } else if (clickBehavior == 2) { // already friend behavior
+            duc.makeShortToast(context, "You are already friends with this user");
+        } else if (clickBehavior == 3) { // pending friend request behavior
+            duc.makeShortToast(context, "They must accept your already sent request");
+        } else if (clickBehavior == 4) { // accept friend request behavior
+            loadFragment(this.duc.getFriendRequests());
         }
-        System.out.println("STH CLICKED   " + position);
+    }
+
+
+    private void loadFragment(Fragment frag) {
+        HomeActivity myActivity = (HomeActivity) context;
+        FragmentTransaction transaction =
+                myActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.homeActivityFrame, frag)
+                        .addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    private void handleErrorsInTask(String result) {
+        Log.e("ASYNCT_TASK_ERROR",  result);
+    }
+
+    private void handleAddFriendOnPost(String result) {
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            int status = resultsJSON.getInt("status");
+            if (status == 1) { // friend request was sent successfully
+                mAddFriendButton.setBackgroundResource(R.drawable.ic_pending_black_24dp);
+                this.duc.makeShortToast(context, "Request sent!");
+                /** FireBase code here???? **/
+            } else {
+                this.duc.makeShortToast(context, "Error request not sent!");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -103,4 +156,5 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
+
 }
