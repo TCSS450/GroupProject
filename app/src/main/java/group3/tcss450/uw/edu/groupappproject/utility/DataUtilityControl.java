@@ -152,6 +152,10 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getFriendStatusURI() { return Uri.parse(Constants.FRIEND_STATUS_URL); }
 
+    public Uri getRejectFriendURI() { return Uri.parse(Constants.REJECT_REQUEST_URL); }
+
+    public Uri getAcceptFriendURI() { return Uri.parse(Constants.ACCEPT_REQUEST_URL); }
+
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;
     }

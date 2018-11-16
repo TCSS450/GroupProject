@@ -99,6 +99,7 @@ public class ChatFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     /**
      * A BroadcastReceiver setup to listen for messages sent from
      MyFirebaseMessagingService

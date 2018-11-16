@@ -202,7 +202,6 @@ public class LoginFragment extends Fragment {
 
                 int id = resultsJSON.getInt("memberId");
                 loginCreds.setMemberId(id);
-                System.out.println("---------------------------------- MEMBER ID: " + loginCreds.getMemberId());
                 saveCredentials(loginCreds);
                 mListener.onWaitFragmentInteractionHide();
                 mListener.OnLogin(this.loginCreds);

@@ -100,5 +100,8 @@
 
     <!--Friend Request Strings-->
     <string name="requests_pending">Pending</string>
+    <string name="request_accepted">Accepted!</string>
+    <string name="request_denied">Rejected!</string>
+    <string name="request_error">Error. Try again later...</string>
 
 </resources>
