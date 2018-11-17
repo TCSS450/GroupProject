@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.AddFriend;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;

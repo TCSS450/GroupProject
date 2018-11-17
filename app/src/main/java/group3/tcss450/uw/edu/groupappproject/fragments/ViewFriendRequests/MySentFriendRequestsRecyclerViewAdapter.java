@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment.OnListFragmentInteractionListener;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment.OnListFragmentInteractionListener;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 
 import java.util.List;

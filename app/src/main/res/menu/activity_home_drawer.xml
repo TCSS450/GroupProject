@@ -11,7 +11,7 @@
             android:title="@string/home_drawer_home" />
 
         <item
-            android:id="@+id/addUser"
+            android:id="@+id/addFriend"
             android:icon="@drawable/add_person"
             android:title="@string/home_drawer_add_user" />
 

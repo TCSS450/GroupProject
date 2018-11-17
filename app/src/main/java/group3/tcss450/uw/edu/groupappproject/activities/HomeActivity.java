@@ -13,6 +13,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -23,9 +25,9 @@ import java.io.IOException;
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.dummyname.NameThisBetter;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriendsItemContent;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
@@ -72,6 +74,19 @@ public class HomeActivity extends MenuOptionsActivity
         loadFragment(this.duc.getHomeViewFragment());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView textView = (TextView) headerView.findViewById(R.id.textView_header_user);
+        String s;
+        if (duc.getUserCreds().getDisplayPref() == 1) {
+            s = duc.getUserCreds().getNickName() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        } else if (duc.getUserCreds().getDisplayPref() == 2) {
+            s = duc.getUserCreds().getFirstName() + " " + duc.getUserCreds().getLastName() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        } else {
+            s = duc.getUserCreds().getEmail() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        }
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -109,7 +124,7 @@ public class HomeActivity extends MenuOptionsActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.addUser) {
+        if (id == R.id.addFriend) {
             loadFragment(this.duc.getAddUserFragment());
         } else if (id == R.id.createChat) {
             ChatFragment chat = new ChatFragment();

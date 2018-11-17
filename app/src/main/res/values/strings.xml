@@ -70,11 +70,11 @@
 
     <!--Activity menu_options drawer nav labels-->
     <string name="home_drawer_home">Home</string>
-    <string name="home_drawer_add_user">Add User</string>
+    <string name="home_drawer_add_user">Add Friend</string>
     <string name="home_drawer_create_chat">Create Chat</string>
     <string name="home_drawer_create_group">Create Group</string>
     <string name="home_drawer_connections">Your Friends</string>
-    <string name="home_drawer_requests">View Requests</string>
+    <string name="home_drawer_requests">Friend Requests</string>
     <string name="home_drawer_weather">Weather</string>
 
     <!--action bar-->
@@ -83,8 +83,8 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">ChitChat</string>
-    <string name="nav_header_subtitle">Get chatting</string>
+    <string name="nav_header_title">ChitChat - Get Chatting</string>
+    <string name="nav_header_subtitle"> is logged in.</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 

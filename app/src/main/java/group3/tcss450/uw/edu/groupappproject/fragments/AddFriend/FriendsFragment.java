@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.AddFriend;
 
 import android.content.Context;
 import android.os.Bundle;

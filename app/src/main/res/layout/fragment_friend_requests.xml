@@ -5,7 +5,7 @@
     android:id="@+id/LinearLayout_friendRequests"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FriendRequests">
+    tools:context=".fragments.ViewFriendRequests.FriendRequests">
 
     <!-- TODO: Update blank fragment layout -->
 

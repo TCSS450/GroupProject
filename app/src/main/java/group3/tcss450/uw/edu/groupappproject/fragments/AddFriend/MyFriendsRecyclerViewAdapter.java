@@ -1,7 +1,6 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.AddFriend;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +16,11 @@ import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.activities.HomeActivity;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment.OnListFragmentInteractionListener;
+import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment.OnListFragmentInteractionListener;
 //import group3.tcss450.uw.edu.groupappproject.dummy.NameThisBetter.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
-import group3.tcss450.uw.edu.groupappproject.utility.FriendStatus;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 import java.util.ArrayList;

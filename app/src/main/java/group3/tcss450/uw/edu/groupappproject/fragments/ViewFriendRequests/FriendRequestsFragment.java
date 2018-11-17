@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,9 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONObject;
+
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
-import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 
 /**
  * A fragment representing a list of Items.
@@ -20,7 +21,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class SentFriendRequestsFragment extends Fragment {
+public class FriendRequestsFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -32,13 +33,12 @@ public class SentFriendRequestsFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SentFriendRequestsFragment() {
+    public FriendRequestsFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static SentFriendRequestsFragment newInstance(int columnCount) {
-        SentFriendRequestsFragment fragment = new SentFriendRequestsFragment();
+
+    public static FriendRequestsFragment newInstance(int columnCount) {
+        FriendRequestsFragment fragment = new FriendRequestsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -48,7 +48,6 @@ public class SentFriendRequestsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -57,8 +56,7 @@ public class SentFriendRequestsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sentfriendrequests_list, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_friendrequests_list, container, false);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -68,7 +66,8 @@ public class SentFriendRequestsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MySentFriendRequestsRecyclerViewAdapter(Constants.sentRequests, mListener));
+            MyFriendRequestsRecyclerViewAdapter adapter = new MyFriendRequestsRecyclerViewAdapter(Constants.receivedRequests, mListener);
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
@@ -103,6 +102,7 @@ public class SentFriendRequestsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Credentials item);
+        void onAcceptListFragmentInteraction(JSONObject msg);
+        void onDenyListFragmentInteraction(JSONObject msg);
     }
 }
