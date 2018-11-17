@@ -56,7 +56,7 @@ public class FriendRequests extends Fragment {
         Uri receivedUri = this.duc.getFriendRequestsRecievedEndPointURI();
         JSONObject msg = new JSONObject();
         try {
-           msg.put("memberId", duc.getUserCreds().getMemberId());
+           msg.put("loggedInUserId", duc.getUserCreds().getMemberId());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }

@@ -38,7 +38,7 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mViewFriendsItem = mValues.get(position);
         holder.mNickname.setText(mValues.get(position).getNickName());
-        holder.mFirstName.setText(mValues.get(position).getmFirstName());
+        holder.mFirstName.setText(mValues.get(position).getFirstName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,13 +1,6 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends;
 
-import android.text.Html;
-import android.text.Spanned;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -68,10 +61,12 @@ public class ViewFriendsItemContent implements Serializable {
 
     public String getNickName() { return mNickName; }
 
-    public String getmFirstName() { return mFirstName; }
+    public String getFirstName() { return mFirstName; }
 
-    public String getmLastName() { return mLastName; }
+    public String getLastName() { return mLastName; }
 
-
-
+    @Override
+    public String toString() {
+        return this.getFirstName() + ' ' + this.getLastName() + ' ' + this.getNickName();
+    }
 }

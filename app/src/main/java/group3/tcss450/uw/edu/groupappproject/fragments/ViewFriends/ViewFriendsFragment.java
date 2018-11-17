@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,9 +28,6 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnViewFriendsListFragmentInteractionListener}
- * interface.
  *
  * Holds the user nickname and fname. JSON data returned from endpoint
  */
@@ -51,14 +50,14 @@ public class ViewFriendsFragment extends Fragment {
     }
 
 //    // TODO: Customize parameter initialization
-//    @SuppressWarnings("unused")
-//    public static ViewFriendsFragment newInstance() {
-//        ViewFriendsFragment fragment = new ViewFriendsFragment();
-////        Bundle args = new Bundle();
-////        args.putInt(ARG_COLUMN_COUNT, columnCount);
-////        fragment.setArguments(args);
-//        return fragment;
-//    }
+    @SuppressWarnings("unused")
+    public static ViewFriendsFragment newInstance(int columnCount) {
+        ViewFriendsFragment fragment = new ViewFriendsFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,37 +74,60 @@ public class ViewFriendsFragment extends Fragment {
             e.printStackTrace();
         }
 
-//        new SendPostAsyncTask.Builder(Constants.VIEW_FRIENDS_END_POINT_URL, jsonObject)
-//                .onPreExecute(this::handleViewFriendsOnPre)
-//                .onPostExecute(this::handleViewFriendsOnPost)
-//                .onCancelled(this::handleErrorsInTask)
-//                .build().execute();
+        // initialize data for the list
+        new SendPostAsyncTask.Builder(Constants.VIEW_FRIENDS_END_POINT_URL, jsonObject)
+                .onPreExecute(this::handleViewFriendsOnPre)
+                .onPostExecute(this::handleViewFriendsOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
 
-        //Bundle the setListPost array for easy retrieval later /todo: temp for now
-        Bundle bArgs = new Bundle();
-        bArgs.putSerializable(ViewFriendsFragment.VIEW_FRIENDS_ITEM_CONTENT_LIST , FriendsGenerator.FRIEND_LISTS);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT); // was here
-            mViewFriendsItemContent = new ArrayList<ViewFriendsItemContent>(
-                    Arrays.asList((ViewFriendsItemContent[]) getArguments()
-                            .getSerializable(VIEW_FRIENDS_ITEM_CONTENT_LIST)));
-        } else {
-            mViewFriendsItemContent = Arrays.asList(FriendsGenerator.FRIEND_LISTS); //todo: remove
-        }
+//        if (getArguments() != null) {
+//            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT); // was here
+//            mViewFriendsItemContent = new ArrayList<ViewFriendsItemContent>(
+//                    Arrays.asList((ViewFriendsItemContent[]) getArguments()
+//                            .getSerializable(VIEW_FRIENDS_ITEM_CONTENT_LIST)));
+//            Log.d("ViewFriendsFragment", "get arguments not null");
+//        } else {
+//            mViewFriendsItemContent = Arrays.asList(FriendsGenerator.FRIEND_LISTS); //todo: remove
+//            Log.d("ViewFriendsFragment", "get arguments is null!!");
+//        }
     }
+
 
     private void handleViewFriendsOnPost(String result) {
         try {
             Log.d("JSON result", result);
             JSONObject resultsJSON = new JSONObject(result);
-            String friends = resultsJSON.getString("friends_list");
-            if (friends != null) { // retrieved the list of friends
-                //set the ARG_SET_LIST here
+            boolean error = resultsJSON.getBoolean("error");
+            if (!error) { // retrieved the list of friends
+                Log.d("ViewFriendsFragment", "not an error");
 
-            } else { // status 4 error or something else
+                JSONArray friends = resultsJSON.getJSONArray("friends");
+                ArrayList<ViewFriendsItemContent> friendsList = new ArrayList<>();
+
+                if (friends.length() > 0) { //user has friends
+                    for (int i = 0; i < friends.length(); i++) {
+//                        Log.d("ViewFriendsFragment", String.valueOf(i));
+                        JSONArray temp = friends.getJSONArray(i);
+                        friendsList.add(new ViewFriendsItemContent
+                            .Builder(temp.getString(2), temp.getString(0))
+                            .addLastName(temp.getString(1))
+                            .build());
+                    }
+                }
+
+                Log.d("ViewFriendsFragment", "friendList" + friendsList.toString());
+
+
+                mViewFriendsItemContent = new ArrayList<>(friendsList);
+                //set the ARG_SET_LIST here
+                Bundle bArgs = new Bundle();
+                bArgs.putSerializable(ViewFriendsFragment.VIEW_FRIENDS_ITEM_CONTENT_LIST , mViewFriendsItemContent.toArray());
+
+            } else { // error on retrieval
 //                duc.makeToast(getContext(),
 //                        getResources().getString(R.string.toast_error_unidentified_user));
+                Log.d("ViewFriendsFragment", "error");
             }
 
         } catch (JSONException e) {
@@ -123,6 +145,18 @@ public class ViewFriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_viewfriends_list, container, false);
+
+        if (getArguments() != null) {
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT); // was here
+            mViewFriendsItemContent = new ArrayList<ViewFriendsItemContent>(
+                    Arrays.asList((ViewFriendsItemContent[]) getArguments()
+                            .getSerializable(VIEW_FRIENDS_ITEM_CONTENT_LIST)));
+            Log.d("ViewFriendsFragment", "get arguments not null");
+        } else {
+            mViewFriendsItemContent = Arrays.asList(FriendsGenerator.FRIEND_LISTS); //todo: remove
+            Log.d("ViewFriendsFragment", "get arguments is null!!");
+
+        }
 
         // Set the adapter
         if (view instanceof RecyclerView) {
