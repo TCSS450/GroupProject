@@ -25,6 +25,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.FriendStatus;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,12 +40,17 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
     private DataUtilityControl duc;
     private Button mAddFriendButton;
     private Context context;
+    private List<Button> buttons;
+    private Integer currentPosition;
 
     public MyFriendsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
         this.duc = Constants.dataUtilityControl;
+        buttons = new ArrayList<>();
+        currentPosition = 0;
         System.out.println();
+
     }
 
     @Override
@@ -52,6 +58,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_friends, parent, false);
         mAddFriendButton = view.findViewById(R.id.addbtn);
+        buttons.add(mAddFriendButton);
         context = view.getContext();
         return new ViewHolder(view);
     }
@@ -64,17 +71,17 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
 
         int relationship = Constants.searchResults.get(position).getRelationship();
         if (relationship == 1) {
-            mAddFriendButton.setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
-            mAddFriendButton.setOnClickListener(v-> onClick(position, 1));
+            buttons.get(position).setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
+            buttons.get(position).setOnClickListener(v-> onClick(position, 1));
         } else if(relationship == 2) {
-            mAddFriendButton.setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
-            mAddFriendButton.setOnClickListener(v-> onClick(position, 2));
+            buttons.get(position).setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
+            buttons.get(position).setOnClickListener(v-> onClick(position, 2));
         } else if (relationship == 3) {
-            mAddFriendButton.setBackgroundResource(R.drawable.ic_pending_black_24dp);
-            mAddFriendButton.setOnClickListener(v-> onClick(position, 3));
+            buttons.get(position).setBackgroundResource(R.drawable.ic_pending_black_24dp);
+            buttons.get(position).setOnClickListener(v-> onClick(position, 3));
         } else if (relationship == 4) {
-            mAddFriendButton.setBackgroundResource(R.drawable.ic_accept_green_24dp);
-            mAddFriendButton.setOnClickListener(v-> onClick(position, 4));
+            buttons.get(position).setBackgroundResource(R.drawable.ic_accept_green_24dp);
+            buttons.get(position).setOnClickListener(v-> onClick(position, 4));
         }
     }
 
@@ -86,7 +93,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
                 msg.put("userAId", this.duc.getUserCreds().getMemberId());
                 msg.put("userBId", Constants.searchResults.get(position).getCred().getMemberId());
             } catch (JSONException e) { e.printStackTrace(); }
-
+            currentPosition = position;
             new SendPostAsyncTask.Builder(this.duc.getAddFriendEndPointURI().toString(), msg)
                     .onPostExecute(this::handleAddFriendOnPost)
                     .onCancelled(this::handleErrorsInTask)
@@ -127,7 +134,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
             if (status == 1) { // friend request was sent successfully
-                mAddFriendButton.setBackgroundResource(R.drawable.ic_pending_black_24dp);
+                buttons.get(currentPosition).setBackgroundResource(R.drawable.ic_pending_black_24dp);
                 this.duc.makeShortToast(context, "Request sent!");
                 /** FireBase code here???? **/
             } else {
