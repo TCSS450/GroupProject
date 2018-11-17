@@ -54,20 +54,16 @@ public class FriendRequests extends Fragment {
     public void onStart() {
         super.onStart();
         Uri receivedUri = this.duc.getFriendRequestsRecievedEndPointURI();
+        System.out.println(receivedUri.toString());
         JSONObject msg = new JSONObject();
         try {
            msg.put("loggedInUserId", duc.getUserCreds().getMemberId());
+           System.out.println("MEMBER ID: " + duc.getUserCreds().getMemberId());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
         new SendPostAsyncTask.Builder(receivedUri.toString(), msg)
                 .onPostExecute(this::handleReceivedOnPost)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
-
-        Uri sentUri = this.duc.getFriendRequestsSentEndPointURI();
-        new SendPostAsyncTask.Builder(sentUri.toString(), msg)
-                .onPostExecute(this::handleSentOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
@@ -110,6 +106,19 @@ public class FriendRequests extends Fragment {
             } else {
                 duc.makeToast(getActivity(), "Cannot connect");
             }
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("loggedInUserId", duc.getUserCreds().getMemberId());
+                System.out.println("MEMBER ID: " + duc.getUserCreds().getMemberId());
+            } catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+            }
+            Uri sentUri = this.duc.getFriendRequestsSentEndPointURI();
+            System.out.println(sentUri.toString());
+            new SendPostAsyncTask.Builder(sentUri.toString(), msg)
+                    .onPostExecute(this::handleSentOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
         } catch (JSONException e) {
             Log.e("JSON_PARSE_ERROR", result
                     + System.lineSeparator()
@@ -145,6 +154,7 @@ public class FriendRequests extends Fragment {
                         searchResult.add(cred);
                     }
                     Constants.sentRequests = searchResult;
+                    System.out.println(Constants.sentRequests);
                     loadSentFragment(duc.getSentFriendRequestsFragment());
                 } catch (JSONException e) {
                     Log.e("JSON_PARSE_ERROR", result);
