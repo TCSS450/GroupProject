@@ -2,6 +2,7 @@ package group3.tcss450.uw.edu.groupappproject.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,32 +19,32 @@ import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.dummyname.NameThisBetter;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriendsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriendsItemContent;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
-public class HomeActivity extends MenuOptionsActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
+public class HomeActivity extends MenuOptionsActivity implements NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnListFragmentInteractionListener,
         WaitFragment.OnWaitFragmentInteractionListener,
-        FriendRequestsFragment.OnListFragmentInteractionListener,
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
-        ViewFriendsFragment.OnViewFriendsListFragmentInteractionListener
+        ViewFriends.OnListFragmentInteractionListener {
 
-{
+
     private DataUtilityControl duc;
 
     @Override
@@ -71,7 +72,8 @@ public class HomeActivity extends MenuOptionsActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        loadFragment(this.duc.getHomeViewFragment());
+        // Load up the friends Fragment.
+        loadFriendHelper();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -123,24 +125,20 @@ public class HomeActivity extends MenuOptionsActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.addFriend) {
             loadFragment(this.duc.getAddUserFragment());
         } else if (id == R.id.createChat) {
             ChatFragment chat = new ChatFragment();
             loadFragment(chat);
             //loadFragment(this.duc.getCreateChatFragment());
-        } else if (id == R.id.createGroup) {
-            loadFragment(this.duc.getCreateGroupFragment());
         } else if (id == R.id.connections) {
-
-            loadFragment(new ViewFriendsFragment()); // todo: update
+            loadFriendHelper();
         } else if (id == R.id.requests) {
             loadFragment(this.duc.getFriendRequests());
         } else if (id == R.id.weather) {
             loadFragment(this.duc.getViewWeatherFragment());
         } else if (id == R.id.home) {
-            loadFragment(this.duc.getHomeViewFragment());
+            loadFriendHelper();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -192,27 +190,12 @@ public class HomeActivity extends MenuOptionsActivity
     }
 
     @Override
-    public void onFriendListFragmentInteraction(NameThisBetter.Credentials item) {
-
-    }
-
-    @Override
     public void onListFragmentInteraction(Credentials credentials) {
 
     }
 
     @Override
-    public void viewFriendsListItemclicked(ViewFriendsItemContent item) {
-        //todo: from view my friends stuff
-    }
-
-    @Override
-    public void onAcceptListFragmentInteraction(JSONObject msg) {
-
-    }
-
-    @Override
-    public void onDenyListFragmentInteraction(JSONObject msg) {
+    public void onFriendListFragmentInteraction(Credentials item) {
 
     }
 
@@ -256,4 +239,67 @@ public class HomeActivity extends MenuOptionsActivity
         }
     }
 
+    private void loadFriendHelper() {
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("user", duc.getUserCreds().getEmail());
+        } catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        }
+        Uri uri = duc.getAllFriendsURI();
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onPostExecute(this::handleGetFriendsOnPostExecute)
+                .build().execute();
+    }
+
+    private void handleGetFriendsOnPostExecute(final String result) {
+        //parse JSON
+
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            if (resultsJSON.has("status")) {
+                int status = resultsJSON.getInt("status");
+                if (status == 0 ) {
+                    if (resultsJSON.has("friends")) {
+                        JSONArray data = resultsJSON.getJSONArray("friends");
+                        List<Credentials> creds = new ArrayList<>();
+                        for(int i = 0; i < data.length(); i++) {
+                            JSONObject jsonBlog = data.getJSONObject(i);
+                            creds.add(new Credentials.Builder("",
+                                    jsonBlog.getString("nickname"))
+                                    .addFirstName("firstname")
+                                    .addLastName("lastname")
+//                                    .addPhoneNumber("phonenumber")
+                                    .build());
+                        }
+                        Credentials[] credsAsArray = new Credentials[creds.size()];
+                        credsAsArray = creds.toArray(credsAsArray);
+
+                        Bundle args = new Bundle();
+                        args.putSerializable(ViewFriends.ARG_CRED_LIST, credsAsArray);
+                        Fragment frag = new ViewFriends();
+                        frag.setArguments(args);
+                        onWaitFragmentInteractionHide();
+                        loadFragment(frag);
+                    } else {
+                        Log.e("ERROR!", "No friends array");
+                        //notify user
+                        onWaitFragmentInteractionHide();
+                    }
+                } else {
+                    duc.makeToast(getBaseContext(), "STATUS = 1");
+                }
+            } else {
+                Log.e("ERROR!", "No response");
+                duc.makeToast(getBaseContext(), "NOTHING STATUSY");
+                onWaitFragmentInteractionHide();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("ERROR!", e.getMessage());
+            duc.makeToast(getBaseContext(), "IN CATCH??");
+            onWaitFragmentInteractionHide();
+        }
+    }
 }
