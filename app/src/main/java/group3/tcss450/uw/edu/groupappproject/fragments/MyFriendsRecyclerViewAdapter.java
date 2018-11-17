@@ -134,7 +134,6 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
             if (status == 1) { // friend request was sent successfully
                 buttons.get(currentPosition).setBackgroundResource(R.drawable.ic_pending_black_24dp);
                 buttons.get(currentPosition).setOnClickListener(v -> onClick(currentPosition, 3));
-
                 this.duc.makeShortToast(context, "Request sent!");
                 /** FireBase code here???? **/
             } else {
@@ -154,8 +153,8 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.nickname_result);
-            mContentView = (TextView) view.findViewById(R.id.fullname_result);
+            mIdView =  view.findViewById(R.id.nickname_result);
+            mContentView =  view.findViewById(R.id.fullname_result);
         }
 
         @Override
