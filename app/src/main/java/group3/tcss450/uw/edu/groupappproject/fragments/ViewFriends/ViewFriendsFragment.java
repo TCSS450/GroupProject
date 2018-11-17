@@ -88,7 +88,7 @@ public class ViewFriendsFragment extends Fragment {
 //                            .getSerializable(VIEW_FRIENDS_ITEM_CONTENT_LIST)));
 //            Log.d("ViewFriendsFragment", "get arguments not null");
 //        } else {
-//            mViewFriendsItemContent = Arrays.asList(FriendsGenerator.FRIEND_LISTS); //todo: remove
+//
 //            Log.d("ViewFriendsFragment", "get arguments is null!!");
 //        }
     }
@@ -153,7 +153,7 @@ public class ViewFriendsFragment extends Fragment {
                             .getSerializable(VIEW_FRIENDS_ITEM_CONTENT_LIST)));
             Log.d("ViewFriendsFragment", "get arguments not null");
         } else {
-            mViewFriendsItemContent = Arrays.asList(FriendsGenerator.FRIEND_LISTS); //todo: remove
+
             Log.d("ViewFriendsFragment", "get arguments is null!!");
 
         }

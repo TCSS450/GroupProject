@@ -52,9 +52,11 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
         });
     }
 
-    @Override
     public int getItemCount() {
-        return mValues.size();
+        if (mValues != null) {
+            return mValues.size();
+        }
+        return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
