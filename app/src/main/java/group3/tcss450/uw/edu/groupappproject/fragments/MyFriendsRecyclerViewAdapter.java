@@ -98,7 +98,6 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
                     .onPostExecute(this::handleAddFriendOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
-
             //duc.makeShortToast(context, "Add friend");
         } else if (clickBehavior == 2) { // already friend behavior
             duc.makeShortToast(context, "You are already friends with this user");
@@ -108,7 +107,6 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
             loadFragment(this.duc.getFriendRequests());
         }
     }
-
 
     private void loadFragment(Fragment frag) {
         HomeActivity myActivity = (HomeActivity) context;
@@ -135,6 +133,8 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
             int status = resultsJSON.getInt("status");
             if (status == 1) { // friend request was sent successfully
                 buttons.get(currentPosition).setBackgroundResource(R.drawable.ic_pending_black_24dp);
+                buttons.get(currentPosition).setOnClickListener(v -> onClick(currentPosition, 3));
+
                 this.duc.makeShortToast(context, "Request sent!");
                 /** FireBase code here???? **/
             } else {

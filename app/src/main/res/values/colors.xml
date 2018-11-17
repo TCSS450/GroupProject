@@ -8,5 +8,5 @@
     <color name="colorAccent">#0080ff</color>
     <color name="chatColor">#9AD7D5</color>
     <!--<color name="transparent_wait_frag_overlay">#29000000</color>-->
-    <color name="transparent_wait_frag_overlay">#b4000000</color>
+    <color name="transparent_wait_frag_overlay">#FFFFFF</color>
 </resources>

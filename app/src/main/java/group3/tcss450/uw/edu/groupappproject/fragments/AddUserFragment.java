@@ -80,6 +80,7 @@ public class AddUserFragment extends Fragment {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
             }
             new SendPostAsyncTask.Builder(uri.toString(), msg)
+                    .onPreExecute(this::handleSearchOnPre)
                     .onPostExecute(this::handleSearchOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
@@ -89,6 +90,10 @@ public class AddUserFragment extends Fragment {
             duc.makeToast(this.getContext(), "You must enter a search string to search");
             loadFragment(this.duc.getNewFriendFragment());
         }
+    }
+
+    private void handleSearchOnPre() {
+        loadFragment(new WaitFragment());
     }
 
 
