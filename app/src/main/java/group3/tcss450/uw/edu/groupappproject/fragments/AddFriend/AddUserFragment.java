@@ -135,6 +135,11 @@ public class AddUserFragment extends Fragment {
                 tempCreds.add(cred);
             }
             Uri friendUri = duc.getFriendStatusURI();
+            if (tempCreds.size() == 0) {
+                Constants.searchResults = searchResult;
+                duc.makeShortToast(getContext(), "Zero search results");
+                loadFragment(duc.getNewFriendFragment());
+            }
             for (int i = 0; i < tempCreds.size(); i++) {
                 JSONObject msg = new JSONObject();
                 try {
