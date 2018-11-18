@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ViewRequestsFragment">
+    tools:context=".fragments.ViewRequestsFragment"
+    android:background="@color/primary_dark_background">
+
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

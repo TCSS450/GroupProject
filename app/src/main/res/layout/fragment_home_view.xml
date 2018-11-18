@@ -4,6 +4,7 @@
     android:id="@+id/constraintLayout_viewFriends_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary_dark_background"
     tools:context=".fragments.HomeViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Your Friends"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_light_text"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

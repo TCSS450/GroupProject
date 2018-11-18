@@ -5,6 +5,7 @@
     android:id="@+id/LinearLayout_friendRequests"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary_dark_background"
     tools:context=".fragments.ViewFriendRequests.FriendRequests">
 
     <!-- TODO: Update blank fragment layout -->
@@ -17,7 +18,7 @@
         android:layout_marginTop="8dp"
         android:text="Received Requests (awaiting your approval)"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_light_text"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,7 @@
         android:layout_marginTop="8dp"
         android:text="Sent Requests (awaiting friend approval)"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_light_text"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

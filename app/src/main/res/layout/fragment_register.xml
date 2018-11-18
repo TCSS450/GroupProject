@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_launch_icon">
+    android:background="@color/primary_dark_background">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="@string/welcome"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primary_light_text"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -44,7 +44,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="@string/registerHint"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primary_light_accent_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
@@ -72,6 +72,7 @@
                 android:layout_marginEnd="8dp"
                 android:hint="@string/firstName"
                 android:inputType="textPersonName"
+                android:textColor="@color/primary_light_accent_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +87,7 @@
                 android:layout_marginEnd="8dp"
                 android:hint="@string/lastName"
                 android:inputType="textPersonName"
+                android:textColor="@color/primary_light_accent_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -100,6 +102,7 @@
                 android:layout_marginEnd="8dp"
                 android:hint="@string/nickname"
                 android:inputType="textPersonName"
+                android:textColor="@color/primary_light_accent_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +117,7 @@
                 android:layout_marginEnd="8dp"
                 android:hint="@string/phoneNumber"
                 android:inputType="number"
+                android:textColor="@color/primary_light_accent_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/register_nicknameInput" />
@@ -127,6 +131,7 @@
                 android:layout_marginEnd="8dp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
+                android:textColor="@color/primary_light_accent_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/phoneNumberInput" />
@@ -143,6 +148,7 @@
                     android:layout_marginEnd="64dp"
                     android:hint="@string/password"
                     android:inputType="textPassword"
+                    android:textColor="@color/primary_light_accent_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -153,11 +159,12 @@
                     android:layout_height="38dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@color/ic_launch_icon"
+                    android:background="@color/primary_dark_background"
+                    android:tint="@color/primary_light_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/passwordInput"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_help_blue_24dp" />
+                    app:srcCompat="@drawable/ic_info_circle" />
             </android.support.constraint.ConstraintLayout>
 
             <EditText
@@ -169,6 +176,7 @@
                 android:layout_marginEnd="8dp"
                 android:hint="@string/password"
                 android:inputType="textPassword"
+                android:textColor="@color/primary_light_accent_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordInput" />
@@ -180,7 +188,7 @@
                 android:layout_margin="12dp"
                 android:text="@string/UserDisplayPrefMessage"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:textColor="@color/primary_light_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordConfirm" />
@@ -200,21 +208,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/nickname" />
+                    android:text="@string/nickname"
+                    android:textColor="@color/primary_light_accent_text" />
 
                 <RadioButton
                     android:id="@+id/radioButtonFullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/fullName" />
+                    android:text="@string/fullName"
+                    android:textColor="@color/primary_light_accent_text" />
 
                 <RadioButton
                     android:id="@+id/radioButtonEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/email" />
+                    android:text="@string/email"
+                    android:textColor="@color/primary_light_accent_text" />
 
             </RadioGroup>
 
@@ -224,8 +235,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:background="@color/primary_dark_button"
                 android:text="@string/register"
-                android:textColor="@android:color/white"
+                android:textColor="@color/primary_light_accent_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

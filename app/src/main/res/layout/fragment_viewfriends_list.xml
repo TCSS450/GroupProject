@@ -7,8 +7,7 @@
     android:name="group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriendsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:background="@color/primary_dark_background"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context=".fragments.ViewFriends.ViewFriends"
     tools:listitem="@layout/fragment_viewfriends" >
