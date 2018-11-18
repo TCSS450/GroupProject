@@ -249,32 +249,39 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         Uri uri = duc.getAllFriendsURI();
         new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
-                .onPostExecute(this::handleGetFriendsOnPostExecute)
+                .onPostExecute(this::handleGetFriendsOnPostExecute) //todo: need errors
                 .build().execute();
     }
 
     private void handleGetFriendsOnPostExecute(final String result) {
         //parse JSON
-
+        Log.d("ViewFriends post execute result: ", result);
         try {
             JSONObject resultsJSON = new JSONObject(result);
-            if (resultsJSON.has("status")) {
-                int status = resultsJSON.getInt("status");
-                if (status == 0 ) {
+//            Log.d("ViewFriends post execute json result: ", resultsJSON.toString());
+            if (resultsJSON.has("error")) {
+                boolean error = resultsJSON.getBoolean("error");
+//                Log.d("ViewFriends post execute error: ", String.valueOf(error));
+                if (!error) {
                     if (resultsJSON.has("friends")) {
-                        JSONArray data = resultsJSON.getJSONArray("friends");
+                        JSONArray friendsArray = resultsJSON.getJSONArray("friends");
+//                        Log.d("ViewFriends post friends array: ", friendsArray.toString());
+//                        Log.d("ViewFriends post friends array len: ", String.valueOf(friendsArray.length()));
                         List<Credentials> creds = new ArrayList<>();
-                        for(int i = 0; i < data.length(); i++) {
-                            JSONObject jsonBlog = data.getJSONObject(i);
-                            creds.add(new Credentials.Builder("",
-                                    jsonBlog.getString("nickname"))
-                                    .addFirstName("firstname")
-                                    .addLastName("lastname")
-//                                    .addPhoneNumber("phonenumber")
+                        for(int i = 0; i < friendsArray.length(); i++) {
+                            JSONObject jsonFriend = friendsArray.getJSONObject(i);
+//                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
+                            creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
+//                                    .addNickName(jsonFriend.getString("nickname"))
+                                    .addFirstName(jsonFriend.getString("firstname"))
+                                    .addLastName(jsonFriend.getString("lastname"))
+                                    .addPhoneNumber(jsonFriend.getString("phone"))
                                     .build());
                         }
                         Credentials[] credsAsArray = new Credentials[creds.size()];
                         credsAsArray = creds.toArray(credsAsArray);
+
+                        //todo: Load different fragment if you have no friends
 
                         Bundle args = new Bundle();
                         args.putSerializable(ViewFriends.ARG_CRED_LIST, credsAsArray);
