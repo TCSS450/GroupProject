@@ -82,6 +82,7 @@ public class FriendRequests extends Fragment {
             int status = resultsJSON.getInt("status");
             if (status == 1) {
                 Constants.receivedRequests = searchResult;
+                loadReceivedFragment(new FriendRequestsFragment());
             } else if (status == 2) {
                 try {
                     JSONArray data = resultsJSON.getJSONArray("data");
@@ -96,7 +97,8 @@ public class FriendRequests extends Fragment {
                         searchResult.add(cred);
                     }
                     Constants.receivedRequests = searchResult;
-                    loadReceivedFragment(duc.getFriendRequestsFragment());
+                    loadReceivedFragment(new FriendRequestsFragment());
+                    //loadReceivedFragment(duc.getFriendRequestsFragment());
                 } catch (JSONException e) {
                     Log.e("JSON_PARSE_ERROR", result);
                 }
@@ -134,6 +136,7 @@ public class FriendRequests extends Fragment {
             int status = resultsJSON.getInt("status");
             if (status == 1) {
                 Constants.sentRequests = searchResult;
+                loadSentFragment(new SentFriendRequestsFragment());
             } else if (status == 2) {
                 try {
                     JSONArray data = resultsJSON.getJSONArray("data");
@@ -148,7 +151,7 @@ public class FriendRequests extends Fragment {
                         searchResult.add(cred);
                     }
                     Constants.sentRequests = searchResult;
-                    loadSentFragment(duc.getSentFriendRequestsFragment());
+                    loadSentFragment(new SentFriendRequestsFragment());
                 } catch (JSONException e) {
                     Log.e("JSON_PARSE_ERROR", result);
                 }

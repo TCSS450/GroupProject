@@ -32,6 +32,7 @@ import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
@@ -44,7 +45,8 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         FriendsFragment.OnListFragmentInteractionListener,
         WaitFragment.OnWaitFragmentInteractionListener,
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
-        ViewFriends.OnListFragmentInteractionListener {
+        ViewFriends.OnListFragmentInteractionListener,
+        FriendRequestsFragment.OnListFragmentInteractionListener {
 
 
     private DataUtilityControl duc;
@@ -198,6 +200,16 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
 
     @Override
     public void onListFragmentInteraction(Credentials item) {
+
+    }
+
+    @Override
+    public void onAcceptListFragmentInteraction(JSONObject msg) {
+
+    }
+
+    @Override
+    public void onDenyListFragmentInteraction(JSONObject msg) {
 
     }
 
