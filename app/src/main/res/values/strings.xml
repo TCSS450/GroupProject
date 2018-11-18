@@ -89,6 +89,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--view friends-->
+    <string name="view_friends_greeting">My Friends</string>
+
 
     <!--password Requirements-->
     <string name="passwordRequirements">

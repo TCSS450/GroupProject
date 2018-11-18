@@ -10,4 +10,16 @@
     <color name="button_grey">#DCDCDC</color>
     <!--<color name="transparent_wait_frag_overlay">#29000000</color>-->
     <color name="transparent_wait_frag_overlay">#FFFFFF</color>
+
+
+    <color name = "primary_light_text">#ffffff</color>
+    <color name = "primary_light_accent_text">#d9cece</color>
+
+    <color name = "primary_dark_background">#004d40</color>
+    <color name = "primary_dark_accent_background">#012e27</color>
+
+    <color name = "primary_dark_button">#c8003d33</color>
+    <color name = "primary_accent_button">#5e9ad7d5</color>
+    <color name = "secondary_accent_button">#0080ff</color>
+
 </resources>

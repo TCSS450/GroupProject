@@ -65,7 +65,7 @@ public class ChangePasswordFragment extends Fragment {
      */
     private void submitPasswords(View view) {
         //verify the password satisfies rules
-        if (PasswordRules.attemptRegister(this,password1, password2)) {
+        if (!PasswordRules.isValidPasswords(this, password1, password2)) {
             //start the async task to change password
             // todo: do this better .... clean up and refactor
             JSONObject msg = new JSONObject();
@@ -87,6 +87,8 @@ public class ChangePasswordFragment extends Fragment {
                     .onPostExecute(this::handleChangePassOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
+        } else {
+            duc.makeToast(getContext(), "Password does not meet minimum requirements");
         }
 
     }
