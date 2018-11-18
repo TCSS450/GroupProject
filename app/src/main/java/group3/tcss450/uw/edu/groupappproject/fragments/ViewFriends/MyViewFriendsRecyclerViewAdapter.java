@@ -44,10 +44,8 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
         s = holder.mFullName.getText().toString() + ": " + mValues.get(position).getFirstName()
                                                    + " " + mValues.get(position).getLastName();
         holder.mFullName.setText(s);
-
         holder.mPhoneNumber.setText(mValues.get(position).getPhoneNumber());
-        s = holder.mEmail.getText().toString() + ": " + mValues.get(position).getEmail();
-        holder.mEmail.setText(s);
+        holder.mEmail.setText(mValues.get(position).getEmail());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +78,7 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
             mNickname = (TextView) view.findViewById(R.id.textView_viewfriends_nickname);
             mFullName = (TextView) view.findViewById(R.id.textView_viewfriends_fullname);
             mPhoneNumber = (TextView) view.findViewById(R.id.textView_viewfriends_phoneNumber);
-            mEmail = (TextView) view.findViewById(R.id.textView_viewfriends_email);
+            mEmail = (TextView) view.findViewById(R.id.textView_viewFriends_email);
         }
 
         @Override
