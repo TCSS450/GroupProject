@@ -35,6 +35,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends_Main;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
@@ -76,8 +77,7 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Load up the friends Fragment.
-        loadFriendHelper();
+        loadFragment(new HomeViewFragment());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -136,15 +136,14 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             loadFragment(chat);
             //loadFragment(this.duc.getCreateChatFragment());
         } else if (id == R.id.connections) {
-            loadFriendHelper();
+            loadFragment(new ViewFriends_Main());
         } else if (id == R.id.requests) {
             loadFragment(this.duc.getFriendRequests());
         } else if (id == R.id.weather) {
             loadFragment(this.duc.getViewWeatherFragment());
         } else if (id == R.id.home) {
-            loadFriendHelper();
+            loadFragment(new HomeViewFragment());
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -250,76 +249,6 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             // startActivity(i);
             // //Ends this Activity and removes it from the Activity back stack.
             // finish();
-        }
-    }
-
-    private void loadFriendHelper() {
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("user", duc.getUserCreds().getEmail());
-        } catch (JSONException e) {
-            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
-        }
-        Uri uri = duc.getAllFriendsURI();
-        new SendPostAsyncTask.Builder(uri.toString(), msg)
-                .onPreExecute(this::onWaitFragmentInteractionShow)
-                .onPostExecute(this::handleGetFriendsOnPostExecute) //todo: need errors
-                .build().execute();
-    }
-
-    private void handleGetFriendsOnPostExecute(final String result) {
-        //parse JSON
-        Log.d("ViewFriends post execute result: ", result);
-        try {
-            JSONObject resultsJSON = new JSONObject(result);
-            if (resultsJSON.has("error")) {
-                boolean error = resultsJSON.getBoolean("error");
-                if (!error) {
-                    if (resultsJSON.has("friends")) {
-                        JSONArray friendsArray = resultsJSON.getJSONArray("friends");
-                        List<Credentials> creds = new ArrayList<>();
-                        for(int i = 0; i < friendsArray.length(); i++) {
-                            JSONObject jsonFriend = friendsArray.getJSONObject(i);
-//                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
-                            creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
-                                    .addNickName(jsonFriend.getString("nickname"))
-                                    .addFirstName(jsonFriend.getString("firstname"))
-                                    .addLastName(jsonFriend.getString("lastname"))
-                                    .addPhoneNumber(jsonFriend.getString("phone"))
-                                    .build());
-                        }
-                        Credentials[] credsAsArray = new Credentials[creds.size()];
-                        credsAsArray = creds.toArray(credsAsArray);
-
-                        //if the user has no friends make a toast
-                        if (friendsArray.length() == 0) {
-                            duc.makeToast(getBaseContext(), "You have no friends");
-                        }
-
-                        Bundle args = new Bundle();
-                        args.putSerializable(ViewFriends.ARG_CRED_LIST, credsAsArray);
-                        Fragment frag = new ViewFriends();
-                        frag.setArguments(args);
-                        onWaitFragmentInteractionHide();
-                        loadFragment(frag);
-                    } else {
-                        Log.e("ERROR!", "No friends array");
-                        //notify user
-                        onWaitFragmentInteractionHide();
-                    }
-                } else {
-                    duc.makeToast(getBaseContext(), "STATUS = 1");
-                }
-            } else {
-                Log.e("ERROR!", "No response");
-                duc.makeToast(getBaseContext(), "NOTHING STATUSY");
-                onWaitFragmentInteractionHide();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("ERROR!", e.getMessage());
-            duc.makeToast(getBaseContext(), "IN CATCH??");
-            onWaitFragmentInteractionHide();
         }
     }
 }

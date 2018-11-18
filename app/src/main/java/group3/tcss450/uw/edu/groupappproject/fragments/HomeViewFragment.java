@@ -72,19 +72,4 @@ public class HomeViewFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home_view, container, false);
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Bundle args = new Bundle();
-        args.putSerializable(ViewFriends.ARG_CRED_LIST, mCredentials);
-        Fragment frag = new HomeViewFragment();
-        frag.setArguments(args);
-        FragmentTransaction transaction =
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.FrameLayout_viewFriends_mainFrame, new ViewFriends())
-                        .addToBackStack(null);
-        transaction.commit();
-    }
 }

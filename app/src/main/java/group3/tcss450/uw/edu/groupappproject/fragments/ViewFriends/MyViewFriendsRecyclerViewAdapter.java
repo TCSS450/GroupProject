@@ -4,13 +4,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends.OnListFragmentInteractionListener;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,17 +26,21 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
 
     private final List<Credentials> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private DataUtilityControl duc;
+
 
     public MyViewFriendsRecyclerViewAdapter(List<Credentials> creds,
                                             OnListFragmentInteractionListener listener) {
         mValues = creds;
         mListener = listener;
+        Constants.chatCheckBoxes = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_viewfriends, parent, false);
+        System.out.println("INSIDE onCreateViewHolder");
         return new ViewHolder(view);
     }
 
@@ -46,6 +54,7 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
         holder.mFullName.setText(s);
         holder.mPhoneNumber.setText(mValues.get(position).getPhoneNumber());
         holder.mEmail.setText(mValues.get(position).getEmail());
+        System.out.println("Stuff is filled out");
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +79,7 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
         public final TextView mFullName;
         public final TextView mPhoneNumber;
         public final TextView mEmail;
+        public final CheckBox mCheckBox;
         public Credentials mCreds;
 
         public ViewHolder(View view) {
@@ -79,6 +89,8 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
             mFullName = (TextView) view.findViewById(R.id.textView_viewfriends_fullname);
             mPhoneNumber = (TextView) view.findViewById(R.id.textView_viewfriends_phoneNumber);
             mEmail = (TextView) view.findViewById(R.id.textView_viewFriends_email);
+            mCheckBox = (CheckBox) view.findViewById(R.id.checkBox_viewFriends_add);
+            Constants.chatCheckBoxes.add(mCheckBox);
         }
 
         @Override

@@ -108,4 +108,9 @@
     <string name="request_denied">Rejected!</string>
     <string name="request_error">Error. Try again later...</string>
 
+    <string name="viewFriends_phone">Phone Number:</string>
+    <string name="viewFriends_email">Email:</string>
+    <string name="viewFriends_addToChat">Add to Chat</string>
+    <string name="viewFriends_myFriends">My Friends</string>
+    <string name="viewFriends_startChat">Start Chat</string>
 </resources>

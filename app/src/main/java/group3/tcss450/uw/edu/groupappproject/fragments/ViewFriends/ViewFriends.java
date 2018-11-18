@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
@@ -24,9 +25,6 @@ import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
  */
 public class ViewFriends extends Fragment {
 
-    private DataUtilityControl duc;
-    public static final String ARG_CRED_LIST = "creds lists";
-    private List<Credentials> mCreds;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
@@ -50,8 +48,7 @@ public class ViewFriends extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             Log.d("ViewFriends", "getArgs not null");
-            mCreds = new ArrayList<Credentials>(
-                    Arrays.asList((Credentials[]) getArguments().getSerializable(ARG_CRED_LIST)));
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
 
@@ -69,7 +66,8 @@ public class ViewFriends extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyViewFriendsRecyclerViewAdapter(mCreds, mListener));
+            MyViewFriendsRecyclerViewAdapter adapter = new MyViewFriendsRecyclerViewAdapter(Constants.myFriends, mListener);
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
