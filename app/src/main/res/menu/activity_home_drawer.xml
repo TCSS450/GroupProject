@@ -21,11 +21,6 @@
             android:title="@string/home_drawer_create_chat" />
 
         <item
-            android:id="@+id/createGroup"
-            android:icon="@drawable/groupchat"
-            android:title="@string/home_drawer_create_group" />
-
-        <item
             android:id="@+id/connections"
             android:icon="@drawable/connections"
             android:title="@string/home_drawer_connections" />

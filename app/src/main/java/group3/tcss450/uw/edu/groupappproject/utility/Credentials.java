@@ -43,7 +43,6 @@ public class Credentials implements Serializable {
         private String mPhoneNumber = "";
         private int mDisplayPref = 1;
         private int mMemberId = -1;
-        private int mVerifyCode = 1000;
 
         /**
          * Constructs a new Builder.
@@ -97,11 +96,6 @@ public class Credentials implements Serializable {
 
         public Builder addDisplayPref(final int val) {
             mDisplayPref = val;
-            return this;
-        }
-
-        public Builder addVerifyCode(final int val) {
-            mVerifyCode = val;
             return this;
         }
 
