@@ -1,11 +1,13 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.AddFriend;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -41,6 +43,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
     private List<Button> buttons;
     private Integer currentPosition;
 
+
     public MyFriendsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -56,7 +59,9 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_friends, parent, false);
         mAddFriendButton = view.findViewById(R.id.addbtn);
+
         buttons.add(mAddFriendButton);
+
         context = view.getContext();
         return new ViewHolder(view);
     }
@@ -67,18 +72,36 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
         holder.mIdView.setText(mValues.get(position).getFirstName()+ " "+ mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getNickName());
 
+        buttons.get(position).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    buttons.get(position).setBackgroundColor(Color.TRANSPARENT);
+                }
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+                    buttons.get(position).setBackgroundColor(Color.rgb(220,220,220));
+                }
+
+                return false;
+            }
+        });
         int relationship = Constants.searchResults.get(position).getRelationship();
         if (relationship == 1) {
-            buttons.get(position).setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
+            buttons.get(position).setText("ADD FRIEND");
+//            buttons.get(position).setBackgroundResource(R.drawable.ic_add_circle_outline_red_24dp);
             buttons.get(position).setOnClickListener(v-> onClick(position, 1));
         } else if(relationship == 2) {
-            buttons.get(position).setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
+
+            buttons.get(position).setText("ALREADY FRIEND");
+//            buttons.get(position).setBackgroundResource(R.drawable.ic_check_circle_green_24dp);
             buttons.get(position).setOnClickListener(v-> onClick(position, 2));
         } else if (relationship == 3) {
-            buttons.get(position).setBackgroundResource(R.drawable.ic_pending_black_24dp);
+            buttons.get(position).setText("FRIEND PENDING");
+//            buttons.get(position).setBackgroundResource(R.drawable.ic_pending_black_24dp);
             buttons.get(position).setOnClickListener(v-> onClick(position, 3));
         } else if (relationship == 4) {
-            buttons.get(position).setBackgroundResource(R.drawable.ic_accept_green_24dp);
+            buttons.get(position).setText("CLICK TO ACCEPT");
+//            buttons.get(position).setBackgroundResource(R.drawable.ic_accept_green_24dp);
             buttons.get(position).setOnClickListener(v-> onClick(position, 4));
         }
     }
