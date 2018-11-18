@@ -3,11 +3,19 @@ package group3.tcss450.uw.edu.groupappproject.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
+import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +31,9 @@ public class HomeViewFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    public static final String ARG_CRED_LIST = "creds lists";
+    private List<Credentials> mCreds;
+    private Credentials[] mCredentials;
 
     public HomeViewFragment() {
         // Required empty public constructor
@@ -51,8 +61,8 @@ public class HomeViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            Log.d("ViewFriends", "getArgs not null");
+            mCredentials = (Credentials[]) getArguments().getSerializable(ARG_CRED_LIST);
         }
     }
 
@@ -63,4 +73,18 @@ public class HomeViewFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home_view, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Bundle args = new Bundle();
+        args.putSerializable(ViewFriends.ARG_CRED_LIST, mCredentials);
+        Fragment frag = new HomeViewFragment();
+        frag.setArguments(args);
+        FragmentTransaction transaction =
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.FrameLayout_viewFriends_mainFrame, new ViewFriends())
+                        .addToBackStack(null);
+        transaction.commit();
+    }
 }

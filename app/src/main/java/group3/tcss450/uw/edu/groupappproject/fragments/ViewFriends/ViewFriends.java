@@ -48,7 +48,6 @@ public class ViewFriends extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             Log.d("ViewFriends", "getArgs not null");
             mCreds = new ArrayList<Credentials>(
@@ -103,7 +102,7 @@ public class ViewFriends extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Credentials creds);
+        void onFriendListFragmentInteraction(Credentials creds);
     }
 }
 

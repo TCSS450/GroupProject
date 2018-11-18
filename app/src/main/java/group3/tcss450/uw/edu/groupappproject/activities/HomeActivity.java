@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +31,7 @@ import java.util.List;
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
@@ -190,12 +192,12 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     }
 
     @Override
-    public void onListFragmentInteraction(Credentials credentials) {
-
+    public void onFriendListFragmentInteraction(Credentials credentials) {
+        loadFragment(new ChatFragment());
     }
 
     @Override
-    public void onFriendListFragmentInteraction(Credentials item) {
+    public void onListFragmentInteraction(Credentials item) {
 
     }
 

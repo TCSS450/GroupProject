@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
 
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <android.support.v7.widget.CardView
@@ -58,11 +58,11 @@
                 <TextView
                     android:id="@+id/textView_viewfriends_phonetext"
                     android:layout_width="98dp"
-                    android:layout_height="22dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:text="@string/phoneNumber"
+                    android:text="Phone Number:"
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
@@ -70,14 +70,13 @@
 
                 <TextView
                     android:id="@+id/textView_viewfriends_phoneNumber"
-                    android:layout_width="287dp"
+                    android:layout_width="89dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
                     android:autoLink="phone"
                     android:text="2531234567"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="@color/cardview_light_background"
                     app:layout_constraintStart_toEndOf="@+id/textView_viewfriends_phonetext"
                     app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_nickname" />
 
