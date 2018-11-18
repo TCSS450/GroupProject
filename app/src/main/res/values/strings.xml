@@ -67,6 +67,7 @@
     <string name="ep_with_token">with_token</string>
     <string name="ep_messaging_base">messaging</string>
     <string name="ep_messaging_send">send</string>
+    <string name="ep_get_all">getAll</string>
 
     <!--Activity menu_options drawer nav labels-->
     <string name="home_drawer_home">Home</string>
