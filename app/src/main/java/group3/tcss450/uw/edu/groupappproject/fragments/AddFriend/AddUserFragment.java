@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.AddFriend;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -80,6 +81,7 @@ public class AddUserFragment extends Fragment {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
             }
             new SendPostAsyncTask.Builder(uri.toString(), msg)
+                    .onPreExecute(this::handleSearchOnPre)
                     .onPostExecute(this::handleSearchOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
@@ -89,6 +91,10 @@ public class AddUserFragment extends Fragment {
             duc.makeToast(this.getContext(), "You must enter a search string to search");
             loadFragment(this.duc.getNewFriendFragment());
         }
+    }
+
+    private void handleSearchOnPre() {
+        loadFragment(new WaitFragment());
     }
 
 

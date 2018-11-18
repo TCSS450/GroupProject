@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -8,18 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment.OnListFragmentInteractionListener;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment.OnListFragmentInteractionListener;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +32,10 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
     private final List<Credentials> mValues;
     private final OnListFragmentInteractionListener mListener;
     private DataUtilityControl duc;
+    private List<ImageButton> mAcceptButtons;
+    private List<ImageButton> mRejectButtons;
+    private List<TextView> mStatusTexts;
+    private Integer mCurrentPosition;
     private ImageButton acceptButton;
     private ImageButton denyButton;
     private TextView mFriendStatusText;
@@ -39,6 +43,11 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
     public MyFriendRequestsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+        this.duc = Constants.dataUtilityControl;
+        mAcceptButtons = new ArrayList<>();
+        mRejectButtons = new ArrayList<>();
+        mStatusTexts = new ArrayList<>();
+        mCurrentPosition = 0;
     }
 
     @Override
@@ -48,8 +57,10 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
         acceptButton = view.findViewById(R.id.imageButton_accept);
         denyButton = view.findViewById(R.id.imageButton_deny);
         mFriendStatusText = view.findViewById(R.id.textView_requests_status);
+        mAcceptButtons.add(acceptButton);
+        mRejectButtons.add(denyButton);
         mFriendStatusText.setVisibility(View.INVISIBLE);
-        this.duc = Constants.dataUtilityControl;
+        mStatusTexts.add(mFriendStatusText);
         return new ViewHolder(view);
     }
 
@@ -59,8 +70,8 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
             holder.mCredentials = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).getFirstName() + " " + mValues.get(position).getLastName());
             holder.mContentView.setText(mValues.get(position).getNickName());
-            acceptButton.setOnClickListener(view -> onClickAccept(position));
-            denyButton.setOnClickListener(view -> onClickDeny(position));
+            mAcceptButtons.get(position).setOnClickListener(view -> onClickAccept(position));
+            mRejectButtons.get(position).setOnClickListener(view -> onClickDeny(position));
         }
     }
 
@@ -75,18 +86,16 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
     public void onClickAccept(int position) {
         Uri acceptFriendUri = this.duc.getAcceptFriendURI();
         JSONObject msg = new JSONObject();
+        mCurrentPosition = position;
         try {
             msg.put("userAId", duc.getUserCreds().getMemberId());
             msg.put("userBId", mValues.get(position).getMemberId());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
-        acceptButton.setVisibility(View.INVISIBLE);
-        denyButton.setVisibility(View.INVISIBLE);
-        mFriendStatusText.setText(R.string.request_accepted);
-        mFriendStatusText.setVisibility(View.VISIBLE);
 
         new SendPostAsyncTask.Builder(acceptFriendUri.toString(), msg)
+                .onPreExecute(this::handleOnPre)
                 .onPostExecute(this::handleAcceptOnPost)
                 .build().execute();
     }
@@ -94,6 +103,7 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
     public void onClickDeny(int position) {
         Uri denyFriendUri = this.duc.getRejectFriendURI();
         JSONObject msg = new JSONObject();
+        mCurrentPosition = position;
         try {
             msg.put("userAId", duc.getUserCreds().getMemberId());
             msg.put("userBId", mValues.get(position).getMemberId());
@@ -127,8 +137,8 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
     }
 
     private void handleOnPre() {
-        acceptButton.setClickable(false);
-        denyButton.setClickable(false);
+        mAcceptButtons.get(mCurrentPosition).setClickable(false);
+        mRejectButtons.get(mCurrentPosition).setClickable(false);
     }
 
     private void handleDenyOnPost(String result) {
@@ -140,15 +150,15 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
             if (status == 1) {
-                acceptButton.setVisibility(View.INVISIBLE);
-                denyButton.setVisibility(View.INVISIBLE);
-                mFriendStatusText.setText(R.string.request_denied);
-                mFriendStatusText.setVisibility(View.VISIBLE);
+                mAcceptButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mRejectButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mStatusTexts.get(mCurrentPosition).setText(R.string.request_denied);
+                mStatusTexts.get(mCurrentPosition).setVisibility(View.VISIBLE);
             }  else {
-                acceptButton.setVisibility(View.INVISIBLE);
-                denyButton.setVisibility(View.INVISIBLE);
-                mFriendStatusText.setText(R.string.request_error);
-                mFriendStatusText.setVisibility(View.VISIBLE);
+                mAcceptButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mRejectButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mStatusTexts.get(mCurrentPosition).setText(R.string.request_error);
+                mStatusTexts.get(mCurrentPosition).setVisibility(View.VISIBLE);
             }
         } catch (JSONException e) {
             Log.e("JSON_PARSE_ERROR",  result
@@ -165,15 +175,15 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
             if (status == 1) {
-                acceptButton.setVisibility(View.INVISIBLE);
-                denyButton.setVisibility(View.INVISIBLE);
-                mFriendStatusText.setText(R.string.request_accepted);
-                mFriendStatusText.setVisibility(View.VISIBLE);
+                mAcceptButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mRejectButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mStatusTexts.get(mCurrentPosition).setText(R.string.request_accepted);
+                mStatusTexts.get(mCurrentPosition).setVisibility(View.VISIBLE);
             }  else {
-                acceptButton.setVisibility(View.INVISIBLE);
-                denyButton.setVisibility(View.INVISIBLE);
-                mFriendStatusText.setText(R.string.request_error);
-                mFriendStatusText.setVisibility(View.VISIBLE);
+                mAcceptButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mRejectButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
+                mStatusTexts.get(mCurrentPosition).setText(R.string.request_error);
+                mStatusTexts.get(mCurrentPosition).setVisibility(View.VISIBLE);
             }
         } catch (JSONException e) {
             Log.e("JSON_PARSE_ERROR",  result

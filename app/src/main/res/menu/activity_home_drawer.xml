@@ -11,7 +11,7 @@
             android:title="@string/home_drawer_home" />
 
         <item
-            android:id="@+id/addUser"
+            android:id="@+id/addFriend"
             android:icon="@drawable/add_person"
             android:title="@string/home_drawer_add_user" />
 
@@ -19,11 +19,6 @@
             android:id="@+id/createChat"
             android:icon="@drawable/chat"
             android:title="@string/home_drawer_create_chat" />
-
-        <item
-            android:id="@+id/createGroup"
-            android:icon="@drawable/groupchat"
-            android:title="@string/home_drawer_create_group" />
 
         <item
             android:id="@+id/connections"

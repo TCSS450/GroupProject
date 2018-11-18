@@ -9,19 +9,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import group3.tcss450.uw.edu.groupappproject.fragments.AddUserFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.CreateGroupFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPassVerifyFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequests;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendRequestsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.FriendsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequests;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.SentFriendRequestsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.VerificationFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewWeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
@@ -33,7 +32,6 @@ public class DataUtilityControl extends AppCompatActivity {
     private WaitFragment waitFragment;
     private AddUserFragment addUserFragment;
     private CreateChatFragment createChatFragment;
-    private CreateGroupFragment createGroupFragment;
 
     private ViewWeatherFragment viewWeatherFragment;
     private HomeViewFragment homeViewFragment;
@@ -55,7 +53,6 @@ public class DataUtilityControl extends AppCompatActivity {
         this.waitFragment = new WaitFragment();
         this.addUserFragment = new AddUserFragment();
         this.createChatFragment = new CreateChatFragment();
-        this.createGroupFragment = new CreateGroupFragment();
 
         this.viewWeatherFragment = new ViewWeatherFragment();
         this.homeViewFragment = new HomeViewFragment();
@@ -84,8 +81,6 @@ public class DataUtilityControl extends AppCompatActivity {
     public Fragment getAddUserFragment() { return this.addUserFragment;}
 
     public Fragment getCreateChatFragment() { return this.createChatFragment;}
-
-    public Fragment getCreateGroupFragment() { return this.createGroupFragment;}
 
 
 
@@ -118,8 +113,8 @@ public class DataUtilityControl extends AppCompatActivity {
         }
         return toSend;
     }
-    /* ***** Get Endpoints **** ***/
 
+    /* ***** Get Endpoints **** ***/
     public Uri getPasswordChangeEndPointURI() {
         return Uri.parse(Constants.PASSWORD_CHANGE_END_POINT_URL);
     }
@@ -156,6 +151,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getAcceptFriendURI() { return Uri.parse(Constants.ACCEPT_REQUEST_URL); }
 
+    public Uri getAllFriendsURI() { return Uri.parse(Constants.VIEW_FRIENDS_URL); }
+
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;
     }
@@ -163,6 +160,8 @@ public class DataUtilityControl extends AppCompatActivity {
     public Credentials getUserCreds() {
         return this.userCreds;
     }
+
+
 
 
 
