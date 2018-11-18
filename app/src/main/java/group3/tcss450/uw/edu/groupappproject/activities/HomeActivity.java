@@ -258,21 +258,17 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         Log.d("ViewFriends post execute result: ", result);
         try {
             JSONObject resultsJSON = new JSONObject(result);
-//            Log.d("ViewFriends post execute json result: ", resultsJSON.toString());
             if (resultsJSON.has("error")) {
                 boolean error = resultsJSON.getBoolean("error");
-//                Log.d("ViewFriends post execute error: ", String.valueOf(error));
                 if (!error) {
                     if (resultsJSON.has("friends")) {
                         JSONArray friendsArray = resultsJSON.getJSONArray("friends");
-//                        Log.d("ViewFriends post friends array: ", friendsArray.toString());
-//                        Log.d("ViewFriends post friends array len: ", String.valueOf(friendsArray.length()));
                         List<Credentials> creds = new ArrayList<>();
                         for(int i = 0; i < friendsArray.length(); i++) {
                             JSONObject jsonFriend = friendsArray.getJSONObject(i);
 //                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
                             creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
-//                                    .addNickName(jsonFriend.getString("nickname"))
+                                    .addNickName(jsonFriend.getString("nickname"))
                                     .addFirstName(jsonFriend.getString("firstname"))
                                     .addLastName(jsonFriend.getString("lastname"))
                                     .addPhoneNumber(jsonFriend.getString("phone"))
@@ -281,7 +277,10 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
                         Credentials[] credsAsArray = new Credentials[creds.size()];
                         credsAsArray = creds.toArray(credsAsArray);
 
-                        //todo: Load different fragment if you have no friends
+                        //if the user has no friends make a toast
+                        if (friendsArray.length() == 0) {
+                            duc.makeToast(getBaseContext(), "You have no friends");
+                        }
 
                         Bundle args = new Bundle();
                         args.putSerializable(ViewFriends.ARG_CRED_LIST, credsAsArray);
