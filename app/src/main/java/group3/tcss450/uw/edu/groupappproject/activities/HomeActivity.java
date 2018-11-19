@@ -31,9 +31,11 @@ import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.SettingsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequests;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
@@ -53,7 +55,10 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
         ViewFriends.OnListFragmentInteractionListener,
         FriendRequestsFragment.OnListFragmentInteractionListener,
-        ViewFriends_Main.OnFragmentInteractionListener {
+        ViewFriends_Main.OnFragmentInteractionListener,
+        SettingsFragment.OnFragmentInteractionListener,
+        ChangePasswordFragment.OnChangePasswordFragmentInteractionListener
+{
 
     private DataUtilityControl duc;
     public String checkNotify = "";
@@ -151,6 +156,8 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Log.d("MenuOptionsActivity", "settings button clicked");
+            loadFragment(SettingsFragment.newInstance(this.duc.getUserCreds()));
             return true;
         }
         if (id == R.id.action_logout) {
@@ -283,6 +290,13 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
                 .replace(R.id.homeActivityFrame, frag)
                 .addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onChangePasswordSubmit() {
+        //log the user out to home screen
+        Log.d("PreLoginActivity", "successful password change");
+        loadFragment(duc.getLoginFragment());
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
