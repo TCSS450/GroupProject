@@ -30,9 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.SettingsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
@@ -45,14 +47,17 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 import static java.lang.Integer.parseInt;
 
-public class HomeActivity extends MenuOptionsActivity implements NavigationView.OnNavigationItemSelectedListener,
+public class HomeActivity extends MenuOptionsActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnListFragmentInteractionListener,
         WaitFragment.OnWaitFragmentInteractionListener,
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
         ViewFriends.OnListFragmentInteractionListener,
         FriendRequestsFragment.OnListFragmentInteractionListener,
-        ViewFriends_Main.OnFragmentInteractionListener {
-
+        ViewFriends_Main.OnFragmentInteractionListener,
+        SettingsFragment.OnFragmentInteractionListener,
+        ChangePasswordFragment.OnChangePasswordFragmentInteractionListener
+{
 
     private DataUtilityControl duc;
     public String checkNotify = "";
@@ -123,6 +128,8 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Log.d("MenuOptionsActivity", "settings button clicked");
+            loadFragment(SettingsFragment.newInstance(this.duc.getUserCreds()));
             return true;
         }
         if (id == R.id.action_logout) {
@@ -319,5 +326,12 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
                     + e.getMessage());
             duc.makeToast(this, getString(R.string.request_error));
         }
+    }
+
+    @Override
+    public void onChangePasswordSubmit() {
+        //log the user out to home screen
+        Log.d("PreLoginActivity", "successful password change");
+        loadFragment(duc.getLoginFragment());
     }
 }
