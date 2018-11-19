@@ -35,7 +35,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 public class ChatFragment extends Fragment {
 
     private static final String TAG = "CHAT_FRAG";
-    private static final String CHAT_ID = "7";
+    //private static final String CHAT_ID = "7";
     private TextView mMessageOutputTextView;
     private EditText mMessageInputEditText;
     private String mEmail;
@@ -45,6 +45,8 @@ public class ChatFragment extends Fragment {
     private String nickName;
     private DataUtilityControl duc;
     private FirebaseMessageReciever mFirebaseMessageReciever;
+
+    int newChatId;
     //private String nickName;
     public ChatFragment() {
         //System.out.println("THE NICKNAME IS FINALLY " + duc);
@@ -62,7 +64,12 @@ public class ChatFragment extends Fragment {
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
+        Bundle bundle = this.getArguments();
+        newChatId = bundle.getInt("chatId");
+        System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
         //String prefName[] = new String[3];
+
+        //System.out.println("The new chat id is " + newChatId);
 
         mGetUrl = new Uri.Builder()
                 .scheme("https")
@@ -74,7 +81,7 @@ public class ChatFragment extends Fragment {
 
         JSONObject messageGetJson = new JSONObject();
         try {
-            messageGetJson.put("chatId", CHAT_ID);
+            messageGetJson.put("chatId", newChatId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -118,7 +125,7 @@ public class ChatFragment extends Fragment {
         try {
             messageJson.put("email", mEmail);
             messageJson.put("message", msg);
-            messageJson.put("chatId", CHAT_ID);
+            messageJson.put("chatId", newChatId);
             //messageJson.put("nickname", nickName);
         } catch (JSONException e) {
             e.printStackTrace();

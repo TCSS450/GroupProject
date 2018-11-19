@@ -68,13 +68,14 @@
     <string name="ep_messaging_base">messaging</string>
     <string name="ep_messaging_send">send</string>
     <string name="ep_get_all">getAll</string>
+    <string name="ep_chat_all">create-chat</string>
 
     <!--Activity menu_options drawer nav labels-->
     <string name="home_drawer_home">Home</string>
     <string name="home_drawer_add_user">Add Friend</string>
-    <string name="home_drawer_create_chat">Create Chat</string>
+    <string name="home_drawer_create_chat">Global Chat</string>
     <string name="home_drawer_create_group">Create Group</string>
-    <string name="home_drawer_connections">Your Friends</string>
+    <string name="home_drawer_connections">Your Friends/Chats</string>
     <string name="home_drawer_requests">Friend Requests</string>
     <string name="home_drawer_weather">Weather</string>
 
@@ -113,4 +114,7 @@
     <string name="viewFriends_addToChat">Add to Chat</string>
     <string name="viewFriends_myFriends">My Friends</string>
     <string name="viewFriends_startChat">Start Chat</string>
+    <string name="viewFriends_chatName_hint">Chat Name</string>
+    <string name="viewFriends_deleteFriend_text">Delete Friend</string>
+    <string name="viewFriends_deleteFriend_done">Friend Deleted</string>
 </resources>

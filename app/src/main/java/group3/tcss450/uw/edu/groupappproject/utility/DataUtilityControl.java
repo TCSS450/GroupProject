@@ -153,6 +153,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getAllFriendsURI() { return Uri.parse(Constants.VIEW_FRIENDS_URL); }
 
+    public Uri getCreateChatURI() { return Uri.parse(Constants.CREATE_CHAT_URL); }
+
     public void saveCreds(Credentials userCredentials) {
         this.userCreds = userCredentials;
     }

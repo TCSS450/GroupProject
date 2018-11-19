@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -48,9 +49,7 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
         ViewFriends.OnListFragmentInteractionListener,
         FriendRequestsFragment.OnListFragmentInteractionListener,
-        ViewFriends_Main.onViewFriendsMainInteraction
-
-{
+        ViewFriends_Main.OnFragmentInteractionListener {
 
 
     private DataUtilityControl duc;
@@ -62,17 +61,6 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,6 +85,14 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             textView.setText(s);
         }
         navigationView.setNavigationItemSelectedListener(this);
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                loadFragment(new ViewFriends_Main());
+//                fab.setVisibility(View.INVISIBLE);
+//            }
+//        });
     }
 
     @Override
@@ -135,9 +131,15 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         if (id == R.id.addFriend) {
             loadFragment(this.duc.getAddUserFragment());
         } else if (id == R.id.createChat) {
-            ChatFragment chat = new ChatFragment();
-            loadFragment(chat);
-            //loadFragment(this.duc.getCreateChatFragment());
+            ChatFragment frag = new ChatFragment();
+            Bundle args = new Bundle();
+            args.putString("chatId", "1");
+            frag.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.homeActivityFrame, frag)
+                    .addToBackStack(null);
+            transaction.commit();
         } else if (id == R.id.connections) {
             loadFragment(new ViewFriends_Main());
         } else if (id == R.id.requests) {
@@ -197,12 +199,31 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
 
     @Override
     public void onFriendListFragmentInteraction(Credentials credentials) {
-        loadFragment(new ChatFragment());
+        JSONObject msg = new JSONObject();
+        Uri createChatURI = this.duc.getCreateChatURI();
+        String[] members = {Integer.toString(duc.getUserCreds().getMemberId()),
+                            Integer.toString(credentials.getMemberId())};
+        try {
+            msg.put("chatmembers", new JSONArray(members));
+            msg.put("chatname", "Friends Chat");
+        } catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(createChatURI.toString(), msg)
+                .onPostExecute(this::handleCreateChatOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
     }
 
     @Override
     public void onListFragmentInteraction(Credentials item) {
 
+    }
+
+
+
+    private void handleErrorsInTask(String result) {
+        Log.e("ASYNCT_TASK_ERROR",  result);
     }
 
     @Override
@@ -213,6 +234,20 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     @Override
     public void onDenyListFragmentInteraction(JSONObject msg) {
 
+    }
+
+    @Override
+    public void onStartChatFragmentInteraction(int chatId) {
+        ChatFragment frag = new ChatFragment();
+        Bundle args = new Bundle();
+        args.putInt("chatId", chatId);
+        frag.setArguments(args);
+        System.out.println(chatId);
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.homeActivityFrame, frag)
+                .addToBackStack(null);
+        transaction.commit();
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
@@ -252,6 +287,29 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             // startActivity(i);
             // //Ends this Activity and removes it from the Activity back stack.
             // finish();
+        }
+    }
+
+    private void handleCreateChatOnPost(String result) {
+        /*  1 - Success! ChatId is created.
+            2 - Error
+        */
+        try {
+            Log.d("JSON result", result);
+            JSONObject resultsJSON = new JSONObject(result);
+            ArrayList<Credentials> searchResult = new ArrayList<>();
+            int status = resultsJSON.getInt("status");
+            if (status == 1) {
+                int chatId = resultsJSON.getInt("chatid");
+                onStartChatFragmentInteraction(chatId);
+            } else {
+                duc.makeToast(this, getString(R.string.request_error));
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR", result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            duc.makeToast(this, getString(R.string.request_error));
         }
     }
 }

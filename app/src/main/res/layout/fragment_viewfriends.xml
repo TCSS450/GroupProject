@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:text="@string/fullName"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/primary_light_accent_text"
+                    android:textColor="@color/primary_light_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -112,7 +112,29 @@
                     android:text="@string/viewFriends_addToChat"
                     android:textColor="@color/primary_light_text"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_viewfriends_nickname" />
+                    app:layout_constraintTop_toTopOf="@+id/textView_viewfriends_fullname" />
+
+                <ImageButton
+                    android:id="@+id/imageButton_deleteFriend"
+                    android:layout_width="34dp"
+                    android:layout_height="38dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/primary_dark_accent_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_nickname"
+                    app:srcCompat="@drawable/ic_clear_red" />
+
+                <TextView
+                    android:id="@+id/textView_viewFriend_DeleteFriend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/viewFriends_deleteFriend_text"
+                    android:textColor="@color/primary_light_text"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageButton_deleteFriend"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_nickname" />
 
             </android.support.constraint.ConstraintLayout>
 
