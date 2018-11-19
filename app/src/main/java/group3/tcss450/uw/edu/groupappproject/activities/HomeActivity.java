@@ -43,6 +43,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
+import static java.lang.Integer.parseInt;
+
 public class HomeActivity extends MenuOptionsActivity implements NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnListFragmentInteractionListener,
         WaitFragment.OnWaitFragmentInteractionListener,
@@ -53,21 +55,26 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
 
 
     private DataUtilityControl duc;
+    public String checkNotify = "";
+    private boolean mLoadFromChatNotification = false;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.duc = Constants.dataUtilityControl;
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         loadFragment(new HomeViewFragment());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -242,7 +249,7 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         Bundle args = new Bundle();
         args.putInt("chatId", chatId);
         frag.setArguments(args);
-        System.out.println(chatId);
+        System.out.println("first id gained is " + chatId);
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.homeActivityFrame, frag)
@@ -294,6 +301,7 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         /*  1 - Success! ChatId is created.
             2 - Error
         */
+        System.out.println("check notify is  third " + checkNotify);
         try {
             Log.d("JSON result", result);
             JSONObject resultsJSON = new JSONObject(result);
