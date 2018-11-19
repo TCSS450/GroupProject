@@ -39,7 +39,7 @@ public class ViewFriends_Main extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_viewfriends_main, container, false);
         this.duc = Constants.dataUtilityControl;
-        mChatName = v.findViewById(R.id.editText_viewFriends_chatname);
+        mChatName = v.findViewById(R.id.editText_viewfriends_chatname);
         mButton = v.findViewById(R.id.button_viewFriendsMain_startChat);
         mButton.setOnClickListener(view -> startChat());
         return v;
