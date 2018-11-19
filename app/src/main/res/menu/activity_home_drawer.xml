@@ -17,7 +17,7 @@
 
         <item
             android:id="@+id/createChat"
-            android:icon="@drawable/chat"
+            android:icon="@drawable/groupchat"
             android:title="@string/home_drawer_create_chat" />
 
         <item

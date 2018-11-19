@@ -40,7 +40,6 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_viewfriends, parent, false);
-        System.out.println("INSIDE onCreateViewHolder");
         return new ViewHolder(view);
     }
 
@@ -54,7 +53,6 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
         holder.mFullName.setText(s);
         holder.mPhoneNumber.setText(mValues.get(position).getPhoneNumber());
         holder.mEmail.setText(mValues.get(position).getEmail());
-        System.out.println("Stuff is filled out");
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

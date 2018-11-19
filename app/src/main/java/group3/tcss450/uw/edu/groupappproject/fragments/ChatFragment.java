@@ -45,8 +45,8 @@ public class ChatFragment extends Fragment {
     private String nickName;
     private DataUtilityControl duc;
     private FirebaseMessageReciever mFirebaseMessageReciever;
-    Bundle bundle = this.getArguments();
-    String newChatId = bundle.getString("chatId");
+
+    String newChatId;
     //private String nickName;
     public ChatFragment() {
         //System.out.println("THE NICKNAME IS FINALLY " + duc);
@@ -64,6 +64,8 @@ public class ChatFragment extends Fragment {
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
+        Bundle bundle = this.getArguments();
+        newChatId = bundle.getString("chatId");
         //String prefName[] = new String[3];
 
         //System.out.println("The new chat id is " + newChatId);

@@ -94,6 +94,16 @@ public class ViewFriends_Main extends Fragment {
         Log.e("ASYNCT_TASK_ERROR",  result);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
 
     private void handleGetFriendsOnPost(String result) {
 
@@ -143,7 +153,9 @@ public class ViewFriends_Main extends Fragment {
             if (status == 1) {
                 String chatId = resultsJSON.getString("chatid");
                 System.out.println(chatId);
-                mListener.onStartChatFragmentInteraction(chatId);
+                if (mListener != null) {
+                    mListener.onStartChatFragmentInteraction(chatId);
+                }
             } else {
                 duc.makeToast(getActivity(), getString(R.string.request_error));
             }
@@ -164,16 +176,7 @@ public class ViewFriends_Main extends Fragment {
         transaction.commit();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
+
 
     /**
      * This interface must be implemented by activities that contain this

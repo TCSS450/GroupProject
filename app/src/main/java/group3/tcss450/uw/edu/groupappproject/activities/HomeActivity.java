@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -61,17 +62,6 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -95,6 +85,14 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             textView.setText(s);
         }
         navigationView.setNavigationItemSelectedListener(this);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadFragment(new ViewFriends_Main());
+                fab.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
@@ -133,9 +131,15 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         if (id == R.id.addFriend) {
             loadFragment(this.duc.getAddUserFragment());
         } else if (id == R.id.createChat) {
-            ChatFragment chat = new ChatFragment();
-            loadFragment(chat);
-            //loadFragment(this.duc.getCreateChatFragment());
+            ChatFragment frag = new ChatFragment();
+            Bundle args = new Bundle();
+            args.putString("chatId", "1");
+            frag.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.homeActivityFrame, frag)
+                    .addToBackStack(null);
+            transaction.commit();
         } else if (id == R.id.connections) {
             loadFragment(new ViewFriends_Main());
         } else if (id == R.id.requests) {
@@ -195,7 +199,8 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
 
     @Override
     public void onFriendListFragmentInteraction(Credentials credentials) {
-        loadFragment(new ChatFragment());
+
+//        loadFragment(new ChatFragment());
     }
 
     @Override
@@ -219,6 +224,7 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         Bundle args = new Bundle();
         args.putString("chatId", chatId);
         frag.setArguments(args);
+        System.out.println(chatId);
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.homeActivityFrame, frag)
