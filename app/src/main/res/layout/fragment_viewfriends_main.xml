@@ -4,7 +4,7 @@
     android:id="@+id/constraintLayout_viewFriends_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/primary_dark_background">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -15,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/viewFriends_myFriends"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_light_text"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,13 +24,14 @@
 
     <Button
         android:id="@+id/button_viewFriendsMain_startChat"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@color/primary_dark_accent_background"
         android:text="@string/viewFriends_startChat"
-        android:textColor="@color/cardview_light_background"
+        android:textColor="@color/primary_light_accent_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -48,17 +49,16 @@
     </FrameLayout>
 
     <EditText
-        android:id="@+id/editText_viewFriends_chatname"
+        android:id="@+id/editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="@string/viewFriends_chatName_hint"
         android:inputType="textPersonName"
-        android:textColor="@color/cardview_light_background"
-        android:textColorHint="@color/primary_light_accent_text"
+        android:text="Name"
+        android:textColor="@color/primary_light_accent_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_viewFriendsMain_startChat"
         app:layout_constraintStart_toStartOf="parent" />
