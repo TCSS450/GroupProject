@@ -33,6 +33,7 @@ import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequests;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
@@ -75,7 +76,40 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        loadFragment(new HomeViewFragment());
+        if (duc.getBooleanId()) {
+
+            ChatFragment frag = new ChatFragment();
+            Bundle args = new Bundle();
+            args.putInt("chatId", duc.getChAtId());
+            frag.setArguments(args);
+            System.out.println("first id gained is " + duc.getChAtId());
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.homeActivityFrame, frag)
+                    .addToBackStack(null);
+            transaction.commit();
+
+        }
+        else if (duc.getFriendRequest() == 33){
+            FriendRequests frag = new FriendRequests();
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.homeActivityFrame, frag)
+                    .addToBackStack(null);
+            transaction.commit();
+        }
+
+        else if (duc.getFriendAccept() == 33){
+            ViewFriends_Main frag = new ViewFriends_Main();
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.homeActivityFrame, frag)
+                    .addToBackStack(null);
+            transaction.commit();
+        } else{
+            loadFragment(new HomeViewFragment());
+        }
+        //loadFragment(new HomeViewFragment());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -301,7 +335,7 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         /*  1 - Success! ChatId is created.
             2 - Error
         */
-        System.out.println("check notify is  third " + checkNotify);
+        //System.out.println("check notify is  third " + checkNotify);
         try {
             Log.d("JSON result", result);
             JSONObject resultsJSON = new JSONObject(result);

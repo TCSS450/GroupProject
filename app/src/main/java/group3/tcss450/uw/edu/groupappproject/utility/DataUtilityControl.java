@@ -45,6 +45,10 @@ public class DataUtilityControl extends AppCompatActivity {
     private FriendRequestsFragment friendRequestsFragment;
     private SentFriendRequestsFragment sentFriendRequestsFragment;
     private Credentials userCreds;
+    private boolean mStartChatWithNotification;
+    private int tempId;
+    private int mFriendRequest;
+    private int mFriendAccept;
 
 
     public DataUtilityControl() {
@@ -63,7 +67,11 @@ public class DataUtilityControl extends AppCompatActivity {
         this.forgotPasswordFragment = new ForgotPasswordFragment();
         this.forgotPassVerifyFragment = new ForgotPassVerifyFragment();
         this.changePasswordFragment = new ChangePasswordFragment();
+        this.tempId = 0;
+        this.mFriendRequest = 0;
+        this.mFriendAccept =0;
 
+        this.mStartChatWithNotification = false;
         this.friendRequests = new FriendRequests();
     }
 
@@ -103,6 +111,14 @@ public class DataUtilityControl extends AppCompatActivity {
     public Fragment getChangePasswordFragment() { return this.changePasswordFragment; }
 
     public Fragment getFriendRequests() { return this.friendRequests; }
+
+    public Boolean getBooleanId() { return this.mStartChatWithNotification;}
+
+    public int getChAtId() { return this.tempId;}
+
+    public int getFriendRequest() { return this.mFriendRequest;}
+
+    public int getFriendAccept() { return this.mFriendAccept;}
 
     public ArrayList<Credentials> getCredFromFriendStatusList(ArrayList<FriendStatus> friendStatuses) {
         ArrayList<Credentials> toSend = new ArrayList<Credentials>();
@@ -155,9 +171,17 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getCreateChatURI() { return Uri.parse(Constants.CREATE_CHAT_URL); }
 
-    public void saveCreds(Credentials userCredentials) {
-        this.userCreds = userCredentials;
+    public void setBooleanNotify(Boolean b) { mStartChatWithNotification = b;}
+
+    public void setNotifyId(int i) { tempId = i; }
+
+    public void setFriendRequests(int i) { mFriendRequest = i; }
+
+    public void setFriendAccept(int i) {
+        mFriendAccept = i;
     }
+
+    public void saveCreds(Credentials userCredentials){this.userCreds = userCredentials;}
 
     public Credentials getUserCreds() {
         return this.userCreds;
