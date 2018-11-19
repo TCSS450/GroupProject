@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,9 @@ import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,11 +32,12 @@ public class HomeViewFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private DataUtilityControl duc;
+    private String username;
     public static final String ARG_CRED_LIST = "creds lists";
     private List<Credentials> mCreds;
     private Credentials[] mCredentials;
+    private Credentials myCredentials;
 
     public HomeViewFragment() {
         // Required empty public constructor
@@ -60,6 +64,7 @@ public class HomeViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             Log.d("ViewFriends", "getArgs not null");
             mCredentials = (Credentials[]) getArguments().getSerializable(ARG_CRED_LIST);
@@ -70,6 +75,13 @@ public class HomeViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_view, container, false);
+
+        TextView textView = view.findViewById(R.id.HomeView_username_text);
+        this.duc = Constants.dataUtilityControl;
+        myCredentials = duc.getUserCreds();
+        textView.setText(myCredentials.getNickName().toString());
+
+        return view;
     }
 }

@@ -1,5 +1,6 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -24,6 +26,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 public class ViewFriends_Main extends Fragment {
 
     private DataUtilityControl duc;
+    private onViewFriendsMainInteraction mListener;
 
     public ViewFriends_Main() {}
 
@@ -47,10 +50,13 @@ public class ViewFriends_Main extends Fragment {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
         new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
+                .onPreExecute(this::handleGetFriendsOnPre)
                 .onPostExecute(this::handleGetFriendsOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
+
+    private void handleGetFriendsOnPre() { mListener.onWaitFragmentInteractionShow(); }
 
     private void handleErrorsInTask(String result) {
         Log.e("ASYNCT_TASK_ERROR",  result);
@@ -82,6 +88,7 @@ public class ViewFriends_Main extends Fragment {
                         }
                         Constants.myFriends = creds;
                         loadFriendsFragment(new ViewFriends());
+                        mListener.onWaitFragmentInteractionHide();
                     }
                 } else {
                     duc.makeToast(getActivity(), "Oops! An Error has occurred");
@@ -91,6 +98,7 @@ public class ViewFriends_Main extends Fragment {
             Log.e("JSON_PARSE_ERROR", result);
             duc.makeToast(getActivity(), "OOPS! Something went wrong!");
         }
+        mListener.onWaitFragmentInteractionHide();
     }
 
     private void loadFriendsFragment(Fragment frag) {
@@ -100,5 +108,27 @@ public class ViewFriends_Main extends Fragment {
                         .replace(R.id.FrameLayout_viewFriends_listFrame, frag)
                         .addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onViewFriendsMainInteraction ) {
+            mListener = (onViewFriendsMainInteraction ) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnChangePasswordFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface onViewFriendsMainInteraction extends WaitFragment.OnWaitFragmentInteractionListener
+    {
+
     }
 }

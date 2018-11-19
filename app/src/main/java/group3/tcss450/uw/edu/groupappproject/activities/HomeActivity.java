@@ -47,7 +47,10 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         WaitFragment.OnWaitFragmentInteractionListener,
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
         ViewFriends.OnListFragmentInteractionListener,
-        FriendRequestsFragment.OnListFragmentInteractionListener {
+        FriendRequestsFragment.OnListFragmentInteractionListener,
+        ViewFriends_Main.onViewFriendsMainInteraction
+
+{
 
 
     private DataUtilityControl duc;

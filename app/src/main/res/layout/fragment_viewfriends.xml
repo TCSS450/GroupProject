@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
+    android:background="@color/primary_dark_background"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="@color/button_grey"
+        app:cardBackgroundColor="@color/primary_dark_accent_background"
         app:cardCornerRadius="20dp">
 
         <LinearLayout
@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:text="@string/fullName"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primary_light_accent_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +50,7 @@
                     android:layout_weight="1"
                     android:text="@string/nickname"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primary_light_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_fullname" />
@@ -64,7 +64,7 @@
                     android:layout_weight="1"
                     android:text="@string/viewFriends_phone"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primary_light_text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_nickname" />
 
@@ -75,7 +75,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
                     android:autoLink="phone"
-                    android:textColor="@color/cardview_light_background"
+                    android:textColor="@color/secondary_accent_text"
                     app:layout_constraintStart_toEndOf="@+id/textView_viewfriends_phonetext"
                     app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_nickname" />
 
@@ -87,7 +87,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/viewFriends_email"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primary_light_text"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_phoneNumber" />
@@ -99,6 +99,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
                     android:autoLink="email"
+                    android:textColor="@color/secondary_accent_text"
                     app:layout_constraintStart_toEndOf="@+id/textView_viewfriends_emailText"
                     app:layout_constraintTop_toBottomOf="@+id/textView_viewfriends_phonetext" />
 
@@ -109,7 +110,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:text="@string/viewFriends_addToChat"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primary_light_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView_viewfriends_nickname" />
 
