@@ -1,6 +1,9 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,7 +14,10 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
+
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.SettingsFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
@@ -20,6 +26,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
  *
  * Add any menus that you want displayed in the action bar in this
  * class.
+ *
+ * TODO: this class is not used move homeActivity logic to here
  */
 public class MenuOptionsActivity extends AppCompatActivity {
 
@@ -42,6 +50,8 @@ public class MenuOptionsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
+                Log.d("MenuOptionsActivity", "settings button clicked");
+                loadFragment(SettingsFragment.newInstance(this.duc.getUserCreds()));
                 return true;
 
             case R.id.action_logout:
@@ -67,6 +77,13 @@ public class MenuOptionsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void loadFragment(Fragment frag) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.homeActivityFrame, frag)
+                .addToBackStack(null).commit();
     }
 
     private void handleErrorsInTask(String result) {
@@ -116,4 +133,9 @@ public class MenuOptionsActivity extends AppCompatActivity {
                 "to startActivity on a new intent?"); //the answer is yes!
         this.finish(); //finish the current activity
     }
+
+    private void logout() {
+
+    }
+
 }

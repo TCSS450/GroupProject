@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/primary_dark_background"
+        android:background="@color/primary_dark_button"
         android:text="@string/verification_resend_email"
         android:textColor="@color/primary_light_text"
         app:layout_constraintBottom_toBottomOf="parent"

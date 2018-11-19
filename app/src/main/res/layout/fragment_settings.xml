@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settingsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SettingsFragment"
+    android:background="@color/primary_dark_background">
+
+
+    <TextView
+        android:id="@+id/settingFrag_greeting_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/settings_greeting"
+        android:textColor="@color/primary_light_text"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/settingsFrag_changeNickname_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@color/primary_dark_button"
+        android:text="@string/change_nickname_button"
+        android:textColor="@color/primary_light_accent_text"
+        app:layout_constraintBottom_toTopOf="@+id/settingsFrag_changePassword_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/settingsFrag_changePassword_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_dark_button"
+        android:text="@string/change_password_button"
+        android:textColor="@color/primary_light_accent_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/settingsFrag_changeTheme_button"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/primary_dark_button"
+        android:text="@string/choose_theme_button"
+        android:textColor="@color/primary_light_accent_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsFrag_changePassword_button" />
+</android.support.constraint.ConstraintLayout>
