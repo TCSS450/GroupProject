@@ -35,7 +35,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 public class ChatFragment extends Fragment {
 
     private static final String TAG = "CHAT_FRAG";
-    private static final String CHAT_ID = "7";
+    //private static final String CHAT_ID = "7";
     private TextView mMessageOutputTextView;
     private EditText mMessageInputEditText;
     private String mEmail;
@@ -45,6 +45,8 @@ public class ChatFragment extends Fragment {
     private String nickName;
     private DataUtilityControl duc;
     private FirebaseMessageReciever mFirebaseMessageReciever;
+    Bundle bundle = this.getArguments();
+    String newChatId = bundle.getString("chatId");
     //private String nickName;
     public ChatFragment() {
         //System.out.println("THE NICKNAME IS FINALLY " + duc);
@@ -64,6 +66,8 @@ public class ChatFragment extends Fragment {
         this.duc = Constants.dataUtilityControl;
         //String prefName[] = new String[3];
 
+        //System.out.println("The new chat id is " + newChatId);
+
         mGetUrl = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -74,7 +78,7 @@ public class ChatFragment extends Fragment {
 
         JSONObject messageGetJson = new JSONObject();
         try {
-            messageGetJson.put("chatId", CHAT_ID);
+            messageGetJson.put("chatId", newChatId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -118,7 +122,7 @@ public class ChatFragment extends Fragment {
         try {
             messageJson.put("email", mEmail);
             messageJson.put("message", msg);
-            messageJson.put("chatId", CHAT_ID);
+            messageJson.put("chatId", newChatId);
             //messageJson.put("nickname", nickName);
         } catch (JSONException e) {
             e.printStackTrace();
