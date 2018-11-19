@@ -237,10 +237,10 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     }
 
     @Override
-    public void onStartChatFragmentInteraction(String chatId) {
+    public void onStartChatFragmentInteraction(int chatId) {
         ChatFragment frag = new ChatFragment();
         Bundle args = new Bundle();
-        args.putString("chatId", chatId);
+        args.putInt("chatId", chatId);
         frag.setArguments(args);
         System.out.println(chatId);
         FragmentTransaction transaction = getSupportFragmentManager()
@@ -300,7 +300,7 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             ArrayList<Credentials> searchResult = new ArrayList<>();
             int status = resultsJSON.getInt("status");
             if (status == 1) {
-                String chatId = resultsJSON.getString("chatid");
+                int chatId = resultsJSON.getInt("chatid");
                 onStartChatFragmentInteraction(chatId);
             } else {
                 duc.makeToast(this, getString(R.string.request_error));

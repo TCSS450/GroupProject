@@ -46,7 +46,7 @@ public class ChatFragment extends Fragment {
     private DataUtilityControl duc;
     private FirebaseMessageReciever mFirebaseMessageReciever;
 
-    String newChatId;
+    int newChatId;
     //private String nickName;
     public ChatFragment() {
         //System.out.println("THE NICKNAME IS FINALLY " + duc);
@@ -65,7 +65,7 @@ public class ChatFragment extends Fragment {
         //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
         Bundle bundle = this.getArguments();
-        newChatId = bundle.getString("chatId");
+        newChatId = bundle.getInt("chatId");
         System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
         //String prefName[] = new String[3];
 

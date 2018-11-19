@@ -157,7 +157,7 @@ public class ViewFriends_Main extends Fragment {
             ArrayList<Credentials> searchResult = new ArrayList<>();
             int status = resultsJSON.getInt("status");
             if (status == 1) {
-                String chatId = resultsJSON.getString("chatid");
+                int chatId = resultsJSON.getInt("chatid");
                 System.out.println(chatId);
                 if (mListener != null) {
                     mListener.onStartChatFragmentInteraction(chatId);
@@ -196,6 +196,6 @@ public class ViewFriends_Main extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onStartChatFragmentInteraction(String chatId);
+        void onStartChatFragmentInteraction(int chatId);
     }
 }
