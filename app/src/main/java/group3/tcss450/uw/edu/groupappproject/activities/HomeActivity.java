@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
@@ -54,7 +55,6 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         FriendRequestsFragment.OnListFragmentInteractionListener,
         ViewFriends_Main.OnFragmentInteractionListener {
 
-
     private DataUtilityControl duc;
     public String checkNotify = "";
     private boolean mLoadFromChatNotification = false;
@@ -77,7 +77,6 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         if (duc.getBooleanId()) {
-
             ChatFragment frag = new ChatFragment();
             Bundle args = new Bundle();
             args.putInt("chatId", duc.getChAtId());
@@ -88,18 +87,14 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
                     .replace(R.id.homeActivityFrame, frag)
                     .addToBackStack(null);
             transaction.commit();
-
-        }
-        else if (duc.getFriendRequest() == 33){
+        } else if (duc.getFriendRequest() == 33) {
             FriendRequests frag = new FriendRequests();
             FragmentTransaction transaction = getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.homeActivityFrame, frag)
                     .addToBackStack(null);
             transaction.commit();
-        }
-
-        else if (duc.getFriendAccept() == 33){
+        } else if (duc.getFriendAccept() == 33){
             ViewFriends_Main frag = new ViewFriends_Main();
             FragmentTransaction transaction = getSupportFragmentManager()
                     .beginTransaction()
@@ -109,7 +104,6 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         } else{
             loadFragment(new HomeViewFragment());
         }
-        //loadFragment(new HomeViewFragment());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -170,21 +164,21 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.addFriend) {
-            loadFragment(this.duc.getAddUserFragment());
+            loadFragment(new AddUserFragment());
         } else if (id == R.id.createChat) {
-            ChatFragment frag = new ChatFragment();
-            Bundle args = new Bundle();
-            args.putString("chatId", "1");
-            frag.setArguments(args);
-            FragmentTransaction transaction = getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.homeActivityFrame, frag)
-                    .addToBackStack(null);
-            transaction.commit();
+//            ChatFragment frag = new ChatFragment();
+//            Bundle args = new Bundle();
+//            args.putInt("chatId", 1);
+//            frag.setArguments(args);
+//            FragmentTransaction transaction = getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.homeActivityFrame, frag)
+//                    .addToBackStack(null);
+//            transaction.commit();
         } else if (id == R.id.connections) {
             loadFragment(new ViewFriends_Main());
         } else if (id == R.id.requests) {
-            loadFragment(this.duc.getFriendRequests());
+            loadFragment(new FriendRequests());
         } else if (id == R.id.weather) {
             loadFragment(this.duc.getViewWeatherFragment());
         } else if (id == R.id.home) {
@@ -242,8 +236,8 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     public void onFriendListFragmentInteraction(Credentials credentials) {
         JSONObject msg = new JSONObject();
         Uri createChatURI = this.duc.getCreateChatURI();
-        String[] members = {Integer.toString(duc.getUserCreds().getMemberId()),
-                            Integer.toString(credentials.getMemberId())};
+        int[] members = {duc.getUserCreds().getMemberId(),
+                           credentials.getMemberId()};
         try {
             msg.put("chatmembers", new JSONArray(members));
             msg.put("chatname", "Friends Chat");

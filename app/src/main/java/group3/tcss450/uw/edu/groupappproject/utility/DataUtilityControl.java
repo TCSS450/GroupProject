@@ -171,6 +171,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getCreateChatURI() { return Uri.parse(Constants.CREATE_CHAT_URL); }
 
+    public Uri getDeleteFriendURI() { return Uri.parse(Constants.DELETE_FRIEND_URL); }
+
     public void setBooleanNotify(Boolean b) { mStartChatWithNotification = b;}
 
     public void setNotifyId(int i) { tempId = i; }

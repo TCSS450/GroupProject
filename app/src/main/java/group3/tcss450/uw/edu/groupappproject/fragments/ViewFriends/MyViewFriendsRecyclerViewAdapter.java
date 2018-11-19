@@ -84,7 +84,7 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
     }
 
     public void onClickDeleteFriend(int position) {
-        Uri deleteFriendUri = this.duc.getAcceptFriendURI();
+        Uri deleteFriendUri = this.duc.getDeleteFriendURI();
         JSONObject msg = new JSONObject();
         mCurrentPosition = position;
         try {

@@ -55,8 +55,6 @@ public class ChatFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -155,6 +153,7 @@ public class ChatFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     //fill textview with previous logs
     private void endOfGetMsgTask(final String result) {
         try {
