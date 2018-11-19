@@ -66,6 +66,7 @@ public class ChatFragment extends Fragment {
         this.duc = Constants.dataUtilityControl;
         Bundle bundle = this.getArguments();
         newChatId = bundle.getString("chatId");
+        System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
         //String prefName[] = new String[3];
 
         //System.out.println("The new chat id is " + newChatId);

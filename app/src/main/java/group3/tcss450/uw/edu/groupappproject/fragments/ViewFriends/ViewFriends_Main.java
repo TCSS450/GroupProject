@@ -52,9 +52,12 @@ public class ViewFriends_Main extends Fragment {
                 members.add(Constants.myFriends.get(i).getMemberId());
             }
         }
-        String[] membersArray = new String[members.size()];
+        members.add(duc.getUserCreds().getMemberId());
+        int[] membersArray = new int[members.size()];
+
+
         for (int i = 0; i < members.size(); i++) {
-            membersArray[i] = Integer.toString(members.get(i));
+            membersArray[i] = members.get(i);
         }
         Uri createChatURI = this.duc.getCreateChatURI();
         JSONObject msg = new JSONObject();
@@ -68,6 +71,7 @@ public class ViewFriends_Main extends Fragment {
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
+
         new SendPostAsyncTask.Builder(createChatURI.toString(), msg)
                 .onPostExecute(this::handleCreateChatOnPost)
                 .onCancelled(this::handleErrorsInTask)
@@ -91,6 +95,7 @@ public class ViewFriends_Main extends Fragment {
     }
 
     private void handleErrorsInTask(String result) {
+        System.out.println("INSIDE ERRORS");
         Log.e("ASYNCT_TASK_ERROR",  result);
     }
 
@@ -146,6 +151,7 @@ public class ViewFriends_Main extends Fragment {
             2 - Error
         */
         try {
+            System.out.println("Inside Try");
             Log.d("JSON result", result);
             JSONObject resultsJSON = new JSONObject(result);
             ArrayList<Credentials> searchResult = new ArrayList<>();

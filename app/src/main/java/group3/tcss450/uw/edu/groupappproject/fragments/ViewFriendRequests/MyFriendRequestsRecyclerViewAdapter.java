@@ -30,15 +30,13 @@ import java.util.List;
 public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRequestsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Credentials> mValues;
+
     private final OnListFragmentInteractionListener mListener;
     private DataUtilityControl duc;
     private List<ImageButton> mAcceptButtons;
     private List<ImageButton> mRejectButtons;
     private List<TextView> mStatusTexts;
     private Integer mCurrentPosition;
-    private ImageButton acceptButton;
-    private ImageButton denyButton;
-    private TextView mFriendStatusText;
 
     public MyFriendRequestsRecyclerViewAdapter(List<Credentials> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -54,9 +52,9 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_friendrequests, parent, false);
-        acceptButton = view.findViewById(R.id.imageButton_accept);
-        denyButton = view.findViewById(R.id.imageButton_deny);
-        mFriendStatusText = view.findViewById(R.id.textView_requests_status);
+        ImageButton acceptButton = view.findViewById(R.id.imageButton_accept);
+        ImageButton denyButton = view.findViewById(R.id.imageButton_deny);
+        TextView mFriendStatusText = view.findViewById(R.id.textView_requests_status);
         mAcceptButtons.add(acceptButton);
         mRejectButtons.add(denyButton);
         mFriendStatusText.setVisibility(View.INVISIBLE);
@@ -179,6 +177,7 @@ public class MyFriendRequestsRecyclerViewAdapter extends RecyclerView.Adapter<My
                 mRejectButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
                 mStatusTexts.get(mCurrentPosition).setText(R.string.request_accepted);
                 mStatusTexts.get(mCurrentPosition).setVisibility(View.VISIBLE);
+                // SEND MESSAGE VIA FIREBASE THAT SAYS REQUEST ACCEPTED
             }  else {
                 mAcceptButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);
                 mRejectButtons.get(mCurrentPosition).setVisibility(View.INVISIBLE);

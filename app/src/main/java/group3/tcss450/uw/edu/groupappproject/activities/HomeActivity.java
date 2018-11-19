@@ -85,14 +85,14 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             textView.setText(s);
         }
         navigationView.setNavigationItemSelectedListener(this);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadFragment(new ViewFriends_Main());
-                fab.setVisibility(View.INVISIBLE);
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                loadFragment(new ViewFriends_Main());
+//                fab.setVisibility(View.INVISIBLE);
+//            }
+//        });
     }
 
     @Override
@@ -199,13 +199,31 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
 
     @Override
     public void onFriendListFragmentInteraction(Credentials credentials) {
-
-//        loadFragment(new ChatFragment());
+        JSONObject msg = new JSONObject();
+        Uri createChatURI = this.duc.getCreateChatURI();
+        String[] members = {Integer.toString(duc.getUserCreds().getMemberId()),
+                            Integer.toString(credentials.getMemberId())};
+        try {
+            msg.put("chatmembers", new JSONArray(members));
+            msg.put("chatname", "Friends Chat");
+        } catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(createChatURI.toString(), msg)
+                .onPostExecute(this::handleCreateChatOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
     }
 
     @Override
     public void onListFragmentInteraction(Credentials item) {
 
+    }
+
+
+
+    private void handleErrorsInTask(String result) {
+        Log.e("ASYNCT_TASK_ERROR",  result);
     }
 
     @Override
@@ -269,6 +287,29 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             // startActivity(i);
             // //Ends this Activity and removes it from the Activity back stack.
             // finish();
+        }
+    }
+
+    private void handleCreateChatOnPost(String result) {
+        /*  1 - Success! ChatId is created.
+            2 - Error
+        */
+        try {
+            Log.d("JSON result", result);
+            JSONObject resultsJSON = new JSONObject(result);
+            ArrayList<Credentials> searchResult = new ArrayList<>();
+            int status = resultsJSON.getInt("status");
+            if (status == 1) {
+                String chatId = resultsJSON.getString("chatid");
+                onStartChatFragmentInteraction(chatId);
+            } else {
+                duc.makeToast(this, getString(R.string.request_error));
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR", result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            duc.makeToast(this, getString(R.string.request_error));
         }
     }
 }
