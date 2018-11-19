@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout_viewFriends_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -23,12 +24,13 @@
 
     <Button
         android:id="@+id/button_viewFriendsMain_startChat"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/viewFriends_startChat"
-        android:textColor="@color/black"
+        android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -46,15 +48,17 @@
     </FrameLayout>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editText_viewFriends_chatname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
+        android:hint="@string/viewFriends_chatName_hint"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:textColor="@color/cardview_light_background"
+        android:textColorHint="@color/primary_light_accent_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_viewFriendsMain_startChat"
         app:layout_constraintStart_toStartOf="parent" />

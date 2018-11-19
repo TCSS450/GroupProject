@@ -28,8 +28,7 @@ public class Constants {
     public static final String REJECT_REQUEST_URL = "https://group3-backend.herokuapp.com/reject-friend-request";
     public static final String ACCEPT_REQUEST_URL = "https://group3-backend.herokuapp.com/accept-friend-request";
     public static final String VIEW_FRIENDS_URL = "https://group3-backend.herokuapp.com/view-friends";
-
-
+    public static final String CREATE_CHAT_URL = "https://group3-backend.herokuapp.com/create-chat";
     public static final String VIEW_FRIENDS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-friends";
 
     //VARIABLES

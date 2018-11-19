@@ -47,7 +47,8 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
         WaitFragment.OnWaitFragmentInteractionListener,
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
         ViewFriends.OnListFragmentInteractionListener,
-        FriendRequestsFragment.OnListFragmentInteractionListener {
+        FriendRequestsFragment.OnListFragmentInteractionListener,
+        ViewFriends_Main.OnFragmentInteractionListener {
 
 
     private DataUtilityControl duc;
@@ -210,6 +211,19 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
     @Override
     public void onDenyListFragmentInteraction(JSONObject msg) {
 
+    }
+
+    @Override
+    public void onStartChatFragmentInteraction(String chatId) {
+        ChatFragment frag = new ChatFragment();
+        Bundle args = new Bundle();
+        args.putString("chatId", chatId);
+        frag.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.homeActivityFrame, frag)
+                .addToBackStack(null);
+        transaction.commit();
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
