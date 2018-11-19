@@ -79,7 +79,7 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
                     buttons.get(position).setBackgroundColor(Color.TRANSPARENT);
                 }
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    buttons.get(position).setBackgroundColor(Color.rgb(220,220,220));
+                    buttons.get(position).setBackgroundColor(Color.rgb(1,46,39));
                 }
 
                 return false;
@@ -153,7 +153,9 @@ public class MyFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyFriends
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
             if (status == 1) { // friend request was sent successfully
-                buttons.get(currentPosition).setBackgroundResource(R.drawable.ic_pending_black_24dp);
+//                buttons.get(currentPosition).setBackgroundResource(R.drawable.ic_pending_black_24dp);
+                buttons.get(currentPosition).setText("FRIEND PENDING");
+
                 buttons.get(currentPosition).setOnClickListener(v -> onClick(currentPosition, 3));
                 this.duc.makeShortToast(context, "Request sent!");
                 /** FireBase code here???? **/
