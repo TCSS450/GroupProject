@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.activities.HomeActivity;
+import group3.tcss450.uw.edu.groupappproject.activities.MainActivity;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -47,6 +48,7 @@ public class ChatFragment extends Fragment {
     private FirebaseMessageReciever mFirebaseMessageReciever;
 
     int newChatId;
+
     //private String nickName;
     public ChatFragment() {
         //System.out.println("THE NICKNAME IS FINALLY " + duc);
@@ -66,6 +68,7 @@ public class ChatFragment extends Fragment {
         this.duc = Constants.dataUtilityControl;
         Bundle bundle = this.getArguments();
         newChatId = bundle.getInt("chatId");
+        //String newNotifyId = getInt
         System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
         //String prefName[] = new String[3];
 
@@ -81,6 +84,7 @@ public class ChatFragment extends Fragment {
 
         JSONObject messageGetJson = new JSONObject();
         try {
+            System.out.println("the notification without id is " + newChatId);
             messageGetJson.put("chatId", newChatId);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -154,8 +158,7 @@ public class ChatFragment extends Fragment {
     //fill textview with previous logs
     private void endOfGetMsgTask(final String result) {
         try {
-            for (int i = 0; i <100; i++){
-            }
+
             //This is the result from the web service
             JSONObject res = new JSONObject(result);
             String oldText = res.getString("messages");
