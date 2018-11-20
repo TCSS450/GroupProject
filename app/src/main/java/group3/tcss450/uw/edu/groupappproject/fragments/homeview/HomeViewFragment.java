@@ -1,7 +1,8 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.homeview;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -10,12 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -69,6 +67,16 @@ public class HomeViewFragment extends Fragment {
             Log.d("ViewFriends", "getArgs not null");
             mCredentials = (Credentials[]) getArguments().getSerializable(ARG_CRED_LIST);
         }
+//        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+//        fab.setVisibility(View.VISIBLE);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //load or do something
+////                loadFragment(new ViewFriends_Main());
+//                fab.setVisibility(View.INVISIBLE);
+//            }
+//        });
     }
 
     @Override
@@ -83,5 +91,19 @@ public class HomeViewFragment extends Fragment {
         textView.setText(myCredentials.getNickName().toString());
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        //call async task to get the weather before loading fragment
+
+        insertNestedFragment();
+    }
+
+    // Embeds the child fragment dynamically
+    private void insertNestedFragment() {
+        Fragment miniWeatherFragment = new MiniWeatherFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.homeView_weather_frame, miniWeatherFragment).commit();
     }
 }

@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,14 +27,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.homeview.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.SettingsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequests;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
@@ -49,7 +48,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 import static java.lang.Integer.parseInt;
 
-public class HomeActivity extends MenuOptionsActivity implements NavigationView.OnNavigationItemSelectedListener,
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnListFragmentInteractionListener,
         WaitFragment.OnWaitFragmentInteractionListener,
         SentFriendRequestsFragment.OnListFragmentInteractionListener,
@@ -125,14 +124,6 @@ public class HomeActivity extends MenuOptionsActivity implements NavigationView.
             textView.setText(s);
         }
         navigationView.setNavigationItemSelectedListener(this);
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                loadFragment(new ViewFriends_Main());
-//                fab.setVisibility(View.INVISIBLE);
-//            }
-//        });
     }
 
     @Override

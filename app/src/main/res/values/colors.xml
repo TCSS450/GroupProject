@@ -3,7 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574b</color>
     <color name = "black">#000000</color>
-    <color name="colorAccent">#0080ff</color>
+    <color name="colorAccent">#c7e3ff</color>
     <color name="chatColor">#9ad7d5</color>
     <color name="button_grey">#dcdcdc</color>
 
@@ -12,10 +12,11 @@
     <!--Use these colors when styling fragments-->
     <color name = "primary_light_text">#ffffff</color>
     <color name = "primary_light_accent_text">#cccccc</color>
-    <color name = "secondary_accent_text">#ce4373a3</color>
+    <color name = "primary_hint_text">#f2e0e0</color>
+    <color name = "secondary_accent_text">#c7e3ff</color>
 
-    <color name = "primary_dark_background">#004d40</color>
-    <color name = "primary_dark_accent_background">#012e27</color>
+    <color name = "primary_dark_background">#029e83</color>
+    <color name = "primary_dark_accent_background">#027361</color>
 
     <color name = "primary_dark_button">#c8003d33</color>
     <color name = "primary_accent_button">#5e9ad7d5</color>

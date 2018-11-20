@@ -16,7 +16,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequests;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequestsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.HomeViewFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.homeview.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.LoginFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.RegisterFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
