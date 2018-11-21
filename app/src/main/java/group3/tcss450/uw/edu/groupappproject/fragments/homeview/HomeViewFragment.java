@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -17,6 +21,7 @@ import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +54,7 @@ public class HomeViewFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment HomeViewFragment.
      */
-    // TODO: Rename and change types and number of parameters
+    // TODO: delete factory method
     public static HomeViewFragment newInstance(String param1, String param2) {
         HomeViewFragment fragment = new HomeViewFragment();
         Bundle args = new Bundle();
@@ -62,21 +67,12 @@ public class HomeViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        duc = Constants.dataUtilityControl;
 
         if (getArguments() != null) {
             Log.d("ViewFriends", "getArgs not null");
             mCredentials = (Credentials[]) getArguments().getSerializable(ARG_CRED_LIST);
         }
-//        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-//        fab.setVisibility(View.VISIBLE);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //load or do something
-////                loadFragment(new ViewFriends_Main());
-//                fab.setVisibility(View.INVISIBLE);
-//            }
-//        });
     }
 
     @Override
@@ -85,10 +81,22 @@ public class HomeViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_view, container, false);
 
-        TextView textView = view.findViewById(R.id.HomeView_username_text);
+        TextView textView = view.findViewById(R.id.homeView_username_text);
         this.duc = Constants.dataUtilityControl;
         myCredentials = duc.getUserCreds();
         textView.setText(myCredentials.getNickName().toString());
+
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //load or do something
+
+                Toast.makeText(getContext(), "you clicked me", Toast.LENGTH_LONG).show();
+            }
+        });
 
         return view;
     }
@@ -96,8 +104,58 @@ public class HomeViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //call async task to get the weather before loading fragment
+        JSONObject location = new JSONObject();
+        try {
+            location.put("lat", 47.250040);
+            location.put("lon", -122.287630);
+            location.put("days", 1);
+        } catch (JSONException e) {
+            Log.wtf("JSON ERROR", "Error creating JSON: " + e.getMessage());
+        }
+        Log.d("HomeView", location.toString());
+        new SendPostAsyncTask.Builder(Constants.WEATHER_END_POINT, location)
+//                .onPreExecute(this::onP) //todo: make mListener for this class to parent
+                .onPostExecute(this::onPostGetWeather)
+//                .onCancelled()
+                .build().execute();
 
         insertNestedFragment();
+    }
+
+    private void onPostGetWeather(String result) {
+
+        Log.d("HomeViewFragment Weather post execute result: ", result);
+        insertNestedFragment();
+//        try {
+//            JSONObject resultsJSON = new JSONObject(result);
+//            if (resultsJSON.has("error")) {
+//                boolean error = resultsJSON.getBoolean("error");
+//                if (!error) {
+//                    if (resultsJSON.has("friends")) {
+//                        JSONArray friendsArray = resultsJSON.getJSONArray("friends");
+//                        ArrayList<Credentials> creds = new ArrayList<>();
+//                        for (int i = 0; i < friendsArray.length(); i++) {
+//                            JSONObject jsonFriend = friendsArray.getJSONObject(i);
+////                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
+//                            creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
+//                                    .addNickName(jsonFriend.getString("nickname"))
+//                                    .addFirstName(jsonFriend.getString("firstname"))
+//                                    .addLastName(jsonFriend.getString("lastname"))
+//                                    .addPhoneNumber(jsonFriend.getString("phone"))
+//                                    .addMemberId(jsonFriend.getInt("memberid"))
+//                                    .build());
+//                        }
+//                        Constants.myFriends = creds;
+//                        loadFriendsFragment(new ViewFriends());
+//                    }
+//                } else {
+//                    duc.makeToast(getActivity(), "Oops! An Error has occurred");
+//                }
+//            }
+//        } catch (JSONException e) {
+//            Log.e("JSON_PARSE_ERROR", result);
+//            duc.makeToast(getActivity(), "OOPS! Something went wrong!");
+//        }
     }
 
     // Embeds the child fragment dynamically

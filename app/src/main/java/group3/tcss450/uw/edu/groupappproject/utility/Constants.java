@@ -30,6 +30,7 @@ public class Constants {
     public static final String VIEW_FRIENDS_URL = "https://group3-backend.herokuapp.com/view-friends";
     public static final String CREATE_CHAT_URL = "https://group3-backend.herokuapp.com/create-chat";
     public static final String DELETE_FRIEND_URL ="https://group3-backend.herokuapp.com/delete-friend";
+    public static final String WEATHER_END_POINT ="https://group3-backend.herokuapp.com/weather";
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;
