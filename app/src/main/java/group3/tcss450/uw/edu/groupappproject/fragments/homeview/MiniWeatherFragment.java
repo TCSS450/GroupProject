@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.utility.WeatherFromJsonString;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +23,8 @@ public class MiniWeatherFragment extends Fragment {
 
     private static final String TAG_TODAYS_WEATHER = "param1";
     private String mTodaysWeather;
+    /** Java object of weather data */
+    private WeatherFromJsonString mWeatherJava;
 
 
     public MiniWeatherFragment() {
@@ -31,13 +34,13 @@ public class MiniWeatherFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @param param1
+     * @param todaysWeatherJSONString a string representing a json object of todays weather
      * @return A new instance of fragment MiniWeatherFragment.
      */
-    public static MiniWeatherFragment newInstance(String param1) { //todo: implement
+    public static MiniWeatherFragment newInstance(String todaysWeatherJSONString) { //todo: implement
         MiniWeatherFragment fragment = new MiniWeatherFragment();
         Bundle args = new Bundle();
-        args.putString(TAG_TODAYS_WEATHER, param1);
+        args.putString(TAG_TODAYS_WEATHER, todaysWeatherJSONString);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,6 +50,8 @@ public class MiniWeatherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTodaysWeather = getArguments().getString(TAG_TODAYS_WEATHER);
+            // setup the weather object
+            mWeatherJava = new WeatherFromJsonString(mTodaysWeather);
         }
     }
 
@@ -58,6 +63,7 @@ public class MiniWeatherFragment extends Fragment {
 
         TextView weather = view.findViewById(R.id.miniWeather_weather_text);
         weather.setText(mTodaysWeather);
+        weather.setText(mWeatherJava.getTemp());
 
         Log.d("Mini Weather todays weather: ", mTodaysWeather);
 
