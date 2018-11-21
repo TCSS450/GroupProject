@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
@@ -104,7 +106,7 @@ public class HomeViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //call async task to get the weather before loading fragment
-        JSONObject location = new JSONObject();
+        JSONObject location = new JSONObject(); // todo: get this from device
         try {
             location.put("lat", 47.250040);
             location.put("lon", -122.287630);
@@ -113,19 +115,46 @@ public class HomeViewFragment extends Fragment {
             Log.wtf("JSON ERROR", "Error creating JSON: " + e.getMessage());
         }
         Log.d("HomeView", location.toString());
+
         new SendPostAsyncTask.Builder(Constants.WEATHER_END_POINT, location)
 //                .onPreExecute(this::onP) //todo: make mListener for this class to parent
                 .onPostExecute(this::onPostGetWeather)
 //                .onCancelled()
                 .build().execute();
 
-        insertNestedFragment();
+//        insertNestedFragment();
     }
 
     private void onPostGetWeather(String result) {
 
         Log.d("HomeViewFragment Weather post execute result: ", result);
-        insertNestedFragment();
+//        insertNestedFragment();
+        try {
+            JSONObject data = new JSONObject(result);
+//            Log.d("HomeView json data", data.toString());
+            if (data.has("success")) {
+                boolean success = data.getBoolean("success");
+                if (success) {
+//                    Log.d("HomeView json sucess", String.valueOf(success));
+                    JSONArray weather = data.getJSONArray("weather");
+//                    Log.d("HomeView json weather --", weather.toString());
+                    JSONObject todaysWeather = new JSONObject(weather.getJSONObject(0).toString());
+                    Log.d("HomeView json todays weather", todaysWeather.toString());
+
+                    // instantiate this with factory method using weather object, like creds object???
+                    insertNestedFragment(MiniWeatherFragment.newInstance(todaysWeather.toString()));
+                } else { //failed to get weather
+                    duc.makeToast(getContext(),"Failed to get weather");
+                }
+            } else { // wrong info sent up or something went wrong
+                duc.makeToast(getContext(),"We can not get the weather");
+            }
+        } catch (JSONException e) { // todo: set text in frag instead
+            Log.e("JSON_PARSE_ERROR", result);
+            duc.makeToast(getActivity(), "OOPS! Something went wrong!");
+        }
+
+
 //        try {
 //            JSONObject resultsJSON = new JSONObject(result);
 //            if (resultsJSON.has("error")) {
@@ -159,9 +188,8 @@ public class HomeViewFragment extends Fragment {
     }
 
     // Embeds the child fragment dynamically
-    private void insertNestedFragment() {
-        Fragment miniWeatherFragment = new MiniWeatherFragment();
+    private void insertNestedFragment(Fragment fragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.homeView_weather_frame, miniWeatherFragment).commit();
+        transaction.replace(R.id.homeView_weather_frame, fragment).commit();
     }
 }

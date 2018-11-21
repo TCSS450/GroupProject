@@ -3,9 +3,11 @@ package group3.tcss450.uw.edu.groupappproject.fragments.homeview;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 
@@ -18,8 +20,8 @@ import group3.tcss450.uw.edu.groupappproject.R;
  */
 public class MiniWeatherFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private String mParam1;
+    private static final String TAG_TODAYS_WEATHER = "param1";
+    private String mTodaysWeather;
 
 
     public MiniWeatherFragment() {
@@ -35,7 +37,7 @@ public class MiniWeatherFragment extends Fragment {
     public static MiniWeatherFragment newInstance(String param1) { //todo: implement
         MiniWeatherFragment fragment = new MiniWeatherFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(TAG_TODAYS_WEATHER, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +46,7 @@ public class MiniWeatherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mTodaysWeather = getArguments().getString(TAG_TODAYS_WEATHER);
         }
     }
 
@@ -53,6 +55,11 @@ public class MiniWeatherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mini_weather, container, false);
+
+        TextView weather = view.findViewById(R.id.miniWeather_weather_text);
+        weather.setText(mTodaysWeather);
+
+        Log.d("Mini Weather todays weather: ", mTodaysWeather);
 
         return view;
     }
