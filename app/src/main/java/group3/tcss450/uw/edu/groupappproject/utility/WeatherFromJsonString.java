@@ -15,6 +15,7 @@ public class WeatherFromJsonString {
 
     private String mTemp;
     private String mDateTime;
+
     private String mWeatherIcon;
     private String mWeatherCode;
     private String mWeatherDescription;
@@ -46,12 +47,12 @@ public class WeatherFromJsonString {
     /**
      * Parse wanted fields of weather inner object.
      */
-    private void parseWeatherObject() {
+    private void parseWeatherObject() { //todo: these are not being set !!!!
         try {
-            if (mWeatherJSON.has("Weather")) {
+            if (mWeatherJSON.has("weather")) {
                 JSONObject weather = mWeatherJSON.getJSONObject("weather");
                 mWeatherIcon = weather.getString("icon");
-                mWeatherCode = String.valueOf(weather.getInt("code"));
+                mWeatherCode = weather.getString("code");
                 mWeatherDescription = weather.getString("description");
             }
         } catch (JSONException e) {
@@ -66,6 +67,10 @@ public class WeatherFromJsonString {
         return mTemp;
     }
 
+    public String getDateTime() {
+        return mDateTime;
+    }
+
     public String getWeatherDescription() {
         return mWeatherDescription;
     }
@@ -78,7 +83,9 @@ public class WeatherFromJsonString {
         return mWeatherIcon;
     }
 
-    public String getDateTime() {
-        return mDateTime;
+    @Override
+    public String toString() {
+        return "date: " + mDateTime + " temp: " + mTemp + " weatherDesript: " + mWeatherDescription +
+                " code: " + mWeatherCode + " icon: " + mWeatherIcon;
     }
 }

@@ -51,7 +51,9 @@ public class MiniWeatherFragment extends Fragment {
         if (getArguments() != null) {
             mTodaysWeather = getArguments().getString(TAG_TODAYS_WEATHER);
             // setup the weather object
+            Log.d("json on create", mTodaysWeather);
             mWeatherJava = new WeatherFromJsonString(mTodaysWeather);
+            Log.d("json on create json", mWeatherJava.toString());
         }
     }
 
@@ -61,11 +63,20 @@ public class MiniWeatherFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mini_weather, container, false);
 
-        TextView weather = view.findViewById(R.id.miniWeather_weather_text);
-        weather.setText(mTodaysWeather);
-        weather.setText(mWeatherJava.getTemp());
+        if (mWeatherJava != null) {
 
-        Log.d("Mini Weather todays weather: ", mTodaysWeather);
+            TextView temp = view.findViewById(R.id.miniWeather_temp_text);
+            temp.setText(mWeatherJava.getTemp());
+
+            TextView date = view.findViewById(R.id.miniWeather_date_text);
+            date.setText(mWeatherJava.getDateTime());
+
+            TextView description = view.findViewById(R.id.miniWeather_weather_descript_text);
+            description.setText(mWeatherJava.getWeatherDescription());
+
+            //set the icon eventually
+
+        }
 
         return view;
     }

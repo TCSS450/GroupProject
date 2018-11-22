@@ -31,10 +31,6 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
  * create an instance of this fragment.
  */
 public class HomeViewFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private DataUtilityControl duc;
@@ -46,24 +42,6 @@ public class HomeViewFragment extends Fragment {
 
     public HomeViewFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeViewFragment.
-     */
-    // TODO: delete factory method
-    public static HomeViewFragment newInstance(String param1, String param2) {
-        HomeViewFragment fragment = new HomeViewFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -89,19 +67,22 @@ public class HomeViewFragment extends Fragment {
         textView.setText(myCredentials.getNickName().toString());
 
 
+        //set a floating action button
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //load or do something
-
-                Toast.makeText(getContext(), "you clicked me", Toast.LENGTH_LONG).show();
-            }
-        });
+        fab.setOnClickListener(this::fabButtonClicked);
 
         return view;
     }
+
+    /**
+     * Todo: update action that happens here
+     * @param view fabButton
+     */
+    private void fabButtonClicked(View view) {
+        Toast.makeText(getContext(), "you clicked me", Toast.LENGTH_LONG).show();
+    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -117,31 +98,25 @@ public class HomeViewFragment extends Fragment {
         Log.d("HomeView", location.toString());
 
         new SendPostAsyncTask.Builder(Constants.WEATHER_END_POINT, location)
-//                .onPreExecute(this::onP) //todo: make mListener for this class to parent
+//                .onPreExecute(this::onP) //todo: make mListener for this class to parent??
                 .onPostExecute(this::onPostGetWeather)
 //                .onCancelled()
                 .build().execute();
-
-//        insertNestedFragment();
     }
 
     private void onPostGetWeather(String result) {
-
-        Log.d("HomeViewFragment Weather post execute result: ", result);
-//        insertNestedFragment();
+//        Log.d("HomeViewFragment Weather post execute result: ", result);
         try {
             JSONObject data = new JSONObject(result);
-//            Log.d("HomeView json data", data.toString());
             if (data.has("success")) {
                 boolean success = data.getBoolean("success");
                 if (success) {
-//                    Log.d("HomeView json sucess", String.valueOf(success));
                     JSONArray weather = data.getJSONArray("weather");
 //                    Log.d("HomeView json weather --", weather.toString());
                     JSONObject todaysWeather = new JSONObject(weather.getJSONObject(0).toString());
                     Log.d("HomeView json todays weather", todaysWeather.toString());
 
-                    // instantiate this with factory method using weather object, like creds object???
+                    // instantiate this with factory method
                     insertNestedFragment(MiniWeatherFragment.newInstance(todaysWeather.toString()));
                 } else { //failed to get weather
                     duc.makeToast(getContext(),"Failed to get weather");
@@ -153,38 +128,6 @@ public class HomeViewFragment extends Fragment {
             Log.e("JSON_PARSE_ERROR", result);
             duc.makeToast(getActivity(), "OOPS! Something went wrong!");
         }
-
-
-//        try {
-//            JSONObject resultsJSON = new JSONObject(result);
-//            if (resultsJSON.has("error")) {
-//                boolean error = resultsJSON.getBoolean("error");
-//                if (!error) {
-//                    if (resultsJSON.has("friends")) {
-//                        JSONArray friendsArray = resultsJSON.getJSONArray("friends");
-//                        ArrayList<Credentials> creds = new ArrayList<>();
-//                        for (int i = 0; i < friendsArray.length(); i++) {
-//                            JSONObject jsonFriend = friendsArray.getJSONObject(i);
-////                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
-//                            creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
-//                                    .addNickName(jsonFriend.getString("nickname"))
-//                                    .addFirstName(jsonFriend.getString("firstname"))
-//                                    .addLastName(jsonFriend.getString("lastname"))
-//                                    .addPhoneNumber(jsonFriend.getString("phone"))
-//                                    .addMemberId(jsonFriend.getInt("memberid"))
-//                                    .build());
-//                        }
-//                        Constants.myFriends = creds;
-//                        loadFriendsFragment(new ViewFriends());
-//                    }
-//                } else {
-//                    duc.makeToast(getActivity(), "Oops! An Error has occurred");
-//                }
-//            }
-//        } catch (JSONException e) {
-//            Log.e("JSON_PARSE_ERROR", result);
-//            duc.makeToast(getActivity(), "OOPS! Something went wrong!");
-//        }
     }
 
     // Embeds the child fragment dynamically

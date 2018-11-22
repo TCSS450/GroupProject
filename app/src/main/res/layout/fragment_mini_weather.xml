@@ -9,13 +9,64 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <ImageView
+        android:id="@+id/miniWeather_icon_image"
+        android:layout_width="114dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/toast_frame"
+        android:src="@drawable/r03n"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/miniWeather_weather_text"
+        android:id="@+id/miniWeather_temp_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="52dp"
+        android:text="53"
+        app:layout_constraintStart_toEndOf="@+id/miniWeather_temp_descript_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/miniWeather_date_descript_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="Weather In: Tacoma 34"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Today is:"
+        app:layout_constraintStart_toEndOf="@+id/miniWeather_icon_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/miniWeather_temp_descript_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:text="Temp:"
+        app:layout_constraintStart_toEndOf="@+id/miniWeather_icon_image"
+        app:layout_constraintTop_toBottomOf="@+id/miniWeather_date_descript_text" />
+
+    <TextView
+        android:id="@+id/miniWeather_weather_descript_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="description"
+        app:layout_constraintStart_toEndOf="@+id/miniWeather_icon_image"
+        app:layout_constraintTop_toBottomOf="@+id/miniWeather_temp_descript_text" />
+
+    <TextView
+        android:id="@+id/miniWeather_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="date"
+        app:layout_constraintStart_toEndOf="@+id/miniWeather_date_descript_text"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
