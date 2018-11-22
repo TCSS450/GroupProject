@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.fragments.homeview.dummy.DummyContent;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 
 /**
  * A fragment representing a list of Items.
@@ -67,7 +67,7 @@ public class BestFriendsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyBestFriendsRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyBestFriendsRecyclerViewAdapter(Constants.myFriends, mListener));
         }
         return view;
     }

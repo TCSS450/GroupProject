@@ -8,21 +8,21 @@ import android.widget.TextView;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.BestFriendsFragment.OnBestFriendInteractionListener;
-import group3.tcss450.uw.edu.groupappproject.fragments.homeview.dummy.DummyContent.DummyItem;
+import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Credentials} and makes a call to the
  * specified {@link OnBestFriendInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyBestFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyBestFriendsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Credentials> mValues;
     private final OnBestFriendInteractionListener mListener;
 
-    public MyBestFriendsRecyclerViewAdapter(List<DummyItem> items, OnBestFriendInteractionListener listener) {
+    public MyBestFriendsRecyclerViewAdapter(List<Credentials> items, OnBestFriendInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,9 +36,10 @@ public class MyBestFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyBes
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItemCredentials = mValues.get(position);
+        holder.mNickName.setText(mValues.get(position).getNickName());
+        holder.mFirstName.setText(mValues.get(position).getFirstName());
+        holder.mLastName.setText(mValues.get(position).getLastName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +47,7 @@ public class MyBestFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyBes
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItem);
+//                    mListener.onListFragmentInteraction(holder.mItemCredentials);
                 }
             }
         });
@@ -59,20 +60,23 @@ public class MyBestFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyBes
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mNickName;
+        public final TextView mFirstName;
+        public final TextView mLastName;
+        public Credentials mItemCredentials;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mNickName = (TextView) view.findViewById(R.id.item_BestFriend_NickName);
+            mFirstName = (TextView) view.findViewById(R.id.item_bestFriend_FName);
+            mLastName = (TextView) view.findViewById(R.id.item_bestFriend_LName);
+
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mNickName.getText() + "'";
         }
     }
 }

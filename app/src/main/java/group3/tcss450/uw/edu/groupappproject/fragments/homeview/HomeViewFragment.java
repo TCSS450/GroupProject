@@ -1,6 +1,7 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.homeview;
 
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,10 +17,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -103,8 +106,6 @@ public class HomeViewFragment extends Fragment {
 //                .onCancelled()
                 .build().execute();
 
-        // insert the friends list view
-        insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
     }
 
     private void onPostGetWeather(String result) {
@@ -130,6 +131,64 @@ public class HomeViewFragment extends Fragment {
                 duc.makeToast(getContext(),"We can not get the weather");
             }
         } catch (JSONException e) { // todo: set text in frag instead
+            Log.e("JSON_PARSE_ERROR", result);
+            duc.makeToast(getActivity(), "OOPS! Something went wrong!");
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Uri getFriendsURI = this.duc.getAllFriendsURI();
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("user", duc.getUserCreds().getEmail());
+        } catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
+                .onPostExecute(this::handleGetFriendsOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+    }
+
+    private void handleErrorsInTask(String result) {
+        System.out.println("INSIDE ERRORS");
+        Log.e("ASYNCT_TASK_ERROR",  result);
+    }
+
+    private void handleGetFriendsOnPost(String result) {
+
+        //parse JSON
+        Log.d("ViewFriends post execute result: ", result);
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            if (resultsJSON.has("error")) {
+                boolean error = resultsJSON.getBoolean("error");
+                if (!error) {
+                    if (resultsJSON.has("friends")) {
+                        JSONArray friendsArray = resultsJSON.getJSONArray("friends");
+                        ArrayList<Credentials> creds = new ArrayList<>();
+                        for (int i = 0; i < friendsArray.length(); i++) {
+                            JSONObject jsonFriend = friendsArray.getJSONObject(i);
+//                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
+                            creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
+                                    .addNickName(jsonFriend.getString("nickname"))
+                                    .addFirstName(jsonFriend.getString("firstname"))
+                                    .addLastName(jsonFriend.getString("lastname"))
+                                    .addPhoneNumber(jsonFriend.getString("phone"))
+                                    .addMemberId(jsonFriend.getInt("memberid"))
+                                    .build());
+                        }
+                        Constants.myFriends = creds;
+                        // insert the friends list view
+                        insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
+                    }
+                } else {
+                    duc.makeToast(getActivity(), "Oops! An Error has occurred");
+                }
+            }
+        } catch (JSONException e) {
             Log.e("JSON_PARSE_ERROR", result);
             duc.makeToast(getActivity(), "OOPS! Something went wrong!");
         }
