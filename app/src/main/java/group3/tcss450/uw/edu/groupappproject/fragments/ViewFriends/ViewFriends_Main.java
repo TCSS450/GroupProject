@@ -106,7 +106,7 @@ public class ViewFriends_Main extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnBestFriendInteractionListener");
         }
     }
 

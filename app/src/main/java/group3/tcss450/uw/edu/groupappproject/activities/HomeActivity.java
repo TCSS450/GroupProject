@@ -33,6 +33,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.homeview.BestFriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.SettingsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequests;
@@ -56,7 +57,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         FriendRequestsFragment.OnListFragmentInteractionListener,
         ViewFriends_Main.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
-        ChangePasswordFragment.OnChangePasswordFragmentInteractionListener
+        ChangePasswordFragment.OnChangePasswordFragmentInteractionListener,
+        BestFriendsFragment.OnBestFriendInteractionListener
 {
 
     private DataUtilityControl duc;

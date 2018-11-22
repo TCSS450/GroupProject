@@ -15,7 +15,7 @@
         android:layout_height="94dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@android:drawable/toast_frame"
+        android:background="@drawable/weather_icon_rounded_square"
         android:src="@drawable/r03n"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,19 +24,20 @@
         android:id="@+id/miniWeather_temp_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
         android:text="53"
+        android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/miniWeather_temp_descript_text"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/miniWeather_date_descript_text" />
 
     <TextView
         android:id="@+id/miniWeather_date_descript_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="44dp"
+        android:layout_height="21dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="Today is:"
+        android:text="Today"
         app:layout_constraintStart_toEndOf="@+id/miniWeather_icon_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="20dp"
-        android:text="Temp:"
+        android:text="Temp"
         app:layout_constraintStart_toEndOf="@+id/miniWeather_icon_image"
         app:layout_constraintTop_toBottomOf="@+id/miniWeather_date_descript_text" />
 
@@ -64,7 +65,7 @@
         android:id="@+id/miniWeather_date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="date"
         app:layout_constraintStart_toEndOf="@+id/miniWeather_date_descript_text"

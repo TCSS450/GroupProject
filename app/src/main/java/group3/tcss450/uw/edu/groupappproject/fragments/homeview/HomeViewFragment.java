@@ -27,7 +27,6 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class HomeViewFragment extends Fragment {
@@ -80,7 +79,8 @@ public class HomeViewFragment extends Fragment {
      * @param view fabButton
      */
     private void fabButtonClicked(View view) {
-        Toast.makeText(getContext(), "you clicked me", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext(), "you clicked me", Toast.LENGTH_LONG).show();
+        Log.d("fab", "fab button clicked");
     }
 
 
@@ -102,6 +102,9 @@ public class HomeViewFragment extends Fragment {
                 .onPostExecute(this::onPostGetWeather)
 //                .onCancelled()
                 .build().execute();
+
+        // insert the friends list view
+        insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
     }
 
     private void onPostGetWeather(String result) {
@@ -117,7 +120,9 @@ public class HomeViewFragment extends Fragment {
                     Log.d("HomeView json todays weather", todaysWeather.toString());
 
                     // instantiate this with factory method
-                    insertNestedFragment(MiniWeatherFragment.newInstance(todaysWeather.toString()));
+                    insertNestedFragment(R.id.homeView_weather_frame,
+                            MiniWeatherFragment.newInstance(todaysWeather.toString()));
+
                 } else { //failed to get weather
                     duc.makeToast(getContext(),"Failed to get weather");
                 }
@@ -131,8 +136,8 @@ public class HomeViewFragment extends Fragment {
     }
 
     // Embeds the child fragment dynamically
-    private void insertNestedFragment(Fragment fragment) {
+    private void insertNestedFragment(int container, Fragment fragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.homeView_weather_frame, fragment).commit();
+        transaction.replace(container, fragment).commit();
     }
 }

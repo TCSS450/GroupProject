@@ -15,6 +15,8 @@
     <color name = "primary_hint_text">#f2e0e0</color>
     <color name = "secondary_accent_text">#c7e3ff</color>
 
+    <color name="primary_dark_text">#00272b</color>
+
     <color name = "primary_dark_background">#029e83</color>
     <color name = "primary_dark_accent_background">#027361</color>
 
