@@ -139,17 +139,22 @@ public class HomeViewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Uri getFriendsURI = this.duc.getAllFriendsURI();
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("user", duc.getUserCreds().getEmail());
-        } catch (JSONException e) {
-            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        // only call the server to get friends on first startup
+        if (Constants.myFriends == null) {
+            Uri getFriendsURI = this.duc.getAllFriendsURI();
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("user", duc.getUserCreds().getEmail());
+            } catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+            }
+            new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
+                    .onPostExecute(this::handleGetFriendsOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
+        } else {
+            insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
         }
-        new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
-                .onPostExecute(this::handleGetFriendsOnPost)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
     }
 
     private void handleErrorsInTask(String result) {

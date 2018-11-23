@@ -81,17 +81,7 @@ public class ViewFriends_Main extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Uri getFriendsURI = this.duc.getAllFriendsURI();
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("user", duc.getUserCreds().getEmail());
-        } catch (JSONException e) {
-            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
-        }
-        new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
-                .onPostExecute(this::handleGetFriendsOnPost)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
+        loadFriendsFragment(new ViewFriends());
     }
 
     private void handleErrorsInTask(String result) {
@@ -107,42 +97,6 @@ public class ViewFriends_Main extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnBestFriendInteractionListener");
-        }
-    }
-
-    private void handleGetFriendsOnPost(String result) {
-
-        //parse JSON
-        Log.d("ViewFriends post execute result: ", result);
-        try {
-            JSONObject resultsJSON = new JSONObject(result);
-            if (resultsJSON.has("error")) {
-                boolean error = resultsJSON.getBoolean("error");
-                if (!error) {
-                    if (resultsJSON.has("friends")) {
-                        JSONArray friendsArray = resultsJSON.getJSONArray("friends");
-                        ArrayList<Credentials> creds = new ArrayList<>();
-                        for (int i = 0; i < friendsArray.length(); i++) {
-                            JSONObject jsonFriend = friendsArray.getJSONObject(i);
-//                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
-                            creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
-                                    .addNickName(jsonFriend.getString("nickname"))
-                                    .addFirstName(jsonFriend.getString("firstname"))
-                                    .addLastName(jsonFriend.getString("lastname"))
-                                    .addPhoneNumber(jsonFriend.getString("phone"))
-                                    .addMemberId(jsonFriend.getInt("memberid"))
-                                    .build());
-                        }
-                        Constants.myFriends = creds;
-                        loadFriendsFragment(new ViewFriends());
-                    }
-                } else {
-                    duc.makeToast(getActivity(), "Oops! An Error has occurred");
-                }
-            }
-        } catch (JSONException e) {
-            Log.e("JSON_PARSE_ERROR", result);
-            duc.makeToast(getActivity(), "OOPS! Something went wrong!");
         }
     }
 
