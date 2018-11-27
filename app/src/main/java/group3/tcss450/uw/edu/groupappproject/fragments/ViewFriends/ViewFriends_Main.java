@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
@@ -30,6 +31,7 @@ public class ViewFriends_Main extends Fragment {
     private Button mButton;
     private EditText mChatName;
     private OnFragmentInteractionListener mListener;
+    private Credentials[] mFriends;
 
     public ViewFriends_Main() {}
 
@@ -72,6 +74,12 @@ public class ViewFriends_Main extends Fragment {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
 
+        Uri getProfilesURI = this.duc.getProfilesEndPointURI();
+        new SendPostAsyncTask.Builder(getProfilesURI.toString(), msg)
+                .onPostExecute(this::handleGetProfilesOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+
         new SendPostAsyncTask.Builder(createChatURI.toString(), msg)
                 .onPostExecute(this::handleCreateChatOnPost)
                 .onCancelled(this::handleErrorsInTask)
@@ -100,21 +108,55 @@ public class ViewFriends_Main extends Fragment {
         }
     }
 
+    private void handleGetProfilesOnPost(String result) {
+        /*  1 - Success! ChatId is created.
+            2 - Error
+        */
+        try {
+            Log.d("JSON result", result);
+            JSONObject resultsJSON = new JSONObject(result);
+
+            int status = resultsJSON.getInt("status");
+            if (status == 1) {
+                JSONArray data = resultsJSON.getJSONArray("profiles");
+                ArrayList<Credentials> creds = new ArrayList<>();
+                for(int i = 0; i < data.length(); i++) {
+                    JSONObject jsonProfile = data.getJSONObject(i);
+                    creds.add(new Credentials.Builder(jsonProfile.getString("email"), "")
+                            .addMemberId(jsonProfile.getInt("memberid"))
+                            .addFirstName(jsonProfile.getString("firstname"))
+                            .addLastName(jsonProfile.getString("lastname"))
+                            .addNickName(jsonProfile.getString("nickname"))
+                            .addPhoneNumber(jsonProfile.getString("phone_number"))
+                            .addDisplayPref(jsonProfile.getInt("display_type"))
+                            .build());
+                }
+                mFriends = new Credentials[creds.size()];
+                mFriends = creds.toArray(mFriends);
+            } else {
+                duc.makeToast(getActivity(), getString(R.string.request_error));
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR", result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            duc.makeToast(getActivity(), getString(R.string.request_error));
+        }
+    }
+
     private void handleCreateChatOnPost(String result) {
         /*  1 - Success! ChatId is created.
             2 - Error
         */
         try {
-            System.out.println("Inside Try");
             Log.d("JSON result", result);
             JSONObject resultsJSON = new JSONObject(result);
-            ArrayList<Credentials> searchResult = new ArrayList<>();
             int status = resultsJSON.getInt("status");
             if (status == 1) {
                 int chatId = resultsJSON.getInt("chatid");
-                System.out.println(chatId);
+
                 if (mListener != null) {
-                    mListener.onStartChatFragmentInteraction(chatId);
+                    mListener.onStartChatFragmentInteraction(chatId, mFriends);
                 }
             } else {
                 duc.makeToast(getActivity(), getString(R.string.request_error));
@@ -150,6 +192,6 @@ public class ViewFriends_Main extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onStartChatFragmentInteraction(int chatId);
+        void onStartChatFragmentInteraction(int chatId, Credentials[] friends);
     }
 }

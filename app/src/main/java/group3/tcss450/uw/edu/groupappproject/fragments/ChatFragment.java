@@ -41,6 +41,7 @@ public class ChatFragment extends Fragment {
     private EditText mMessageInputEditText;
     private String mEmail;
     private String mSendUrl;
+    private Credentials[] mMembers;
     private String mGetUrl;
     private String oldMessages[];
     private String nickName;
@@ -66,6 +67,13 @@ public class ChatFragment extends Fragment {
         this.duc = Constants.dataUtilityControl;
         Bundle bundle = this.getArguments();
         newChatId = bundle.getInt("chatId");
+        String chatName = bundle.getString("chatName");
+        if (chatName.length() > 30) {
+            chatName = chatName.substring(0, 30) + "...";
+        }
+        TextView chatNameTextView = rootLayout.findViewById(R.id.textView_chat_chatName);
+        chatNameTextView.setText(chatName);
+        mMembers = (Credentials[]) bundle.getSerializable("members");
         //String newNotifyId = getInt
         System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
         //String prefName[] = new String[3];

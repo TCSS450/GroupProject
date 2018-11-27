@@ -9,6 +9,21 @@
     android:background="@color/primary_dark_background">
 
     <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/textView_chat_chatName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/typing_hint"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/edit_chat_message_input"
         android:layout_width="313dp"

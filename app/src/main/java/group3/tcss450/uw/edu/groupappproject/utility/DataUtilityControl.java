@@ -86,23 +86,11 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getWaitFragment() { return this.waitFragment;}
 
-    public Fragment getAddUserFragment() { return this.addUserFragment;}
-
-    public Fragment getCreateChatFragment() { return this.createChatFragment;}
-
-
-
     public Fragment getViewWeatherFragment() { return this.viewWeatherFragment;}
-
-    public Fragment getHomeViewFragment() { return this.homeViewFragment;}
 
     public Fragment getVerificationFragment() { return this.verificationFragment;}
 
     public Fragment getNewFriendFragment() { return new FriendsFragment(); }
-
-    public Fragment getFriendRequestsFragment() { return this.friendRequestsFragment; }
-
-    public Fragment getSentFriendRequestsFragment() { return this.sentFriendRequestsFragment; }
 
     public Fragment getForgotPasswordFragment() {return this.forgotPasswordFragment; }
 
@@ -139,10 +127,6 @@ public class DataUtilityControl extends AppCompatActivity {
         return Uri.parse(Constants.PASSWORD_FORGOT_END_POINT_URL);
     }
 
-    public Uri getLoginEndPointURI() {
-        return Uri.parse(Constants.LOGIN_END_POINT_URL);
-    }
-
     public Uri getLoginEndPointFirebaseURI() { return Uri.parse(Constants.LOGIN_END_POINT_FIREBASE_URL); }
 
     public Uri getRegisterEndPointURI() { return Uri.parse(Constants.REGISTER_END_POINT_URL); }
@@ -151,7 +135,7 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getResendEndPointURI() { return Uri.parse(Constants.RESEND_END_POINT_URL); }
 
-    public Uri getBaseEndPointURI() {return Uri.parse(Constants.BASE_END_POINT_URL); }
+    public Uri getProfilesEndPointURI() {return Uri.parse(Constants.GET_PROFILES_URL); }
 
     public Uri getAddFriendEndPointURI() { return Uri.parse(Constants.ADD_FRIEND_URL); }
 

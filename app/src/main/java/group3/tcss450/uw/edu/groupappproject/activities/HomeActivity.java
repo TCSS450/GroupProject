@@ -66,6 +66,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DataUtilityControl duc;
     public String checkNotify = "";
     private boolean mLoadFromChatNotification = false;
+    private Credentials[] mTempFriendCredentials;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -245,6 +246,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onFriendListFragmentInteraction(Credentials credentials) {
+        mTempFriendCredentials = new Credentials[1];
+        mTempFriendCredentials[0] = credentials;
         JSONObject msg = new JSONObject();
         Uri createChatURI = this.duc.getCreateChatURI();
         int[] members = {duc.getUserCreds().getMemberId(),
@@ -266,8 +269,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
     private void handleErrorsInTask(String result) {
         Log.e("ASYNCT_TASK_ERROR",  result);
     }
@@ -283,10 +284,36 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onStartChatFragmentInteraction(int chatId) {
+    public void onStartChatFragmentInteraction(int chatId, Credentials[] creds) {
         ChatFragment frag = new ChatFragment();
+        StringBuilder sb = new StringBuilder();
+        // First "fencepost"
+        if (creds[0].getMemberId() != duc.getUserCreds().getMemberId()) {
+            if (creds[0].getDisplayPref() == 1) {
+                sb.append(creds[0].getNickName());
+            } else if (creds[0].getDisplayPref() == 2) {
+                sb.append(creds[0].getFirstName() + " " + creds[0].getLastName());
+            } else {
+                sb.append(creds[0].getEmail());
+            }
+        }
+        // Rest of fence.
+        for (int i = 1; i < creds.length; i++) {
+            if (creds[i].getMemberId() != duc.getUserCreds().getMemberId()) {
+                if (creds[i].getDisplayPref() == 1) {
+                    sb.append(", " + creds[i].getNickName());
+                } else if (creds[i].getDisplayPref() == 2) {
+                    sb.append(", " + creds[i].getFirstName() + " " + creds[i].getLastName());
+                } else {
+                    sb.append(", " + creds[i].getEmail());
+                }
+            }
+        }
+        String chatMemberCreds = sb.toString();
         Bundle args = new Bundle();
         args.putInt("chatId", chatId);
+        args.putString("chatName", chatMemberCreds);
+        args.putSerializable("members", creds);
         frag.setArguments(args);
         System.out.println("first id gained is " + chatId);
         FragmentTransaction transaction = getSupportFragmentManager()
@@ -355,7 +382,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             int status = resultsJSON.getInt("status");
             if (status == 1) {
                 int chatId = resultsJSON.getInt("chatid");
-                onStartChatFragmentInteraction(chatId);
+                onStartChatFragmentInteraction(chatId, mTempFriendCredentials);
             } else {
                 duc.makeToast(this, getString(R.string.request_error));
             }
