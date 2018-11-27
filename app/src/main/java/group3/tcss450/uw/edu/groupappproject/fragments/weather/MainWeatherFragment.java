@@ -68,6 +68,7 @@ public class MainWeatherFragment extends Fragment {
         return v;
     }
 
+
     private void insertNestedFragment(int container, Fragment fragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(container, fragment).commit();
