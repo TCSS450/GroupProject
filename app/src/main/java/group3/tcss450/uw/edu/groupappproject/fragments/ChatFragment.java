@@ -18,8 +18,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.activities.HomeActivity;
@@ -27,6 +31,7 @@ import group3.tcss450.uw.edu.groupappproject.activities.MainActivity;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.MessageFromJsonString;
 import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
@@ -173,6 +178,14 @@ public class ChatFragment extends Fragment {
             System.out.println(oldText);
 
             mMessageOutputTextView.setText(oldText);
+            Log.d("Chat Frag json result", result);
+            JSONArray messagesArr = new JSONArray(res.getJSONArray("messages"));
+            List<MessageFromJsonString> messagesList = new ArrayList<>();
+            Log.d("Chat Frag json arr", messagesArr.toString());
+            for (int i = 0; i < messagesArr.length(); i++) {
+                Log.d("Chat Frag json arr item", messagesArr.getString(i));
+                MessageFromJsonString temp = new MessageFromJsonString(messagesArr.getString(i));
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
