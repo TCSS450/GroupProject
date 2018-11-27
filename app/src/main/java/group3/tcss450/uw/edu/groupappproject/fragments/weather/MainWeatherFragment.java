@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,6 +63,13 @@ public class MainWeatherFragment extends Fragment {
             }
         });
 
+        insertNestedFragment(R.id.mainWeather_frameLayout_container, new ViewWeatherFragment());
+
         return v;
+    }
+
+    private void insertNestedFragment(int container, Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(container, fragment).commit();
     }
 }
