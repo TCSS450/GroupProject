@@ -57,7 +57,6 @@ public class ViewFriends_Main extends Fragment {
         members.add(duc.getUserCreds().getMemberId());
         int[] membersArray = new int[members.size()];
 
-
         for (int i = 0; i < members.size(); i++) {
             membersArray[i] = members.get(i);
         }

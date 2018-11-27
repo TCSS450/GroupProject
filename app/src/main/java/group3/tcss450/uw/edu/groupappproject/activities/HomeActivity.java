@@ -289,6 +289,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         StringBuilder sb = new StringBuilder();
         // First "fencepost"
         if (creds[0].getMemberId() != duc.getUserCreds().getMemberId()) {
+            // First post.
             if (creds[0].getDisplayPref() == 1) {
                 sb.append(creds[0].getNickName());
             } else if (creds[0].getDisplayPref() == 2) {
@@ -296,16 +297,39 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             } else {
                 sb.append(creds[0].getEmail());
             }
-        }
-        // Rest of fence.
-        for (int i = 1; i < creds.length; i++) {
-            if (creds[i].getMemberId() != duc.getUserCreds().getMemberId()) {
-                if (creds[i].getDisplayPref() == 1) {
-                    sb.append(", " + creds[i].getNickName());
-                } else if (creds[i].getDisplayPref() == 2) {
-                    sb.append(", " + creds[i].getFirstName() + " " + creds[i].getLastName());
+            // Do rest.
+            for (int i = 1; i < creds.length; i++) {
+                if (creds[i].getMemberId() != duc.getUserCreds().getMemberId()) {
+                    if (creds[i].getDisplayPref() == 1) {
+                        sb.append(", " + creds[i].getNickName());
+                    } else if (creds[i].getDisplayPref() == 2) {
+                        sb.append(", " + creds[i].getFirstName() + " " + creds[i].getLastName());
+                    } else {
+                        sb.append(", " + creds[i].getEmail());
+                    }
+                }
+            }
+        } else {
+        // If I am at start of list, skip me, first post.
+            if (creds[1] != null) {
+                if (creds[1].getDisplayPref() == 1) {
+                    sb.append(creds[1].getNickName());
+                } else if (creds[1].getDisplayPref() == 2) {
+                    sb.append(creds[1].getFirstName() + " " + creds[1].getLastName());
                 } else {
-                    sb.append(", " + creds[i].getEmail());
+                    sb.append(creds[1].getEmail());
+                }
+            }
+            // rest of post.
+            for (int i = 2; i < creds.length; i++) {
+                if (creds[i].getMemberId() != duc.getUserCreds().getMemberId()) {
+                    if (creds[i].getDisplayPref() == 1) {
+                        sb.append(", " + creds[i].getNickName());
+                    } else if (creds[i].getDisplayPref() == 2) {
+                        sb.append(", " + creds[i].getFirstName() + " " + creds[i].getLastName());
+                    } else {
+                        sb.append(", " + creds[i].getEmail());
+                    }
                 }
             }
         }
