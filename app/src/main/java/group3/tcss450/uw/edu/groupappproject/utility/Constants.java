@@ -1,5 +1,6 @@
 package group3.tcss450.uw.edu.groupappproject.utility;
 
+import android.location.Location;
 import android.widget.CheckBox;
 
 import java.util.ArrayList;
@@ -40,5 +41,6 @@ public class Constants {
     public static ArrayList<Credentials> temporaryCreds = new ArrayList<>();
     public static ArrayList<Credentials> myFriends = null;
     public static ArrayList<CheckBox> chatCheckBoxes = null;
+    public static Location MY_CURRENT_LOCATION = null;
 
 }

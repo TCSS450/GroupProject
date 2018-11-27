@@ -123,4 +123,6 @@
     <string name="viewFriends_chatName_hint">Chat Name</string>
     <string name="viewFriends_deleteFriend_text">Delete Friend</string>
     <string name="viewFriends_deleteFriend_done">Friend Deleted</string>
+
+    <string name="title_activity_maps">Map</string>
 </resources>

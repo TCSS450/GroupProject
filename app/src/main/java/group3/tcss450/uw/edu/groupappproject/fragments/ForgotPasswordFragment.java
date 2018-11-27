@@ -146,7 +146,7 @@ public class ForgotPasswordFragment extends Fragment {
             mListener = (OnForgotPasswordFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnChangePasswordFragmentInteractionListener");
+                    + " must implement OnHomeViewFragmentListener");
         }
     }
 

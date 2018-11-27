@@ -42,6 +42,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.SentFr
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends_Main;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.MainWeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -58,7 +59,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ViewFriends_Main.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
         ChangePasswordFragment.OnChangePasswordFragmentInteractionListener,
-        BestFriendsFragment.OnBestFriendInteractionListener
+        BestFriendsFragment.OnBestFriendInteractionListener,
+        HomeViewFragment.OnHomeViewFragmentListener
 {
 
     private DataUtilityControl duc;
@@ -180,7 +182,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.requests) {
             loadFragment(new FriendRequests());
         } else if (id == R.id.weather) {
-            loadFragment(this.duc.getViewWeatherFragment());
+            loadFragment(new MainWeatherFragment());
         } else if (id == R.id.home) {
             loadFragment(new HomeViewFragment());
         }
@@ -229,6 +231,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager()
                 .beginTransaction()
                 .remove(getSupportFragmentManager().findFragmentByTag("WAIT"))
+                .commit();
+    }
+
+    @Override
+    public void onHomeViewWaitShow(int container) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(container, new WaitFragment(), "WAIT")
+                .addToBackStack(null)
                 .commit();
     }
 
