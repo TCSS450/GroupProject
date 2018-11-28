@@ -63,7 +63,7 @@ public class MainWeatherFragment extends Fragment {
             }
         });
 
-        insertNestedFragment(R.id.mainWeather_frameLayout_container, new ViewWeatherFragment());
+        insertNestedFragment(R.id.mainWeather_frameLayout_container, new WeatherFragment());
 
         return v;
     }

@@ -1,10 +1,14 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
@@ -43,6 +52,10 @@ import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends_Main;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.MainWeatherFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.Weather;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetailListFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetails;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -60,8 +73,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         SettingsFragment.OnFragmentInteractionListener,
         ChangePasswordFragment.OnChangePasswordFragmentInteractionListener,
         BestFriendsFragment.OnBestFriendInteractionListener,
-        HomeViewFragment.OnHomeViewFragmentListener
+        HomeViewFragment.OnHomeViewFragmentListener,
+        WeatherFragment.OnWeatherListFragmentInteractionListener
 {
+    /**
+     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
+     */
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+
+    /**
+     * The fastest rate for active location updates. Exact. Updates will never be more frequent
+     * than this value.
+     */
+    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+
+    private static final int MY_PERMISSIONS_LOCATIONS = 8414;
+    private LocationRequest mLocationRequest;
+    private Location mCurrentLocation;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback mLocationCallback;
 
     private DataUtilityControl duc;
     public String checkNotify = "";
@@ -129,6 +160,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             textView.setText(s);
         }
         navigationView.setNavigationItemSelectedListener(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
+                            , Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_LOCATIONS);
+        } else {
+            //The user has already allowed the use of Locations. Get the current location.
+            requestLocation();
+        }
+
     }
 
     @Override
@@ -183,13 +230,87 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.requests) {
             loadFragment(new FriendRequests());
         } else if (id == R.id.weather) {
-            loadFragment(new MainWeatherFragment());
+
+            JSONObject msg = new JSONObject();
+            //requestLocation();
+
+
+            try {
+                msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+                msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+                msg.put("days", 10);
+            }catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
+            }
+
+            new SendPostAsyncTask.Builder(this.duc.getWeatherDateURI().toString(), msg)
+                    .onPostExecute(this::handleOnPostWeatherDate)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
+
+
+
+
+
+
+
         } else if (id == R.id.home) {
+
             loadFragment(new HomeViewFragment());
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void handleOnPostWeatherDate(String result) {
+
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+
+
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) { // success
+
+                JSONArray weatherArray = resultsJSON.getJSONArray("weather");
+
+                ArrayList<Weather> weatherArrayList = new ArrayList<>();
+
+                for (int i = 0 ;i < weatherArray.length(); i++ ) {
+                    JSONObject weather = weatherArray.getJSONObject(i);
+
+                    String date = weather.getString("valid_date");
+                    String temp = weather.getString("temp");
+                    String wind = weather.getString("wind_spd");
+                    String humidity = weather.getString("rh");
+                    String pressure = weather.getString("pres");
+
+
+                    JSONObject innerWeather = weather.getJSONObject("weather");
+
+                    String description = innerWeather.getString("description");
+
+                    String icon = innerWeather.getString("icon");
+
+
+
+                    Weather weatherObject = new Weather(temp,date, description, wind, pressure, humidity, icon);
+
+                    weatherArrayList.add(weatherObject);
+
+                }
+                Constants.weatherSearch = weatherArrayList;
+                loadFragment(new MainWeatherFragment());
+
+            }  else {
+                this.duc.makeToast(getApplicationContext(), "END_POINT_ERROR");
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR",  result
+                    + System.lineSeparator()
+                    + e.getMessage());
+
+        }
     }
 
     private void loadFragment(Fragment frag) {
@@ -354,6 +475,83 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         loadFragment(duc.getLoginFragment());
     }
 
+
+
+
+    @Override
+    public void onWeatherListFragmentInteraction(Weather weather) {
+        JSONObject msg = new JSONObject();
+
+        try {
+            msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+            msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+        }catch (JSONException e) {
+            Log.wtf("WEATHER", "Error: " + e.getMessage());
+        }
+
+        new SendPostAsyncTask.Builder(this.duc.getWeatherHourURI().toString(), msg)
+                .onPostExecute(this::handleONPostWeatherHour)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+
+
+
+    }
+
+    private void handleONPostWeatherHour(String result) {
+        System.out.println("SUCCES WEATHER HOUR " + result);
+        onWaitFragmentInteractionHide();
+
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+
+
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) { // success
+
+                JSONArray weatherArray = resultsJSON.getJSONArray("weather");
+
+                ArrayList<WeatherDetails> weatherDetailsArrayList = new ArrayList<>();
+
+                for (int i = 0 ;i < weatherArray.length(); i++ ) {
+                    JSONObject weather = weatherArray.getJSONObject(i);
+
+                    String time = weather.getString("timestamp_local");
+                    String temp = weather.getString("temp");
+
+
+                    JSONObject innerWeatherDetails = weather.getJSONObject("weather");
+
+                    String description = innerWeatherDetails.getString("description");
+
+                    String icon = innerWeatherDetails.getString("icon");
+
+
+
+                    WeatherDetails weatherDetailsObject = new WeatherDetails(temp,time, description, icon);
+
+                    weatherDetailsArrayList.add(weatherDetailsObject);
+
+                }
+                Constants.weatherDetails = weatherDetailsArrayList;
+
+                loadFragment(new WeatherDetailListFragment());
+
+            }  else {
+                this.duc.makeToast(getApplicationContext(), "END_POINT_ERROR");
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR",  result
+                    + System.lineSeparator()
+                    + e.getMessage());
+
+        }
+
+
+
+    }
+
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
     // we have something that allows us to do that.
     class DeleteTokenAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -417,4 +615,58 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             duc.makeToast(this, getString(R.string.request_error));
         }
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_LOCATIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // locations-related task you need to do.
+                    requestLocation();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Log.d("PERMISSION DENIED", "Nothing to see or do here.");
+
+                    //Shut down the app. In production release, you would let the user
+                    //know why the app is shutting down...maybe ask for permission again?
+                    finishAndRemoveTask();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    private void requestLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d("REQUEST LOCATION", "User did NOT allow permission to request location!");
+        } else {
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                Log.d("LOCATION", location.toString());
+                                mCurrentLocation = location;
+                            }
+                        }
+                    });
+        }
+    }
+
+
 }

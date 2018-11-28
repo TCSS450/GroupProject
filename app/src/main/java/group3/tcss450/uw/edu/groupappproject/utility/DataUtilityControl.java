@@ -157,6 +157,15 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getDeleteFriendURI() { return Uri.parse(Constants.DELETE_FRIEND_URL); }
 
+    public Uri getWeatherDateURI() { return Uri.parse(Constants.WEATHER_DATE_URL); }
+
+    public Uri getWeatherHourURI() { return Uri.parse(Constants.WEATHER_HOUR_URL); }
+
+    public int getWeatherDrawable(Context context, String iconCode) {
+        return context.getResources().getIdentifier("group3.tcss450.uw.edu.groupappproject:drawable/" + iconCode, null, null);
+    }
+
+
     public void setBooleanNotify(Boolean b) { mStartChatWithNotification = b;}
 
     public void setNotifyId(int i) { tempId = i; }

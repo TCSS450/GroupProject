@@ -5,6 +5,9 @@ import android.widget.CheckBox;
 
 import java.util.ArrayList;
 
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.Weather;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetails;
+
 public class Constants {
 
 
@@ -32,7 +35,9 @@ public class Constants {
     public static final String GET_PROFILES_URL = "https://group3-backend.herokuapp.com/get-profiles-by-id";
     public static final String CREATE_CHAT_URL = "https://group3-backend.herokuapp.com/create-chat";
     public static final String DELETE_FRIEND_URL ="https://group3-backend.herokuapp.com/delete-friend";
-    public static final String WEATHER_END_POINT ="https://group3-backend.herokuapp.com/weather";
+    public static final String WEATHER_DATE_URL = "https://group3-backend.herokuapp.com/weather";
+    public static final String WEATHER_HOUR_URL = "https://group3-backend.herokuapp.com/weather/24hour";
+
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;
@@ -43,5 +48,8 @@ public class Constants {
     public static ArrayList<Credentials> myFriends = null;
     public static ArrayList<CheckBox> chatCheckBoxes = null;
     public static Location MY_CURRENT_LOCATION = null;
+    public static ArrayList<Weather> weatherSearch = null;
+    public static ArrayList<WeatherDetails> weatherDetails = null;
+
 
 }

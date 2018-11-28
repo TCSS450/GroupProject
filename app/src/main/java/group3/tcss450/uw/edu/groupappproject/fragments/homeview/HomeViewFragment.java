@@ -107,7 +107,7 @@ public class HomeViewFragment extends Fragment {
                 }
                 for (Location location : locationResult.getLocations()) {
                     // Update UI with location data
-                    setLocation(location);
+                    //setLocation(location);
                     Log.d("LOCATION UPDATE!", location.toString());
                 }
             };
@@ -269,7 +269,8 @@ public class HomeViewFragment extends Fragment {
                         public void onSuccess(Location location) {
                             // Got last known location. In some rare situations this can be null.
                             if (location != null) {
-                                setLocation(location);
+                                Constants.MY_CURRENT_LOCATION = location;
+                                //setLocation(location);
                                 Log.d("LOCATION", location.toString());
                             }
                         }
@@ -336,27 +337,27 @@ public class HomeViewFragment extends Fragment {
 
     /**
      * Set the textview to have the current location.
-     * @param location
+     * @param
      */
-    private void setLocation(final Location location) {
-        mCurrentLocation = location;
-        Constants.MY_CURRENT_LOCATION = mCurrentLocation;
-        //call async task to get the weather before loading fragment
-        JSONObject jsonLocation = new JSONObject();
-        try {
-            jsonLocation.put("lat", mCurrentLocation.getLatitude());
-            jsonLocation.put("lon", mCurrentLocation.getLongitude());
-            jsonLocation.put("days", 1);
-        } catch (JSONException e) {
-            Log.wtf("JSON ERROR", "Error creating JSON: " + e.getMessage());
-        }
-        Log.d("LOCATION: ",mCurrentLocation.getLatitude() +
-                                " " + mCurrentLocation.getLongitude());
-        new SendPostAsyncTask.Builder(Constants.WEATHER_END_POINT, jsonLocation)
-                .onPreExecute(this::onPreGetWeather)
-                .onPostExecute(this::onPostGetWeather)
-                .build().execute();
-    }
+//    private void setLocation(final Location location) {
+//        mCurrentLocation = location;
+//        Constants.MY_CURRENT_LOCATION = mCurrentLocation;
+//        //call async task to get the weather before loading fragment
+//        JSONObject jsonLocation = new JSONObject();
+//        try {
+//            jsonLocation.put("lat", mCurrentLocation.getLatitude());
+//            jsonLocation.put("lon", mCurrentLocation.getLongitude());
+//            jsonLocation.put("days", 1);
+//        } catch (JSONException e) {
+//            Log.wtf("JSON ERROR", "Error creating JSON: " + e.getMessage());
+//        }
+//        Log.d("LOCATION: ",mCurrentLocation.getLatitude() +
+//                                " " + mCurrentLocation.getLongitude());
+//        new SendPostAsyncTask.Builder(Constants.WEATHER_END_POINT, jsonLocation)
+//                .onPreExecute(this::onPreGetWeather)
+//                .onPostExecute(this::onPostGetWeather)
+//                .build().execute();
+//    }
 
     private void onPreGetWeather() { mListener.onHomeViewWaitShow(R.id.homeView_weather_frame); }
 

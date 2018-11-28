@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments.homeview;
+package group3.tcss450.uw.edu.groupappproject.fragments.weather;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,53 +10,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnBestFriendInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnWeatherListFragmentInteractionListener}
  * interface.
  */
-public class BestFriendsFragment extends Fragment {
+public class WeatherFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnBestFriendInteractionListener mListener;
+
+    private OnWeatherListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BestFriendsFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static BestFriendsFragment newInstance(int columnCount) {
-        BestFriendsFragment fragment = new BestFriendsFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    public WeatherFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bestfriends_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_weather_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -67,7 +55,10 @@ public class BestFriendsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyBestFriendsRecyclerViewAdapter(Constants.myFriends, mListener));
+
+
+
+            recyclerView.setAdapter(new MyWeatherRecyclerViewAdapter(Constants.weatherSearch, mListener));
         }
         return view;
     }
@@ -76,11 +67,11 @@ public class BestFriendsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnBestFriendInteractionListener) {
-            mListener = (OnBestFriendInteractionListener) context;
+        if (context instanceof OnWeatherListFragmentInteractionListener) {
+            mListener = (OnWeatherListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnBestFriendInteractionListener");
+                    + " must implement OnWeatherListFragmentInteractionListener");
         }
     }
 
@@ -100,8 +91,8 @@ public class BestFriendsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnBestFriendInteractionListener {
+    public interface OnWeatherListFragmentInteractionListener {
         // TODO: Update argument type and name
-//        void onWeatherListFragmentInteraction(DummyItem item);
+        void onWeatherListFragmentInteraction(Weather weather);
     }
 }

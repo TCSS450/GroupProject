@@ -47,7 +47,7 @@ public class MyBestFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyBes
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItemCredentials);
+//                    mListener.onWeatherListFragmentInteraction(holder.mItemCredentials);
                 }
             }
         });
