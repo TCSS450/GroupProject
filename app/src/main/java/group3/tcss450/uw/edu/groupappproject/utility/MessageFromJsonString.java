@@ -73,7 +73,6 @@ public class MessageFromJsonString {
 
     @Override
     public String toString() {
-        return mNickname + " " + mFirstName + " " + mLastName + " " + mEmail +
-                " " + mMessage + " " + mTimeStamp + " " + mDisplayType;
+        return mJsonMessage.toString();
     }
 }

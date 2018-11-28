@@ -1,13 +1,10 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-//import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment
-import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
+//import group3.tcss450.uw.edu.groupappproject.fragments.chat.ChatFragment
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 

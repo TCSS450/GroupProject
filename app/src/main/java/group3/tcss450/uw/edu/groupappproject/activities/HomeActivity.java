@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.ChatFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.chat.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.BestFriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.HomeViewFragment;

@@ -10,7 +10,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
-import group3.tcss450.uw.edu.groupappproject.fragments.CreateChatFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.chat.CreateChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPassVerifyFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ForgotPasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests.FriendRequests;

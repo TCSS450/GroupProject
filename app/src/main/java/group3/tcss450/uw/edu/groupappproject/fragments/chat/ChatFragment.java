@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
 
 import android.content.BroadcastReceiver;
@@ -9,12 +9,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -28,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.activities.HomeActivity;
-import group3.tcss450.uw.edu.groupappproject.activities.MainActivity;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -190,24 +187,18 @@ public class ChatFragment extends Fragment {
 //            mMessageOutputTextView.setText(oldText);
             Log.d("Chat Frag json result", result);
             JSONArray messagesArr = resJson.getJSONArray("messages");
-            // fill the list of message objects
-            List<MessageFromJsonString> messagesList = new ArrayList<>();
-            Log.d("Chat Frag json arr", messagesArr.toString());
-            for (int i = 0; i < messagesArr.length(); i++) {
-//                Log.d("Chat Frag json arr item", messagesArr.getString(i));
-                MessageFromJsonString temp = new MessageFromJsonString(messagesArr.getString(i));
-                messagesList.add(temp);
-//                Log.d("Chat Frag messageFromJson", temp.toString());
-            }
 
-//            mMessageAdapter =
-//                new MessageListAdapter(getContext(), (List<MessageFromJsonString>) messagesList);
-////            mMessageRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-//            mMessageRecycler.setAdapter(mMessageAdapter);
+            insertNestedFragment(R.id.chatFrag_message_frame,
+                    MessagesListFragment.newInstance(messagesArr.toString()));
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void insertNestedFragment(int container, Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(container, fragment).commit();
     }
 
 

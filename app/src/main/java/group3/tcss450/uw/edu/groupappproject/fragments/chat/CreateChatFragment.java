@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
 
 import android.os.Bundle;
@@ -17,6 +17,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
  * create an instance of this fragment.
  */
 public class CreateChatFragment extends Fragment {
+
+    // Todo: IS THIS CLASS EVEN USED ???????
 
     private static final String ARG_PARAM1 = "param1";
     private int mParam1;

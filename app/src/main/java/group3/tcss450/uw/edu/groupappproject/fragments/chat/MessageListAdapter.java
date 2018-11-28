@@ -1,4 +1,4 @@
-package group3.tcss450.uw.edu.groupappproject.fragments;
+package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
