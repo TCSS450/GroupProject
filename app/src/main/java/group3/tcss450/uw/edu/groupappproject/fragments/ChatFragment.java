@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,6 +55,9 @@ public class ChatFragment extends Fragment {
     private DataUtilityControl duc;
     private FirebaseMessageReciever mFirebaseMessageReciever;
 
+    private RecyclerView mMessageRecycler;
+    private MessageListAdapter mMessageAdapter;
+
     int newChatId;
 
     //private String nickName;
@@ -65,8 +70,12 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootLayout = inflater.inflate(R.layout.fragment_chat, container, false);
-        mMessageOutputTextView = rootLayout.findViewById(R.id.text_chat_message_display);
-        mMessageOutputTextView.setMovementMethod(new ScrollingMovementMethod());
+//        mMessageOutputTextView = rootLayout.findViewById(R.id.text_chat_message_display);
+//        mMessageOutputTextView.setMovementMethod(new ScrollingMovementMethod());
+
+        //set up the recycler view
+        RecyclerView mMessageRecycler = (RecyclerView) rootLayout.findViewById(R.id.chatFrag_message_recycler);
+
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
@@ -162,6 +171,7 @@ public class ChatFragment extends Fragment {
                 //its up to you to decide if you want to send the message to the output here
                 //or wait for the message to come back from the web service.
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -172,20 +182,28 @@ public class ChatFragment extends Fragment {
         try {
 
             //This is the result from the web service
-            JSONObject res = new JSONObject(result);
-            String oldText = res.getString("messages");
+            JSONObject resJson = new JSONObject(result);
+            String oldText = resJson.getString("messages");
             //oldText.replace("email","");
             System.out.println(oldText);
 
-            mMessageOutputTextView.setText(oldText);
+//            mMessageOutputTextView.setText(oldText);
             Log.d("Chat Frag json result", result);
-            JSONArray messagesArr = new JSONArray(res.getJSONArray("messages"));
+            JSONArray messagesArr = resJson.getJSONArray("messages");
+            // fill the list of message objects
             List<MessageFromJsonString> messagesList = new ArrayList<>();
             Log.d("Chat Frag json arr", messagesArr.toString());
             for (int i = 0; i < messagesArr.length(); i++) {
-                Log.d("Chat Frag json arr item", messagesArr.getString(i));
+//                Log.d("Chat Frag json arr item", messagesArr.getString(i));
                 MessageFromJsonString temp = new MessageFromJsonString(messagesArr.getString(i));
+                messagesList.add(temp);
+//                Log.d("Chat Frag messageFromJson", temp.toString());
             }
+
+//            mMessageAdapter =
+//                new MessageListAdapter(getContext(), (List<MessageFromJsonString>) messagesList);
+////            mMessageRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+//            mMessageRecycler.setAdapter(mMessageAdapter);
 
         } catch (JSONException e) {
             e.printStackTrace();

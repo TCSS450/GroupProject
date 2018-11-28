@@ -50,18 +50,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/text_chat_message_display"
-        android:layout_width="0dp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/chatFrag_message_recycler"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/chatColor"
         android:textColor="@color/primary_dark_text"
         app:layout_constraintBottom_toTopOf="@+id/edit_chat_message_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_chat_chatName" />
 
     <TextView
         android:id="@+id/typing_hint"

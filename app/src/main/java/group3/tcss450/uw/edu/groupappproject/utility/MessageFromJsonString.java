@@ -70,4 +70,10 @@ public class MessageFromJsonString {
     public String getDisplayType() {
         return mDisplayType;
     }
+
+    @Override
+    public String toString() {
+        return mNickname + " " + mFirstName + " " + mLastName + " " + mEmail +
+                " " + mMessage + " " + mTimeStamp + " " + mDisplayType;
+    }
 }
