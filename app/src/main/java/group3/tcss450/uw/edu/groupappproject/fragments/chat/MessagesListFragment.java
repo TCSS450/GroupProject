@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -79,7 +80,10 @@ public class MessagesListFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            LinearLayoutManager linear = new LinearLayoutManager(context);
+            linear.setReverseLayout(true);
+            recyclerView.setLayoutManager(linear);
+
 
             Log.d("Message List onCreateView", messagesList.toString());
             recyclerView.setAdapter(new MessageListAdapter(context, messagesList));
