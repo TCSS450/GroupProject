@@ -97,7 +97,9 @@
     <string name="settings_greeting">Settings</string>
     <string name="change_password_button">Change Password</string>
     <string name="change_nickname_button">Change Nickname</string>
-    <string name="choose_theme_button">Choose theme\nlight/dark</string>
+    <string name="choose_theme_button">Choose Theme</string>
+    <string name="change_display_name">Change Display Name</string>
+    <string name="change_display_apply">Apply</string>
 
 
     <!--password Requirements-->

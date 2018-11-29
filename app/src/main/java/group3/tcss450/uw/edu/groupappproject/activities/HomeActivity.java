@@ -40,11 +40,13 @@ import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ChangeDisplayName;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChatsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.chat.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChats_Main;
+import group3.tcss450.uw.edu.groupappproject.fragments.chat.MessagesListFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.chat.MessagesListFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.BestFriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.HomeViewFragment;
@@ -80,7 +82,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         HomeViewFragment.OnHomeViewFragmentListener,
         WeatherFragment.OnWeatherListFragmentInteractionListener,
         MyChatsFragment.OnListFragmentInteractionListener,
-        ChatFragment.OnChatFragmentListener
+        ChatFragment.OnChatFragmentListener,
+        ChangeDisplayName.OnFragmentInteractionListener
 {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
@@ -102,18 +105,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private DataUtilityControl duc;
     private Credentials[] mTempFriendCredentials;
-    private boolean myIsGotChats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.duc = Constants.dataUtilityControl;
         super.onCreate(savedInstanceState);
-        myIsGotChats = false;
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -123,6 +123,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (duc.getBooleanId()) {
             ChatFragment frag = new ChatFragment();
             Bundle args = new Bundle();
+            args.putString("chatName", duc.getmOtherMembersChatNotification());
             args.putInt("chatId", duc.getChAtId());
             frag.setArguments(args);
             System.out.println("first id gained is " + duc.getChAtId());
@@ -557,6 +558,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .findFragmentById(R.id.chatFrag_message_recycler);
             ((MessagesListFragment) cf).onSendMessage();
         }
+    }
+
+    @Override
+    public void onGoHomeFragmentInteraction() {
+        loadFragment(new HomeViewFragment());
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing

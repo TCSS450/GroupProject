@@ -49,6 +49,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private int tempId;
     private int mFriendRequest;
     private int mFriendAccept;
+    private String mOtherMembersChatNotification;
 
 
     public DataUtilityControl() {
@@ -70,7 +71,7 @@ public class DataUtilityControl extends AppCompatActivity {
         this.tempId = 0;
         this.mFriendRequest = 0;
         this.mFriendAccept =0;
-
+        this.mOtherMembersChatNotification = "";
         this.mStartChatWithNotification = false;
         this.friendRequests = new FriendRequests();
     }
@@ -107,6 +108,8 @@ public class DataUtilityControl extends AppCompatActivity {
     public int getFriendRequest() { return this.mFriendRequest;}
 
     public int getFriendAccept() { return this.mFriendAccept;}
+
+    public String getmOtherMembersChatNotification() { return mOtherMembersChatNotification; }
 
     public ArrayList<Credentials> getCredFromFriendStatusList(ArrayList<FriendStatus> friendStatuses) {
         ArrayList<Credentials> toSend = new ArrayList<Credentials>();
@@ -163,6 +166,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getWeatherHourURI() { return Uri.parse(Constants.WEATHER_HOUR_URL); }
 
+    public Uri getChangeDisplayTypeURI() { return Uri.parse(Constants.CHANGE_DISPLAY_TYPE_URL); }
+
     public int getWeatherDrawable(Context context, String iconCode) {
         return context.getResources().getIdentifier("group3.tcss450.uw.edu.groupappproject:drawable/" + iconCode, null, null);
     }
@@ -177,6 +182,8 @@ public class DataUtilityControl extends AppCompatActivity {
     public void setFriendAccept(int i) {
         mFriendAccept = i;
     }
+
+    public void setmOtherMembersChatNotification(String otherMembers) { mOtherMembersChatNotification = otherMembers; }
 
     public void saveCreds(Credentials userCredentials){this.userCreds = userCredentials;}
 

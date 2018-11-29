@@ -20,11 +20,14 @@ public class MainActivity extends AppCompatActivity {
     public Boolean checkNotification = false;
     public int friendRequestCheck;
     public int friendAcceptedCheck;
+    public String mOtherMembers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(this, PreLoginRegisterActivity.class);
+        Constants.dataUtilityControl = new DataUtilityControl();
+
         System.out.println("check notify is first " + checkNotify);
         if (getIntent().getExtras() != null) {
 
@@ -32,14 +35,20 @@ public class MainActivity extends AppCompatActivity {
             if (getIntent().getExtras().containsKey("type")) {
                 if(getIntent().getExtras().getString("type").equals("contact")){
                     notificationID = parseInt(getIntent().getExtras().getString("chatId"));
+                    Constants.dataUtilityControl.setNotifyId(notificationID);
+                    mOtherMembers = getIntent().getExtras().getString("otherMembers");
+                    Constants.dataUtilityControl.setmOtherMembersChatNotification(mOtherMembers);
                     checkNotification = true;
+                    Constants.dataUtilityControl.setBooleanNotify(checkNotification);
                 }
 
                 if (getIntent().getExtras().getString("type").equals("sent")){
                     friendRequestCheck = 33;
+                    Constants.dataUtilityControl.setFriendRequests(friendRequestCheck);
                 }
                 if (getIntent().getExtras().getString("type").equals("accepted")){
                     friendAcceptedCheck = 33;
+                    Constants.dataUtilityControl.setFriendAccept(friendAcceptedCheck);
                 }
 
                 Log.d(TAG, "type of message: " + getIntent().getExtras().getString("type"));
@@ -88,5 +97,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 }

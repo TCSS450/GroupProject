@@ -35,6 +35,7 @@ public class Constants {
     public static final String GET_ALL_CHATS_END_POINT_URL = "https://group3-backend.herokuapp.com/get-current-chats";
     public static final String WEATHER_DATE_URL = "https://group3-backend.herokuapp.com/weather";
     public static final String WEATHER_HOUR_URL = "https://group3-backend.herokuapp.com/weather/24hour";
+    public static final String CHANGE_DISPLAY_TYPE_URL = "https://group3-backend.herokuapp.com/change-display-type";
     public static final String GET_ALL_MESSAGES_URL = "https://group3-backend.herokuapp.com/messaging/getAll";
 
     //VARIABLES
@@ -50,7 +51,6 @@ public class Constants {
     public static Location MY_CURRENT_LOCATION = null;
     public static ArrayList<Weather> weatherSearch = null;
     public static ArrayList<WeatherDetails> weatherDetails = null;
-
 
 
 }
