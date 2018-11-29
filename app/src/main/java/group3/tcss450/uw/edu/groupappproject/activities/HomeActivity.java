@@ -45,6 +45,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChatsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.chat.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChats_Main;
+import group3.tcss450.uw.edu.groupappproject.fragments.chat.MessagesListFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.BestFriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.SettingsFragment;
@@ -78,7 +79,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         BestFriendsFragment.OnBestFriendInteractionListener,
         HomeViewFragment.OnHomeViewFragmentListener,
         WeatherFragment.OnWeatherListFragmentInteractionListener,
-        MyChatsFragment.OnListFragmentInteractionListener
+        MyChatsFragment.OnListFragmentInteractionListener,
+        ChatFragment.OnChatFragmentListener
 {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
@@ -541,6 +543,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+    }
+
+    /**
+     * not used here but used in MessagesListFragment in inner firebase class
+     */
+    @Override
+    public void onSendMessage() {
+        //Todo: not currently working !!!!!
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.chatFragment_id);
+        if(f instanceof ChatFragment) {
+            Fragment cf = (MessagesListFragment) f.getChildFragmentManager()
+                    .findFragmentById(R.id.chatFrag_message_recycler);
+            ((MessagesListFragment) cf).onSendMessage();
+        }
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing

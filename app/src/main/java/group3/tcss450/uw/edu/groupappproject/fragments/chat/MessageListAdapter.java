@@ -28,6 +28,11 @@ public class MessageListAdapter extends RecyclerView.Adapter implements Serializ
         mMessageList = messageList;
     }
 
+    public void addMessage(MessageFromJsonString messageFromJsonString) {
+        mMessageList.add(0, messageFromJsonString);
+        notifyItemInserted(0);
+    }
+
     @Override
     public int getItemCount() {
         return mMessageList.size();

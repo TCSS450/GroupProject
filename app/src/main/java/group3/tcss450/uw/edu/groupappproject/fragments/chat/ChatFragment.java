@@ -1,16 +1,12 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,15 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
-import group3.tcss450.uw.edu.groupappproject.utility.MessageFromJsonString;
-import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
@@ -41,7 +32,6 @@ public class ChatFragment extends Fragment {
 
     private static final String TAG = "CHAT_FRAG";
     //private static final String CHAT_ID = "7";
-    private TextView mMessageOutputTextView;
     private EditText mMessageInputEditText;
     private String mEmail;
     private String mSendUrl;
@@ -50,12 +40,14 @@ public class ChatFragment extends Fragment {
     private String oldMessages[];
     private String nickName;
     private DataUtilityControl duc;
-    private FirebaseMessageReciever mFirebaseMessageReciever;
+//    private FirebaseMessageReciever mFirebaseMessageReciever;
 
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
 
     int newChatId;
+    protected static int mChatId;
+    private OnChatFragmentListener mListener;
 
     //private String nickName;
     public ChatFragment() {
@@ -67,8 +59,6 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootLayout = inflater.inflate(R.layout.fragment_chat, container, false);
-//        mMessageOutputTextView = rootLayout.findViewById(R.id.text_chat_message_display);
-//        mMessageOutputTextView.setMovementMethod(new ScrollingMovementMethod());
 
         //set up the recycler view
         RecyclerView mMessageRecycler = (RecyclerView) rootLayout.findViewById(R.id.chatFrag_message_recycler);
@@ -78,6 +68,7 @@ public class ChatFragment extends Fragment {
         this.duc = Constants.dataUtilityControl;
         Bundle bundle = this.getArguments();
         newChatId = bundle.getInt("chatId");
+        mChatId = newChatId;
         String chatName = bundle.getString("chatName");
         if (chatName.length() > 30) {
             chatName = chatName.substring(0, 30) + "...";
@@ -112,7 +103,6 @@ public class ChatFragment extends Fragment {
                 .build().execute();
 
 
-        //mMessageOutputTextView.setText(mGetUrl);
         rootLayout.findViewById(R.id.button_chat_send).setOnClickListener(this::handleSendClick);
         return rootLayout;
     }
@@ -167,6 +157,8 @@ public class ChatFragment extends Fragment {
                 mMessageInputEditText.setText("");
                 //its up to you to decide if you want to send the message to the output here
                 //or wait for the message to come back from the web service.
+                Log.d("Send result", result);
+                mListener.onSendMessage();
             }
 
         } catch (JSONException e) {
@@ -184,8 +176,7 @@ public class ChatFragment extends Fragment {
             //oldText.replace("email","");
             System.out.println(oldText);
 
-//            mMessageOutputTextView.setText(oldText);
-            Log.d("Chat Frag json result", result);
+            Log.d("Message Chat Frag json result", result);
             JSONArray messagesArr = resJson.getJSONArray("messages");
 
             insertNestedFragment(R.id.chatFrag_message_frame,
@@ -201,59 +192,27 @@ public class ChatFragment extends Fragment {
         transaction.replace(container, fragment).commit();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnChatFragmentListener) {
+            mListener = (OnChatFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnChatFragmentListener");
+        }
+    }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mFirebaseMessageReciever == null) {
-            mFirebaseMessageReciever = new FirebaseMessageReciever();
-        }
-        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
-        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mFirebaseMessageReciever != null){
-            getActivity().unregisterReceiver(mFirebaseMessageReciever);
-        }
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     /**
-     * A BroadcastReceiver setup to listen for messages sent from
-     MyFirebaseMessagingService
-     * that Android allows to run all the time.
      */
-    private class FirebaseMessageReciever extends BroadcastReceiver {
-        //String duc.DataUtilityControl
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            Log.i("FCM Chat Frag", "start onRecieve");
-
-            if(intent.hasExtra("DATA")) {
-                String data = intent.getStringExtra("DATA");
-                JSONObject jObj = null;
-
-                //JSONObject userPref
-                try {
-                    jObj = new JSONObject(data);
-                    if(jObj.has("message") && jObj.has("sender")) {
-                        String sender = jObj.getString("sender");
-                        String msg = jObj.getString("message");
-
-                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
-                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
-                        //mMessageOutputTextView.setText(sender + ": " + msg +  mMessageOutputTextView.getText());
-                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
-                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
-                        //System.out.println("THE SECOND PASS");
-                        Log.i("FCM Chat Frag", sender + " " + msg);
-                    }
-                } catch (JSONException e) {
-                    Log.e("JSON PARSE", e.toString());
-                }
-            }
-        }
+    public interface OnChatFragmentListener
+    {
+        public void onSendMessage();
     }
 }

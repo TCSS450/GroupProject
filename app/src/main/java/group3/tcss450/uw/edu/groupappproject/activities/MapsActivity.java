@@ -13,8 +13,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.Weather;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -64,13 +72,13 @@ public class MapsActivity extends FragmentActivity implements
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title("New Weather Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
 
         LatLng lat_long = marker.getPosition();
         Location loc = mCurrentLocation;
         loc.setLongitude(marker.getPosition().longitude);
         loc.setLatitude(marker.getPosition().latitude);
         Constants.MY_CURRENT_LOCATION = loc;
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
     }
+
 }

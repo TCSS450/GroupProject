@@ -368,7 +368,7 @@ public class HomeViewFragment extends Fragment {
             mListener = (OnHomeViewFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnHomeViewFragmentListener");
+                    + " must implement OnChatFragmentListener");
         }
     }
 

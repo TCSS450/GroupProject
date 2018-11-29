@@ -48,16 +48,8 @@ public class MessageFromJsonString {
      * @return formatted string in 2018-11-19 15:39
      */
     private static String formatDateTime(String dateTime) {
-        String result = "";
-        int dateIndex = dateTime.indexOf(' ');
-        String date = dateTime.substring(0, dateIndex);
-        result += date;
 
-        int periodIndex = dateTime.indexOf('.');
-        String time = dateTime.substring(dateIndex, periodIndex-3);
-        result += time;
-
-        return result;
+        return dateTime.substring(0, 16);
     }
 
 

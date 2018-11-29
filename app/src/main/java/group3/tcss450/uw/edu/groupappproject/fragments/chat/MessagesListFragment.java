@@ -1,10 +1,11 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,21 +15,31 @@ import android.view.ViewGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.MessageFromJsonString;
+import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
+import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
  *
  */
-public class MessagesListFragment extends Fragment {
+public class MessagesListFragment extends Fragment
+{
 
     private static final String ARG_MESSAGES_STRING = "column-count";
     private String mMessagesJsonArray = "";
-    private List<MessageFromJsonString> messagesList;
+    private List<MessageFromJsonString> mMessagesList;
+    private MessageListAdapter mMessageListAdapter;
+//    private onMessagesListInteraction mListener;
+    private LinearLayoutManager mLinearLayoutManager;
+    private RecyclerView mRecyclerView;
+    private FirebaseMessageReciever mFirebaseMessageReciever;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,21 +63,27 @@ public class MessagesListFragment extends Fragment {
 
         if (getArguments() != null) {
             mMessagesJsonArray = getArguments().getString(ARG_MESSAGES_STRING);
+            parseGetAllMessages(mMessagesJsonArray);
 
-            try {
-                JSONArray messagesArr = new JSONArray(mMessagesJsonArray);
-                // fill the list of message objects
-                messagesList = new ArrayList<>();
-                Log.d("Messages List arr", messagesArr.toString());
-                for (int i = 0; i < messagesArr.length(); i++) {
+        }
+    }
+
+    private void parseGetAllMessages(String jsonArray) {
+//        if (mMessagesList != null)
+//            mMessagesList.clear();
+        try {
+            JSONArray messagesArr = new JSONArray(jsonArray);
+            // fill the list of message objects
+            mMessagesList = new ArrayList<>();
+            Log.d("Messages List arr", messagesArr.toString());
+            for (int i = 0; i < messagesArr.length(); i++) {
 //                    Log.d("Chat Frag json arr item", messagesArr.getString(i));
-                    MessageFromJsonString temp = new MessageFromJsonString(messagesArr.getString(i));
-                    messagesList.add(temp);
+                MessageFromJsonString temp = new MessageFromJsonString(messagesArr.getString(i));
+                mMessagesList.add(temp);
 //                    Log.d("Message MessageFromJsonString", temp.toString());
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -78,17 +95,135 @@ public class MessagesListFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
 
-            LinearLayoutManager linear = new LinearLayoutManager(context);
-            linear.setReverseLayout(true);
-            recyclerView.setLayoutManager(linear);
+            mLinearLayoutManager = new LinearLayoutManager(context);
+            mLinearLayoutManager.setReverseLayout(true);
 
+            mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-            Log.d("Message List onCreateView", messagesList.toString());
-            recyclerView.setAdapter(new MessageListAdapter(context, messagesList));
+            mMessageListAdapter = new MessageListAdapter(context, mMessagesList);
+//            mListener.notifyOfNewMessage(); // here
+            Log.d("Message List onCreateView", mMessagesList.toString());
+            mRecyclerView.setAdapter(mMessageListAdapter);
+            mRecyclerView.scrollToPosition(0);
         }
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
+    }
+
+    public void onSendMessage() {
+        Log.d("Sent message", "messages list method sending ");
+        mFirebaseMessageReciever.sendAMessage();
+    }
+
+    /**
+     * A BroadcastReceiver setup to listen for messages sent from
+     MyFirebaseMessagingService
+     * that Android allows to run all the time.
+     */
+    private class FirebaseMessageReciever extends BroadcastReceiver
+
+    {
+        //String duc.DataUtilityControl
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.i("FCM Chat Frag", "start onRecieve");
+
+            if (intent.hasExtra("DATA")) {
+                String data = intent.getStringExtra("DATA");
+                JSONObject jObj = null;
+
+                Log.d("Message data", data);
+                //JSONObject userPref
+                try {
+                    jObj = new JSONObject(data);
+                    if (jObj.has("message") && jObj.has("sender")) {
+                        String sender = jObj.getString("sender");
+                        String msg = jObj.getString("message");
+
+//                        notifyOfNewMessage();
+                        JSONObject messageGetJson = new JSONObject();
+                        try {
+                            messageGetJson.put("chatId", ChatFragment.mChatId);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        new SendPostAsyncTask.Builder(Constants.GET_ALL_MESSAGES_URL, messageGetJson)
+                                .onPostExecute(this::endOfGetMsgTask)
+                                .build().execute();
+
+                        Log.d("Message return", data);
+//                        new MessageFromJsonString()
+
+                        //System.out.println("THE SECOND PASS");
+                        Log.i("FCM Chat Frag", sender + " " + msg);
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSON PARSE", e.toString());
+                }
+            }
+        }
+
+        private void endOfGetMsgTask(final String result) {
+            try {
+
+                //This is the result from the web service
+                JSONObject resJson = new JSONObject(result);
+                String oldText = resJson.getString("messages");
+                //oldText.replace("email","");
+                System.out.println(oldText);
+
+                Log.d("Message Chat Frag json result", result);
+                JSONArray messagesArr = resJson.getJSONArray("messages");
+                Log.d("Refresh messages", messagesArr.get(0).toString());
+
+                try {
+                    MessageFromJsonString newMessage = new MessageFromJsonString(messagesArr.get(0).toString());
+                    mMessageListAdapter.addMessage(newMessage);
+                    mRecyclerView.scrollToPosition(0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void getMessages() {
+            JSONObject messageGetJson = new JSONObject();
+            try {
+                messageGetJson.put("chatId", ChatFragment.mChatId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            new SendPostAsyncTask.Builder(Constants.GET_ALL_MESSAGES_URL, messageGetJson)
+                    .onPostExecute(this::endOfGetMsgTask)
+                    .build().execute();
+        }
+
+        //not working yet
+        public void sendAMessage() {
+            Log.d("Sent a message", "in firebase?");
+            getMessages();
+        }
+    }
 }

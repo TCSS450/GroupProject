@@ -135,7 +135,7 @@ public class ChangePasswordFragment extends Fragment {
             mListener = (OnChangePasswordFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnHomeViewFragmentListener");
+                    + " must implement OnChatFragmentListener");
         }
     }
 
