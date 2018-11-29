@@ -157,6 +157,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getDeleteFriendURI() { return Uri.parse(Constants.DELETE_FRIEND_URL); }
 
+    public Uri getCurrentChatsURI() { return Uri.parse(Constants.GET_ALL_CHATS_END_POINT_URL); }
+
     public Uri getWeatherDateURI() { return Uri.parse(Constants.WEATHER_DATE_URL); }
 
     public Uri getWeatherHourURI() { return Uri.parse(Constants.WEATHER_HOUR_URL); }

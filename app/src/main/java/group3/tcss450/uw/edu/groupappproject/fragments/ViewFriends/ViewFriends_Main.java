@@ -54,35 +54,39 @@ public class ViewFriends_Main extends Fragment {
                 members.add(Constants.myFriends.get(i).getMemberId());
             }
         }
-        members.add(duc.getUserCreds().getMemberId());
-        int[] membersArray = new int[members.size()];
+        if (members.size() == 0) {
+            duc.makeToast(getActivity(), "Why not invite others to your chat?");
+        } else {
+            members.add(duc.getUserCreds().getMemberId());
+            int[] membersArray = new int[members.size()];
 
-        for (int i = 0; i < members.size(); i++) {
-            membersArray[i] = members.get(i);
-        }
-        Uri createChatURI = this.duc.getCreateChatURI();
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("chatmembers", new JSONArray(membersArray));
-            if (mChatName.getText().length() == 0) {
-                msg.put("chatname", "Friends Chat");
-            } else {
-                msg.put("chatname", mChatName.getText().toString());
+            for (int i = 0; i < members.size(); i++) {
+                membersArray[i] = members.get(i);
             }
-        } catch (JSONException e) {
-            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+            Uri createChatURI = this.duc.getCreateChatURI();
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("chatmembers", new JSONArray(membersArray));
+                if (mChatName.getText().length() == 0) {
+                    msg.put("chatname", "Friends Chat");
+                } else {
+                    msg.put("chatname", mChatName.getText().toString());
+                }
+            } catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+            }
+
+            Uri getProfilesURI = this.duc.getProfilesEndPointURI();
+            new SendPostAsyncTask.Builder(getProfilesURI.toString(), msg)
+                    .onPostExecute(this::handleGetProfilesOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
+
+            new SendPostAsyncTask.Builder(createChatURI.toString(), msg)
+                    .onPostExecute(this::handleCreateChatOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
         }
-
-        Uri getProfilesURI = this.duc.getProfilesEndPointURI();
-        new SendPostAsyncTask.Builder(getProfilesURI.toString(), msg)
-                .onPostExecute(this::handleGetProfilesOnPost)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
-
-        new SendPostAsyncTask.Builder(createChatURI.toString(), msg)
-                .onPostExecute(this::handleCreateChatOnPost)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
     }
 
     @Override

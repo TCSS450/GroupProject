@@ -36,12 +36,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChatsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.chat.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChats_Main;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.BestFriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.HomeViewFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.SettingsFragment;
@@ -74,7 +77,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ChangePasswordFragment.OnChangePasswordFragmentInteractionListener,
         BestFriendsFragment.OnBestFriendInteractionListener,
         HomeViewFragment.OnHomeViewFragmentListener,
-        WeatherFragment.OnWeatherListFragmentInteractionListener
+        WeatherFragment.OnWeatherListFragmentInteractionListener,
+        MyChatsFragment.OnListFragmentInteractionListener
 {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
@@ -95,23 +99,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private LocationCallback mLocationCallback;
 
     private DataUtilityControl duc;
-    public String checkNotify = "";
-    private boolean mLoadFromChatNotification = false;
     private Credentials[] mTempFriendCredentials;
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private boolean myIsGotChats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.duc = Constants.dataUtilityControl;
         super.onCreate(savedInstanceState);
-
+        myIsGotChats = false;
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -145,9 +147,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             loadFragment(new HomeViewFragment());
         }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
-        TextView textView = (TextView) headerView.findViewById(R.id.textView_header_user);
+        TextView textView = headerView.findViewById(R.id.textView_header_user);
         String s;
         if (duc.getUserCreds().getDisplayPref() == 1) {
             s = duc.getUserCreds().getNickName() + " " + getString(R.string.nav_header_subtitle);
@@ -175,12 +177,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             //The user has already allowed the use of Locations. Get the current location.
             requestLocation();
         }
-
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -209,22 +210,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.addFriend) {
             loadFragment(new AddUserFragment());
-        } else if (id == R.id.createChat) {
-//            ChatFragment frag = new ChatFragment();
-//            Bundle args = new Bundle();
-//            args.putInt("chatId", 1);
-//            frag.setArguments(args);
-//            FragmentTransaction transaction = getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.homeActivityFrame, frag)
-//                    .addToBackStack(null);
-//            transaction.commit();
+        } else if (id == R.id.viewChats) {
+            getMyChats();
         } else if (id == R.id.connections) {
             loadFragment(new ViewFriends_Main());
         } else if (id == R.id.requests) {
@@ -278,7 +271,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     String wind = weather.getString("wind_spd");
                     String humidity = weather.getString("rh");
                     String pressure = weather.getString("pres");
-
+                    humidity = humidity + "%";
+                    temp = temp + "°F";
+                    wind = wind + "m/s";
 
                     JSONObject innerWeather = weather.getJSONObject("weather");
 
@@ -367,6 +362,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Uri createChatURI = this.duc.getCreateChatURI();
         int[] members = {duc.getUserCreds().getMemberId(),
                            credentials.getMemberId()};
+
+
         try {
             msg.put("chatmembers", new JSONArray(members));
             msg.put("chatname", "Friends Chat");
@@ -609,6 +606,80 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             duc.makeToast(this, getString(R.string.request_error));
         }
     }
+
+    private void getMyChats() {
+        Uri getChatsURI = duc.getCurrentChatsURI();
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("memberid", duc.getUserCreds().getMemberId());
+        } catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(getChatsURI.toString(), msg)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onPostExecute(this::handleGetChatsOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+
+    }
+
+    private void handleGetChatsOnPost(String result) {
+        /*  1 - Success! chats fragment is created.
+            2 - Error
+        */
+        try {
+            JSONObject root = new JSONObject(result);
+            if (root.has("status")) {
+                System.out.println("STATUS IN");
+                int status = root.getInt("status");
+                if (status == 1) {
+                    System.out.println("STATUS == 1");
+                    JSONArray chatDetails = root.getJSONArray("chatDetails");
+                    ArrayList<Integer> chatIds = new ArrayList<>();
+                    ArrayList<Credentials[]> allChats = new ArrayList<>();
+                    for (int i = 0; i < chatDetails.length(); i++) {
+                        System.out.println("IN FIRST LOOP");
+                        JSONObject jsonChat = chatDetails.getJSONObject(i);
+                        chatIds.add(jsonChat.getInt("chatid"));
+                        System.out.println("CHAT ID" + jsonChat.getInt("chatid"));
+                        JSONArray jsonMembers = jsonChat.getJSONArray("memberProfiles");
+                        List<Credentials> chatMembers = new ArrayList<>();
+                        for (int j = 0; j < jsonMembers.length(); j++) {
+                            System.out.println("IN SECOND LOOP");
+                            JSONObject member = jsonMembers.getJSONObject(j);
+                            System.out.println("member is created");
+                            chatMembers.add(new Credentials.Builder(member.getString("email"), "")
+                                    .addDisplayPref(member.getInt("display_type"))
+                                    .addFirstName(member.getString("firstname"))
+                                    .addLastName(member.getString("lastname"))
+                                    .addNickName(member.getString("nickname"))
+                                    .addMemberId(member.getInt("memberid"))
+                                    .addPhoneNumber(member.getString("phone_number"))
+                                    .build());
+                        }
+                        Credentials[] tempCreds = new Credentials[chatMembers.size()];
+                        tempCreds = chatMembers.toArray(tempCreds);
+                        allChats.add(tempCreds);
+                    }
+                    Constants.myChatIds = chatIds;
+                    Constants.myChatMembers = allChats;
+                    onWaitFragmentInteractionHide();
+                    loadFragment(new MyChats_Main());
+                } else {
+                    onWaitFragmentInteractionHide();
+                    duc.makeToast(this, getString(R.string.request_error));
+                }
+            } else {
+                onWaitFragmentInteractionHide();
+                duc.makeToast(this, getString(R.string.request_error));
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR", result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            duc.makeToast(this, getString(R.string.request_error));
+        }
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -661,6 +732,4 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     });
         }
     }
-
-
 }

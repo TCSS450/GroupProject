@@ -242,11 +242,11 @@ public class ChatFragment extends Fragment {
                         String sender = jObj.getString("sender");
                         String msg = jObj.getString("message");
 
-                        mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
-                        mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
-                        mMessageOutputTextView.setText(sender + ": " + msg +  mMessageOutputTextView.getText());
-                        mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
-                        mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
+                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
+                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
+                        //mMessageOutputTextView.setText(sender + ": " + msg +  mMessageOutputTextView.getText());
+                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
+                        //mMessageOutputTextView.setText(System.lineSeparator()+  mMessageOutputTextView.getText());
                         //System.out.println("THE SECOND PASS");
                         Log.i("FCM Chat Frag", sender + " " + msg);
                     }
