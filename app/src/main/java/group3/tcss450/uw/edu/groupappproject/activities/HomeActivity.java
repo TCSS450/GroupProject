@@ -234,7 +234,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             JSONObject msg = new JSONObject();
             //requestLocation();
 
-
             try {
                 msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
                 msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
@@ -247,11 +246,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .onPostExecute(this::handleOnPostWeatherDate)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
-
-
-
-
-
 
 
         } else if (id == R.id.home) {

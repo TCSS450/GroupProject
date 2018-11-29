@@ -47,7 +47,7 @@ public class WeatherFromJsonString {
     /**
      * Parse wanted fields of weather inner object.
      */
-    private void parseWeatherObject() { //todo: these are not being set !!!!
+    private void parseWeatherObject() {
         try {
             if (mWeatherJSON.has("weather")) {
                 JSONObject weather = mWeatherJSON.getJSONObject("weather");

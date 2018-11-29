@@ -1,5 +1,6 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public Boolean checkNotification = false;
     public int friendRequestCheck;
     public int friendAcceptedCheck;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +57,36 @@ public class MainActivity extends AppCompatActivity {
         Constants.dataUtilityControl.setFriendRequests(friendRequestCheck);
         Constants.dataUtilityControl.setFriendAccept(friendAcceptedCheck);
 
+        GcmKeepAlive gka = new GcmKeepAlive(this);
+        gka.broadcastIntents();
 
         startActivity(intent);
         finish();
+    }
 
+    /**
+     * Send call to wakeup firebase service on app startup.
+     */
+    private class GcmKeepAlive {
+
+        private Context mContext;
+        private Intent gTalkHeartBeatIntent;
+        private Intent mcsHeartBeatIntent;
+
+         public GcmKeepAlive(Context context) {
+            mContext = context;
+            gTalkHeartBeatIntent = new Intent(
+                    "com.google.android.intent.action.GTALK_HEARTBEAT");
+            mcsHeartBeatIntent = new Intent(
+                    "com.google.android.intent.action.MCS_HEARTBEAT");
+        }
+
+        public void broadcastIntents() {
+            Log.d("GCM KEEP ALIVE","sending heart beat to keep gcm alive");
+            mContext.sendBroadcast(gTalkHeartBeatIntent);
+            mContext.sendBroadcast(mcsHeartBeatIntent);
+        }
 
     }
+
 }

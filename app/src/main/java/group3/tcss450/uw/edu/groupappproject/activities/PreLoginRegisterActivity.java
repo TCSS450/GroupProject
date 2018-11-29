@@ -32,7 +32,7 @@ public class PreLoginRegisterActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_login_register);
         this.duc = Constants.dataUtilityControl;
-        this.loadFragment(this.duc.getLoginFragment());
+        this.loadFragment(new LoginFragment());
     }
 
 

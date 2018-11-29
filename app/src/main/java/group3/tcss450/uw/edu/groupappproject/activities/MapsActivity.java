@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -62,7 +63,13 @@ public class MapsActivity extends FragmentActivity implements
 
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
-                .title("New Marker"));
+                .title("New Weather Location"));
+
+        LatLng lat_long = marker.getPosition();
+        Location loc = mCurrentLocation;
+        loc.setLongitude(marker.getPosition().longitude);
+        loc.setLatitude(marker.getPosition().latitude);
+        Constants.MY_CURRENT_LOCATION = loc;
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18.0f));
     }

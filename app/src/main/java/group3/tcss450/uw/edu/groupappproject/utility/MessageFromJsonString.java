@@ -34,12 +34,30 @@ public class MessageFromJsonString {
             mLastName = mJsonMessage.getString("lastname");
             mEmail = mJsonMessage.getString("email");
             mMessage = mJsonMessage.getString("message");
-            mTimeStamp = mJsonMessage.getString("timestamp");
+            mTimeStamp = formatDateTime(mJsonMessage.getString("timestamp"));
             mDisplayType = mJsonMessage.getString("display_type");
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("Message from json", "failed parsing object fields");
         }
+    }
+
+    /**
+     * Convert string type
+     * @param dateTime the original string in 2018-11-19 15:39:21.257496 format
+     * @return formatted string in 2018-11-19 15:39
+     */
+    private static String formatDateTime(String dateTime) {
+        String result = "";
+        int dateIndex = dateTime.indexOf(' ');
+        String date = dateTime.substring(0, dateIndex);
+        result += date;
+
+        int periodIndex = dateTime.indexOf('.');
+        String time = dateTime.substring(dateIndex, periodIndex-3);
+        result += time;
+
+        return result;
     }
 
 
