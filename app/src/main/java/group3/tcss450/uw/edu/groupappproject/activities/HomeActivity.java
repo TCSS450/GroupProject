@@ -85,6 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ChatFragment.OnChatFragmentListener,
         ChangeDisplayName.OnFragmentInteractionListener
 {
+
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
