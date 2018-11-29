@@ -13,17 +13,13 @@ public class Constants {
 
     //Add constants used across CODE here, NOT application
 
-
-
     //CONSTANTS
     public static final String PASSWORD_CHANGE_END_POINT_URL = "https://group3-backend.herokuapp.com/password-change";
     public static final String PASSWORD_FORGOT_END_POINT_URL = "https://group3-backend.herokuapp.com/password-forgot";
-    public static final String LOGIN_END_POINT_URL = "https://group3-backend.herokuapp.com/login";
     public static final String REGISTER_END_POINT_URL = "https://group3-backend.herokuapp.com/register";
     public static final String VERIFY_END_POINT_URL = "https://group3-backend.herokuapp.com/verify";
     public static final String RESEND_END_POINT_URL = "https://group3-backend.herokuapp.com/resend";
     public static final String LOGIN_END_POINT_FIREBASE_URL = "https://group3-backend.herokuapp.com/login/with_token";
-    public static final String BASE_END_POINT_URL = "group3-backend.herokuapp.com";
     public static final String ADD_FRIEND_URL = "https://group3-backend.herokuapp.com/send-friend-request";
     public static final String RECEIVED_REQUESTS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-request-sent-to-me";
     public static final String SENT_REQUESTS_END_POINT_URL = "https://group3-backend.herokuapp.com/view-request-I-sent";
@@ -35,6 +31,8 @@ public class Constants {
     public static final String GET_PROFILES_URL = "https://group3-backend.herokuapp.com/get-profiles-by-id";
     public static final String CREATE_CHAT_URL = "https://group3-backend.herokuapp.com/create-chat";
     public static final String DELETE_FRIEND_URL ="https://group3-backend.herokuapp.com/delete-friend";
+    public static final String WEATHER_END_POINT ="https://group3-backend.herokuapp.com/weather";
+    public static final String GET_ALL_CHATS_END_POINT_URL = "https://group3-backend.herokuapp.com/get-current-chats";
     public static final String WEATHER_DATE_URL = "https://group3-backend.herokuapp.com/weather";
     public static final String WEATHER_HOUR_URL = "https://group3-backend.herokuapp.com/weather/24hour";
 
@@ -46,6 +44,8 @@ public class Constants {
     public static ArrayList<Credentials> sentRequests = null;
     public static ArrayList<Credentials> temporaryCreds = new ArrayList<>();
     public static ArrayList<Credentials> myFriends = null;
+    public static ArrayList<Integer> myChatIds = null;
+    public static ArrayList<Credentials[]> myChatMembers= null;
     public static ArrayList<CheckBox> chatCheckBoxes = null;
     public static Location MY_CURRENT_LOCATION = null;
     public static ArrayList<Weather> weatherSearch = null;

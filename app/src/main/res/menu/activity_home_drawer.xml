@@ -16,9 +16,9 @@
             android:title="@string/home_drawer_add_user" />
 
         <item
-            android:id="@+id/createChat"
+            android:id="@+id/viewChats"
             android:icon="@drawable/groupchat"
-            android:title="@string/home_drawer_create_chat" />
+            android:title="@string/home_drawer_view_chats" />
 
         <item
             android:id="@+id/connections"
