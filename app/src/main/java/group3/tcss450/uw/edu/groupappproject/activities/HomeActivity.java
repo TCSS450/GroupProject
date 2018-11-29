@@ -284,7 +284,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     String wind = weather.getString("wind_spd");
                     String humidity = weather.getString("rh");
                     String pressure = weather.getString("pres");
-
+                    humidity = humidity + "%";
+                    temp = temp + "°F";
+                    wind = wind + "m/s";
 
                     JSONObject innerWeather = weather.getJSONObject("weather");
 
