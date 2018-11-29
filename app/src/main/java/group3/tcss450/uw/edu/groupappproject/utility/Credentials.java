@@ -174,6 +174,8 @@ public class Credentials implements Serializable {
 
     public void setNickname(String nn) { mNickName = nn; }
 
+    public void setDisplayPref(int pref) { mDisplayPref = pref; }
+
 
     /**
      * Get all of the fields in a single JSON object. Note, if no values were provided for the

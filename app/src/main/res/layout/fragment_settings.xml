@@ -26,28 +26,28 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:padding="@dimen/sixteen_gutter_margin"
+        android:layout_marginTop="32dp"
         android:background="@color/primary_dark_button"
+        android:padding="@dimen/sixteen_gutter_margin"
         android:text="@string/change_nickname_button"
         android:textColor="@color/primary_light_accent_text"
-        app:layout_constraintBottom_toTopOf="@+id/settingsFrag_changePassword_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingFrag_greeting_text" />
 
     <Button
         android:id="@+id/settingsFrag_changePassword_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:background="@color/primary_dark_button"
-        android:text="@string/change_password_button"
         android:padding="@dimen/sixteen_gutter_margin"
+        android:text="@string/change_password_button"
         android:textColor="@color/primary_light_accent_text"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/settingsFrag_changeNickname_button" />
 
     <Button
         android:id="@+id/settingsFrag_changeTheme_button"
@@ -62,4 +62,18 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsFrag_changePassword_button" />
+
+    <Button
+        android:id="@+id/settingsFrag_changeDisplayType"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/primary_dark_button"
+        android:padding="@dimen/sixteen_gutter_margin"
+        android:text="@string/change_display_name"
+        android:textColor="@color/primary_light_accent_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsFrag_changeTheme_button" />
 </android.support.constraint.ConstraintLayout>

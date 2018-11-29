@@ -77,11 +77,17 @@ public class SettingsFragment extends Fragment {
         b = view.findViewById(R.id.settingsFrag_changeTheme_button);
         b.setOnClickListener(this::changeTheme);
 
+        b= view.findViewById(R.id.settingsFrag_changeDisplayType);
+        b.setOnClickListener(this::changeDisplayName);
         return view;
     }
 
     private void changeTheme(View view) {
 
+    }
+
+    private void changeDisplayName(View view) {
+        loadFragment(new ChangeDisplayName());
     }
 
     private void changePassword(View view) {

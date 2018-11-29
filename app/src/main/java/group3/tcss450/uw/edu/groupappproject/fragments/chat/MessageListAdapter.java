@@ -94,7 +94,7 @@ public class MessageListAdapter extends RecyclerView.Adapter implements Serializ
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(message.getTimeStamp());
+            timeText.setText(message.getTimeStamp().substring(0, 16));
         }
     }
 
@@ -113,8 +113,7 @@ public class MessageListAdapter extends RecyclerView.Adapter implements Serializ
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(message.getTimeStamp());
-
+            timeText.setText(message.getTimeStamp().substring(0, 16));
             nameText.setText(message.getNickname());
 
         }

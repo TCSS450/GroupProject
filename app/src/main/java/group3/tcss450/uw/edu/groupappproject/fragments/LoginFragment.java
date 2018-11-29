@@ -161,6 +161,7 @@ public class LoginFragment extends Fragment {
                         // Get new Instance ID token
                         mFirebaseToken = task.getResult().getToken();
                         Log.d("FCM: ", mFirebaseToken);
+                        mListener.onWaitFragmentInteractionHide();
                         //the helper method that initiates login service
                         attemptLogin(email, password);
                     });
@@ -231,7 +232,7 @@ public class LoginFragment extends Fragment {
                         .onCancelled(this::handleErrorsInTask)
                         .build().execute();
             } else {
-                //mListener.onWaitFragmentInteractionHide();
+                mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.nicknameInput))
                         .setError("Login Unsuccessful");
             }
