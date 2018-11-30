@@ -59,6 +59,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.ViewFriends.ViewFriends_M
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.MainWeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.Weather;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherContainer;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetailListFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetails;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherFragment;
@@ -304,7 +305,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 }
                 Constants.weatherSearch = weatherArrayList;
-                loadFragment(new MainWeatherFragment());
+                loadFragment(new WeatherContainer());
+
+//                loadFragment(new MainWeatherFragment());
 
             }  else {
                 this.duc.makeToast(getApplicationContext(), "END_POINT_ERROR");
@@ -486,6 +489,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onWeatherListFragmentInteraction(Weather weather) {
+
         JSONObject msg = new JSONObject();
 
         try {

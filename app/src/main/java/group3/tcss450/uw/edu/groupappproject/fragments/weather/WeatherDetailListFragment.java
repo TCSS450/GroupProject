@@ -36,6 +36,7 @@ public class WeatherDetailListFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
     }
@@ -45,15 +46,21 @@ public class WeatherDetailListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weatherdetaillist_list, container, false);
 
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+                LinearLayoutManager layoutManager
+                        = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(layoutManager);
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
             recyclerView.setAdapter(new MyWeatherDetailListRecyclerViewAdapter(Constants.weatherDetails));
         }
         return view;

@@ -57,18 +57,18 @@ public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeather
 
 
 
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onWeatherListFragmentInteraction(holder.mItem);
-//                    System.out.println("DATEEEEE "+ holder.mItem.date);
-                }
-            }
-        });
+//
+//        holder.mView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (null != mListener) {
+//                    // Notify the active callbacks interface (the activity, if the
+//                    // fragment is attached to one) that an item has been selected.
+//                    mListener.onWeatherListFragmentInteraction(holder.mItem);
+////                    System.out.println("DATEEEEE "+ holder.mItem.date);
+//                }
+//            }
+//        });
     }
 
     @Override

@@ -27,6 +27,9 @@ public class MyWeatherDetailListRecyclerViewAdapter extends RecyclerView.Adapter
         mValues = items;
         duc = Constants.dataUtilityControl;
 
+
+
+
     }
 
     @Override
@@ -41,8 +44,7 @@ public class MyWeatherDetailListRecyclerViewAdapter extends RecyclerView.Adapter
         holder.mItem = mValues.get(position);
         holder.mTemp.setText(mValues.get(position).temp);
         holder.mDes.setText(mValues.get(position).description);
-        holder.mTime.setText(mValues.get(position).time);
-
+//        holder.mTime.setText(mValues.get(position).time);
         holder.mIcon.setImageResource(duc.getWeatherDrawable(holder.mView.getContext(),mValues.get(position).icon));
 
 
@@ -71,6 +73,7 @@ public class MyWeatherDetailListRecyclerViewAdapter extends RecyclerView.Adapter
             mDes = (TextView) view.findViewById(R.id.weather_description);
 
             mIcon = view.findViewById(R.id.weather_icon);
+
         }
 
         @Override

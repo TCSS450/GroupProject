@@ -8,6 +8,10 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
+    android:orientation="horizontal"
+
+    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context=".fragments.weather.WeatherDetailListFragment"
     tools:listitem="@layout/fragment_weatherdetaillist" />
+
+
