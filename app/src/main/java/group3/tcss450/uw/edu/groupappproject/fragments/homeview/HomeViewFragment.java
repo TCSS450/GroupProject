@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChats_Main;
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
@@ -124,14 +125,21 @@ public class HomeViewFragment extends Fragment {
 
         TextView textView = view.findViewById(R.id.homeView_username_text);
         this.duc = Constants.dataUtilityControl;
-        myCredentials = duc.getUserCreds();
-        textView.setText(myCredentials.getNickName().toString());
+        Credentials creds = duc.getUserCreds();
+        if (creds.getDisplayPref() == 1 ) {
+            textView.setText(creds.getNickName());
+        } else if (creds.getDisplayPref() == 2) {
+            String fullname = creds.getFirstName() + " " + creds.getLastName();
+            textView.setText(fullname);
+        } else {
+            textView.setText(creds.getEmail());
+        }
 
         //set a floating action button
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(this::fabButtonClicked);
-
+        insertNestedFragment(R.id.homeView_bestFriend_frame, new MyChats_Main());
         return view;
     }
 
@@ -184,21 +192,23 @@ public class HomeViewFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // only call the server to get friends on first startup
-        if (Constants.myFriends == null) {
-            Uri getFriendsURI = this.duc.getAllFriendsURI();
-            JSONObject msg = new JSONObject();
-            try {
-                msg.put("user", duc.getUserCreds().getEmail());
-            } catch (JSONException e) {
-                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
-            }
-            new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
-                    .onPostExecute(this::handleGetFriendsOnPost)
-                    .onCancelled(this::handleErrorsInTask)
-                    .build().execute();
-        } else {
-            insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
-        }
+//        if (Constants.myFriends == null) {
+//            Uri getFriendsURI = this.duc.getAllFriendsURI();
+//            JSONObject msg = new JSONObject();
+//            try {
+//                msg.put("user", duc.getUserCreds().getEmail());
+//            } catch (JSONException e) {
+//                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+//            }
+//            new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
+//                    .onPostExecute(this::handleGetFriendsOnPost)
+//                    .onCancelled(this::handleErrorsInTask)
+//                    .build().execute();
+//            insertNestedFragment(R.id.homeView_bestFriend_frame, new MyChats_Main());
+//
+//        } else {
+//            insertNestedFragment(R.id.homeView_bestFriend_frame, new MyChats_Main());
+//        }
     }
 
     private void handleErrorsInTask(String result) {

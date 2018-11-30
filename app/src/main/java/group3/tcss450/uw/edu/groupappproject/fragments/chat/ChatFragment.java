@@ -158,6 +158,7 @@ public class ChatFragment extends Fragment {
                 //its up to you to decide if you want to send the message to the output here
                 //or wait for the message to come back from the web service.
                 Log.d("Send result", result);
+                System.out.println("Message SENT");
                 mListener.onSendMessage();
             }
 

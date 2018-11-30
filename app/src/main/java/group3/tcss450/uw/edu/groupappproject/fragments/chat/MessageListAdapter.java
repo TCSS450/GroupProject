@@ -119,7 +119,15 @@ public class MessageListAdapter extends RecyclerView.Adapter implements Serializ
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(message.getTimeStamp().substring(0, 16));
-            nameText.setText(message.getNickname());
+            String pref = message.getDisplayType();
+            if (pref.equals("1")) {
+                nameText.setText(message.getNickname());
+            } else if (pref.equals("2")) {
+                String s = message.getFirstName() + " " + message.getLastName();
+                nameText.setText(s);
+            } else {
+                nameText.setText(message.getEmail());
+            }
 
         }
     }

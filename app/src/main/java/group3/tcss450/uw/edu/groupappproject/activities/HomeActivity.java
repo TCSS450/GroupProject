@@ -148,9 +148,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .addToBackStack(null);
             transaction.commit();
         } else{
+            Uri getChatsURI = duc.getCurrentChatsURI();
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("memberid", duc.getUserCreds().getMemberId());
+            } catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+            }
+            new SendPostAsyncTask.Builder(getChatsURI.toString(), msg)
+                    .onPreExecute(this::onWaitFragmentInteractionShow)
+                    .onPostExecute(this::handleGetChatsOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
             loadFragment(new HomeViewFragment());
         }
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView textView = headerView.findViewById(R.id.textView_header_user);
@@ -643,7 +654,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .onPostExecute(this::handleGetChatsOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
-
+        loadFragment(new MyChats_Main());
     }
 
     private void handleGetChatsOnPost(String result) {
@@ -661,16 +672,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     ArrayList<Integer> chatIds = new ArrayList<>();
                     ArrayList<Credentials[]> allChats = new ArrayList<>();
                     for (int i = 0; i < chatDetails.length(); i++) {
-                        System.out.println("IN FIRST LOOP");
                         JSONObject jsonChat = chatDetails.getJSONObject(i);
                         chatIds.add(jsonChat.getInt("chatid"));
-                        System.out.println("CHAT ID" + jsonChat.getInt("chatid"));
                         JSONArray jsonMembers = jsonChat.getJSONArray("memberProfiles");
                         List<Credentials> chatMembers = new ArrayList<>();
                         for (int j = 0; j < jsonMembers.length(); j++) {
-                            System.out.println("IN SECOND LOOP");
                             JSONObject member = jsonMembers.getJSONObject(j);
-                            System.out.println("member is created");
                             chatMembers.add(new Credentials.Builder(member.getString("email"), "")
                                     .addDisplayPref(member.getInt("display_type"))
                                     .addFirstName(member.getString("firstname"))
@@ -687,7 +694,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Constants.myChatIds = chatIds;
                     Constants.myChatMembers = allChats;
                     onWaitFragmentInteractionHide();
-                    loadFragment(new MyChats_Main());
                 } else {
                     onWaitFragmentInteractionHide();
                     duc.makeToast(this, getString(R.string.request_error));
@@ -700,6 +706,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Log.e("JSON_PARSE_ERROR", result
                     + System.lineSeparator()
                     + e.getMessage());
+            onWaitFragmentInteractionHide();
             duc.makeToast(this, getString(R.string.request_error));
         }
     }

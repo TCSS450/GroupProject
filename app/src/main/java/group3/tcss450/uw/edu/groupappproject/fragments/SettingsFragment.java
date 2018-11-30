@@ -23,12 +23,10 @@ import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PARAM_TAG = "credentials for user";
     private DataUtilityControl duc;
 
-    // TODO: Rename and change types of parameters
     private Credentials mCredentials;
 
     private OnFragmentInteractionListener mListener;
@@ -43,7 +41,6 @@ public class SettingsFragment extends Fragment {
      * @param credentials object to pass in
      * @return A new instance of fragment SettingsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static SettingsFragment newInstance(Credentials credentials) {
         SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
