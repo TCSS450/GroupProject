@@ -188,27 +188,26 @@ public class HomeViewFragment extends Fragment {
         mListener.onWaitFragmentInteractionHide();
     }
 
+    /**
+     * Get the friends of this user
+     */
     @Override
     public void onStart() {
         super.onStart();
         // only call the server to get friends on first startup
-//        if (Constants.myFriends == null) {
-//            Uri getFriendsURI = this.duc.getAllFriendsURI();
-//            JSONObject msg = new JSONObject();
-//            try {
-//                msg.put("user", duc.getUserCreds().getEmail());
-//            } catch (JSONException e) {
-//                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
-//            }
-//            new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
-//                    .onPostExecute(this::handleGetFriendsOnPost)
-//                    .onCancelled(this::handleErrorsInTask)
-//                    .build().execute();
-//            insertNestedFragment(R.id.homeView_bestFriend_frame, new MyChats_Main());
-//
-//        } else {
-//            insertNestedFragment(R.id.homeView_bestFriend_frame, new MyChats_Main());
-//        }
+        if (Constants.myFriends == null) {
+            Uri getFriendsURI = this.duc.getAllFriendsURI();
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("user", duc.getUserCreds().getEmail());
+            } catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+            }
+            new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
+                    .onPostExecute(this::handleGetFriendsOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
+        }
     }
 
     private void handleErrorsInTask(String result) {
@@ -241,7 +240,7 @@ public class HomeViewFragment extends Fragment {
                         }
                         Constants.myFriends = creds;
                         // insert the friends list view
-                        insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
+//                        insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
                     }
                 } else {
                     duc.makeToast(getActivity(), "Oops! An Error has occurred");

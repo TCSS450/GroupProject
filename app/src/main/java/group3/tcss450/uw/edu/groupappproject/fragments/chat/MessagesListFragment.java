@@ -128,14 +128,9 @@ public class MessagesListFragment extends Fragment
         }
     }
 
-    public void onSendMessage() {
-        Log.d("Sent message", "messages list method sending ");
-        mFirebaseMessageReciever.sendAMessage();
-    }
-
     /**
      * A BroadcastReceiver setup to listen for messages sent from
-     MyFirebaseMessagingService
+     * MyFirebaseMessagingService
      * that Android allows to run all the time.
      */
     private class FirebaseMessageReciever extends BroadcastReceiver
@@ -159,7 +154,6 @@ public class MessagesListFragment extends Fragment
                         String sender = jObj.getString("sender");
                         String msg = jObj.getString("message");
 
-//                        notifyOfNewMessage();
                         JSONObject messageGetJson = new JSONObject();
                         try {
                             messageGetJson.put("chatId", ChatFragment.mChatId);
@@ -171,7 +165,6 @@ public class MessagesListFragment extends Fragment
                                 .build().execute();
 
                         Log.d("Message return", data);
-//                        new MessageFromJsonString()
 
                         //System.out.println("THE SECOND PASS");
                         Log.i("FCM Chat Frag", sender + " " + msg);
@@ -206,24 +199,6 @@ public class MessagesListFragment extends Fragment
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-
-        private void getMessages() {
-            JSONObject messageGetJson = new JSONObject();
-            try {
-                messageGetJson.put("chatId", ChatFragment.mChatId);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            new SendPostAsyncTask.Builder(Constants.GET_ALL_MESSAGES_URL, messageGetJson)
-                    .onPostExecute(this::endOfGetMsgTask)
-                    .build().execute();
-        }
-
-        //not working yet
-        public void sendAMessage() {
-            Log.d("Sent a message", "in firebase?");
-            getMessages();
         }
     }
 }

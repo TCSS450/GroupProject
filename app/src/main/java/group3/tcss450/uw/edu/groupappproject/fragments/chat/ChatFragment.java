@@ -40,14 +40,12 @@ public class ChatFragment extends Fragment {
     private String oldMessages[];
     private String nickName;
     private DataUtilityControl duc;
-//    private FirebaseMessageReciever mFirebaseMessageReciever;
 
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
 
     int newChatId;
     protected static int mChatId;
-    private OnChatFragmentListener mListener;
 
     //private String nickName;
     public ChatFragment() {
@@ -159,7 +157,6 @@ public class ChatFragment extends Fragment {
                 //or wait for the message to come back from the web service.
                 Log.d("Send result", result);
                 System.out.println("Message SENT");
-                mListener.onSendMessage();
             }
 
         } catch (JSONException e) {
@@ -193,27 +190,4 @@ public class ChatFragment extends Fragment {
         transaction.replace(container, fragment).commit();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnChatFragmentListener) {
-            mListener = (OnChatFragmentListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnChatFragmentListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     */
-    public interface OnChatFragmentListener
-    {
-        public void onSendMessage();
-    }
 }
