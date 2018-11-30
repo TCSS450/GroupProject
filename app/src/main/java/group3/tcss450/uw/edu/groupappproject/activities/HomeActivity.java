@@ -82,7 +82,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         HomeViewFragment.OnHomeViewFragmentListener,
         WeatherFragment.OnWeatherListFragmentInteractionListener,
         MyChatsFragment.OnListFragmentInteractionListener,
-        ChatFragment.OnChatFragmentListener,
         ChangeDisplayName.OnFragmentInteractionListener
 {
 
@@ -558,19 +557,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    /**
-     * not used here but used in MessagesListFragment in inner firebase class
-     */
-    @Override
-    public void onSendMessage() {
-        //Todo: not currently working !!!!!
-        Fragment f = getSupportFragmentManager().findFragmentById(R.id.chatFragment_id);
-        if(f instanceof ChatFragment) {
-            Fragment cf = (MessagesListFragment) f.getChildFragmentManager()
-                    .findFragmentById(R.id.chatFrag_message_recycler);
-            ((MessagesListFragment) cf).onSendMessage();
-        }
-    }
 
     @Override
     public void onGoHomeFragmentInteraction() {
