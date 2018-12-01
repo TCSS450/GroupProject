@@ -46,11 +46,12 @@ public class Constants {
     public static ArrayList<Credentials> temporaryCreds = new ArrayList<>();
     public static ArrayList<Credentials> myFriends = null;
     public static ArrayList<Integer> myChatIds = null;
-    public static ArrayList<Credentials[]> myChatMembers= null;
+    public static ArrayList<Credentials[]> myChatMembers = null;
     public static ArrayList<CheckBox> chatCheckBoxes = null;
     public static Location MY_CURRENT_LOCATION = null;
     public static ArrayList<Weather> weatherSearch = null;
     public static ArrayList<WeatherDetails> weatherDetails = null;
+    public static boolean myLoadHomeFragChats = true;
 
 
 }

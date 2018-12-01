@@ -112,7 +112,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         this.duc = Constants.dataUtilityControl;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -150,6 +149,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else{
             Uri getChatsURI = duc.getCurrentChatsURI();
             JSONObject msg = new JSONObject();
+
             try {
                 msg.put("memberid", duc.getUserCreds().getMemberId());
             } catch (JSONException e) {
@@ -160,7 +160,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .onPostExecute(this::handleGetChatsOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
-            loadFragment(new HomeViewFragment());
+
         }
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -644,7 +644,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .onPostExecute(this::handleGetChatsOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
-        loadFragment(new MyChats_Main());
     }
 
     private void handleGetChatsOnPost(String result) {
@@ -657,6 +656,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 System.out.println("STATUS IN");
                 int status = root.getInt("status");
                 if (status == 1) {
+                    System.out.println("INSIDE ON POST IN ACTIVITY");
                     System.out.println("STATUS == 1");
                     JSONArray chatDetails = root.getJSONArray("chatDetails");
                     ArrayList<Integer> chatIds = new ArrayList<>();
@@ -684,6 +684,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Constants.myChatIds = chatIds;
                     Constants.myChatMembers = allChats;
                     onWaitFragmentInteractionHide();
+                    if (Constants.myLoadHomeFragChats) {
+                        loadFragment(new HomeViewFragment());
+                        Constants.myLoadHomeFragChats = false;
+                    } else
+                        loadFragment(new MyChats_Main());
                 } else {
                     onWaitFragmentInteractionHide();
                     duc.makeToast(this, getString(R.string.request_error));
