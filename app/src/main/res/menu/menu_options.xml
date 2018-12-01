@@ -15,22 +15,5 @@
         android:title="@string/logout"
         android:icon="@drawable/ic_logout"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_changeDisplay"
-        android:orderInCategory="200"
-        android:title="Display Settings"
-        app:showAsAction = "never">
-        <menu >
-            <item
-                android:id="@+id/menu_nickname"
-                android:title="Nick Name" />
-            <item
-                android:id="@+id/menu_email"
-                android:title="Email" />
-            <item
-                android:id="@+id/menu_fullName"
-                android:title="Full Name" />
-        </menu>
-    </item>
 
 </menu>

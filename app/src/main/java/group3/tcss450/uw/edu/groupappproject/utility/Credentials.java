@@ -41,7 +41,7 @@ public class Credentials implements Serializable {
         private String mLastName = "";
         private String mNickName = "";
         private String mPhoneNumber = "";
-        private int mDisplayPref = 1;
+        private int mDisplayPref = -1;
         private int mMemberId = -1;
 
         /**
@@ -170,11 +170,18 @@ public class Credentials implements Serializable {
 
     public int getMemberId() { return mMemberId; }
 
+    public String getFullName() { return mFirstName + " " + mLastName; }
+
     public void setMemberId(int id) { mMemberId = id; }
 
     public void setNickname(String nn) { mNickName = nn; }
 
     public void setDisplayPref(int pref) { mDisplayPref = pref; }
+
+    public void setFullName(String first, String last) {
+        mFirstName = first;
+        mLastName = last;
+    }
 
 
     /**

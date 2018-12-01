@@ -34,6 +34,11 @@
             android:id="@+id/weather"
             android:icon="@drawable/weather"
             android:title="@string/home_drawer_weather" />
+
+        <item
+            android:id="@+id/referral"
+            android:icon="@android:drawable/ic_dialog_email"
+            android:title="@string/home_drawer_referFriend" />
     </group>
 
 </menu>

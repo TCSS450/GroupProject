@@ -78,6 +78,7 @@
     <string name="home_drawer_connections">My Friends</string>
     <string name="home_drawer_requests">Friend Requests</string>
     <string name="home_drawer_weather">Weather</string>
+    <string name="home_drawer_referFriend">Refer-a-Friend</string>
 
     <!--action bar-->
     <string name="logout">Logout</string>

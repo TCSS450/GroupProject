@@ -68,6 +68,7 @@ public class ChangeDisplayName extends Fragment {
     public void onApply(View view) {
         Uri changeDisplayPrefUri = duc.getChangeDisplayTypeURI();
         JSONObject msg = new JSONObject();
+        System.out.println("MY DISPLAY TYPE = " + duc.getUserCreds().getDisplayPref());
         try {
             msg.put("memberid", duc.getUserCreds().getMemberId());
             if (mNickNameButton.isChecked()) {
@@ -105,8 +106,7 @@ public class ChangeDisplayName extends Fragment {
             int status = resultsJSON.getInt("status");
             if (status == 1) {
                 duc.getUserCreds().setDisplayPref(mDisplayPref);
-                System.out.println(mDisplayPref);
-                System.out.println(duc.getUserCreds().getDisplayPref());
+                System.out.println("MY NEW DISPLAY TYPE = " + duc.getUserCreds().getDisplayPref());
                 mListener.onWaitFragmentInteractionHide();
                 mListener.onGoHomeFragmentInteraction();
             } else {

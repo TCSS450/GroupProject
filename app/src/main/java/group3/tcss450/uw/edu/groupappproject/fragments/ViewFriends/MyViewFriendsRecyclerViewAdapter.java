@@ -65,8 +65,7 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
         holder.mCreds = mValues.get(position);
         String s = holder.mNickname.getText().toString() + ": " + mValues.get(position).getNickName();
         holder.mNickname.setText(s);
-        s = holder.mFullName.getText().toString() + ": " + mValues.get(position).getFirstName()
-                                                   + " " + mValues.get(position).getLastName();
+        s = holder.mFullName.getText().toString() + ": " + mValues.get(position).getFullName();
         holder.mFullName.setText(s);
         holder.mPhoneNumber.setText(mValues.get(position).getPhoneNumber());
         holder.mEmail.setText(mValues.get(position).getEmail());
@@ -107,15 +106,15 @@ public class MyViewFriendsRecyclerViewAdapter extends RecyclerView.Adapter<MyVie
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mNickname;
-        public final TextView mFullName;
-        public final TextView mPhoneNumber;
-        public final TextView mEmail;
-        public final CheckBox mCheckBox;
-        public final TextView mDeleteStatus;
-        public final ImageButton mImageButton;
-        public Credentials mCreds;
+        private final View mView;
+        private final TextView mNickname;
+        private final TextView mFullName;
+        private final TextView mPhoneNumber;
+        private final TextView mEmail;
+        private final CheckBox mCheckBox;
+        private  final TextView mDeleteStatus;
+        private final ImageButton mImageButton;
+        private Credentials mCreds;
 
         public ViewHolder(View view) {
             super(view);

@@ -123,13 +123,10 @@ public class LoginFragment extends Fragment {
             JSONObject msg = loginCreds.asJSONObject();
             try {
                 msg.put("token", mFirebaseToken);
-                System.out.print("TESTTESTETSTEST" + mFirebaseToken);
             } catch (JSONException e) {
                 e.printStackTrace();
 
             }
-            System.out.print("TESTTESTETSTEST" + loginUri.toString());
-
 
             new SendPostAsyncTask.Builder(loginUri.toString(), msg)
                     .onPreExecute(this::handleLoginOnPre)
@@ -187,22 +184,14 @@ public class LoginFragment extends Fragment {
         try {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
-
-            System.out.println(resultsJSON);
-
-
-            System.out.println("NICKNAME FROM USER "+ resultsJSON.getString("nickname"));
-
-
             int status = resultsJSON.getInt("status");
-            System.out.println("THE STATUS IS " + status);
             if (status == 1) { // success
-                String nn = resultsJSON.getString("nickname");
-
-                loginCreds.setNickname(nn);
-
-                int id = resultsJSON.getInt("memberId");
-                loginCreds.setMemberId(id);
+                JSONObject profile = resultsJSON.getJSONObject("memberProfile");
+                loginCreds.setDisplayPref(profile.getInt("display_type"));
+                loginCreds.setNickname(profile.getString("nickname"));
+                loginCreds.setMemberId(profile.getInt("memberid"));
+                loginCreds.setFullName(profile.getString("firstname"), profile.getString("lastname"));
+                duc.saveCreds(loginCreds);
                 saveCredentials(loginCreds);
                 mListener.onWaitFragmentInteractionHide();
                 mListener.OnLogin(this.loginCreds);

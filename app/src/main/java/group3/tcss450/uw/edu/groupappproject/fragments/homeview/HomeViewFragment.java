@@ -129,8 +129,7 @@ public class HomeViewFragment extends Fragment {
         if (creds.getDisplayPref() == 1 ) {
             textView.setText(creds.getNickName());
         } else if (creds.getDisplayPref() == 2) {
-            String fullname = creds.getFirstName() + " " + creds.getLastName();
-            textView.setText(fullname);
+            textView.setText(duc.getUserCreds().getFullName());
         } else {
             textView.setText(creds.getEmail());
         }

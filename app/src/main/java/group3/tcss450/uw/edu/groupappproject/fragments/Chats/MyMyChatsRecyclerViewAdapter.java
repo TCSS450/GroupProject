@@ -50,8 +50,7 @@ public class MyMyChatsRecyclerViewAdapter extends RecyclerView.Adapter<MyMyChats
             if (mChatMembers.get(position)[0].getDisplayPref() == 1) {
                 chatTitle.append(mChatMembers.get(position)[0].getNickName());
             } else if (mChatMembers.get(position)[0].getDisplayPref() == 2) {
-                chatTitle.append(mChatMembers.get(position)[0].getFirstName()
-                        + " " + mChatMembers.get(position)[0].getLastName());
+                chatTitle.append(mChatMembers.get(position)[0].getFullName());
             } else {
                 chatTitle.append(mChatMembers.get(position)[0].getEmail());
             }
@@ -62,8 +61,7 @@ public class MyMyChatsRecyclerViewAdapter extends RecyclerView.Adapter<MyMyChats
                         if (mChatMembers.get(position)[i].getDisplayPref() == 1) {
                             chatTitle.append(", " + mChatMembers.get(position)[i].getNickName());
                         } else if (mChatMembers.get(position)[i].getDisplayPref() == 2) {
-                            chatTitle.append(", " + mChatMembers.get(position)[i].getFirstName()
-                                            + " " + mChatMembers.get(position)[i].getLastName());
+                            chatTitle.append(", " + mChatMembers.get(position)[i].getFullName());
                         } else {
                             chatTitle.append(", " + mChatMembers.get(position)[i].getEmail());
                         }
@@ -75,8 +73,7 @@ public class MyMyChatsRecyclerViewAdapter extends RecyclerView.Adapter<MyMyChats
                 if (mChatMembers.get(position)[1].getDisplayPref() == 1) {
                     chatTitle.append(mChatMembers.get(position)[1].getNickName());
                 } else if (mChatMembers.get(position)[1].getDisplayPref() == 2) {
-                    chatTitle.append(mChatMembers.get(position)[1].getFirstName()
-                            + " " + mChatMembers.get(position)[1].getLastName());
+                    chatTitle.append(mChatMembers.get(position)[1].getFullName());
                 } else {
                     chatTitle.append(mChatMembers.get(position)[1].getEmail());
                 }
@@ -84,8 +81,7 @@ public class MyMyChatsRecyclerViewAdapter extends RecyclerView.Adapter<MyMyChats
                     if (mChatMembers.get(position)[i].getDisplayPref() == 1) {
                         chatTitle.append(", " + mChatMembers.get(position)[i].getNickName());
                     } else if (mChatMembers.get(position)[i].getDisplayPref() == 2) {
-                        chatTitle.append(", " + mChatMembers.get(position)[i].getFirstName()
-                                + " " + mChatMembers.get(position)[i].getLastName());
+                        chatTitle.append(", " + mChatMembers.get(position)[i].getFullName());
                     } else {
                         chatTitle.append(", " + mChatMembers.get(position)[i].getEmail());
                     }

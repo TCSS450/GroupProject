@@ -110,16 +110,46 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.duc = Constants.dataUtilityControl;
+        System.out.println(duc.getUserCreds().getDisplayPref());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView textView = headerView.findViewById(R.id.textView_header_user);
+        String s;
+        if (duc.getUserCreds().getDisplayPref() == 1) {
+            s = duc.getUserCreds().getNickName() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        } else if (duc.getUserCreds().getDisplayPref() == 2) {
+            s = duc.getUserCreds().getFullName() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        } else {
+            s = duc.getUserCreds().getEmail() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        }
+        navigationView.setNavigationItemSelectedListener(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
+                            , Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_LOCATIONS);
+        } else {
+            //The user has already allowed the use of Locations. Get the current location.
+            requestLocation();
+        }
         if (duc.getBooleanId()) {
             ChatFragment frag = new ChatFragment();
             Bundle args = new Bundle();
@@ -160,37 +190,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .onPostExecute(this::handleGetChatsOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
-
-        }
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        TextView textView = headerView.findViewById(R.id.textView_header_user);
-        String s;
-        if (duc.getUserCreds().getDisplayPref() == 1) {
-            s = duc.getUserCreds().getNickName() + " " + getString(R.string.nav_header_subtitle);
-            textView.setText(s);
-        } else if (duc.getUserCreds().getDisplayPref() == 2) {
-            s = duc.getUserCreds().getFirstName() + " " + duc.getUserCreds().getLastName() + " " + getString(R.string.nav_header_subtitle);
-            textView.setText(s);
-        } else {
-            s = duc.getUserCreds().getEmail() + " " + getString(R.string.nav_header_subtitle);
-            textView.setText(s);
-        }
-        navigationView.setNavigationItemSelectedListener(this);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
-                            , Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_LOCATIONS);
-        } else {
-            //The user has already allowed the use of Locations. Get the current location.
-            requestLocation();
         }
     }
 
@@ -238,10 +237,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.requests) {
             loadFragment(new FriendRequests());
         } else if (id == R.id.weather) {
-
             JSONObject msg = new JSONObject();
             //requestLocation();
-
             try {
                 msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
                 msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
@@ -255,10 +252,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
 
-
         } else if (id == R.id.home) {
-
             loadFragment(new HomeViewFragment());
+        } else if (id == R.id.referral) {
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -422,7 +419,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (creds[0].getDisplayPref() == 1) {
                 sb.append(creds[0].getNickName());
             } else if (creds[0].getDisplayPref() == 2) {
-                sb.append(creds[0].getFirstName() + " " + creds[0].getLastName());
+                sb.append(creds[0].getFullName());
             } else {
                 sb.append(creds[0].getEmail());
             }
@@ -432,7 +429,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     if (creds[i].getDisplayPref() == 1) {
                         sb.append(", " + creds[i].getNickName());
                     } else if (creds[i].getDisplayPref() == 2) {
-                        sb.append(", " + creds[i].getFirstName() + " " + creds[i].getLastName());
+                        sb.append(", " + creds[i].getFullName());
                     } else {
                         sb.append(", " + creds[i].getEmail());
                     }
@@ -444,7 +441,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 if (creds[1].getDisplayPref() == 1) {
                     sb.append(creds[1].getNickName());
                 } else if (creds[1].getDisplayPref() == 2) {
-                    sb.append(creds[1].getFirstName() + " " + creds[1].getLastName());
+                    sb.append(creds[1].getFullName());
                 } else {
                     sb.append(creds[1].getEmail());
                 }
@@ -455,7 +452,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     if (creds[i].getDisplayPref() == 1) {
                         sb.append(", " + creds[i].getNickName());
                     } else if (creds[i].getDisplayPref() == 2) {
-                        sb.append(", " + creds[i].getFirstName() + " " + creds[i].getLastName());
+                        sb.append(", " + creds[i].getFullName());
                     } else {
                         sb.append(", " + creds[i].getEmail());
                     }
@@ -561,9 +558,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
     @Override
     public void onGoHomeFragmentInteraction() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView textView = headerView.findViewById(R.id.textView_header_user);
+        String s;
+        if (duc.getUserCreds().getDisplayPref() == 1) {
+            s = duc.getUserCreds().getNickName() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        } else if (duc.getUserCreds().getDisplayPref() == 2) {
+            s = duc.getUserCreds().getFullName() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        } else {
+            s = duc.getUserCreds().getEmail() + " " + getString(R.string.nav_header_subtitle);
+            textView.setText(s);
+        }
         loadFragment(new HomeViewFragment());
     }
 
@@ -737,6 +747,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void requestLocation() {
+        System.out.println("INSIDE REQUEST LOCATION");
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
