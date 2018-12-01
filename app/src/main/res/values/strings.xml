@@ -36,7 +36,7 @@
     <!--Forgot password prompts-->
     <string name="login_forgot_password_button_txt">Forgot Password</string>
     <string name="forgotpass_password_prompt_greeting">Oops</string>
-    <string name="forgotpass_password_prompt_message">Looks like someone forgot something. Enter your username or email address and we\'ll send you a new password faster than a hamster running in a wheel...</string>
+    <string name="forgotpass_password_prompt_message">Looks like someone forgot something. Enter your username or email address and we\'ll send you a new password faster than a hamster running in a wheel…</string>
     <string name="forgotpass_user_creds_hint">Enter User ID</string>
     <string name="forgotpass_enter_pin_button">I have a Pin</string>
     <string name="forgotpass_send_pin_button">Get Pin</string>
@@ -116,7 +116,7 @@
     <string name="requests_pending">Pending</string>
     <string name="request_accepted">Accepted!</string>
     <string name="request_denied">Rejected!</string>
-    <string name="request_error">Error. Try again later...</string>
+    <string name="request_error">Error. Try again later…</string>
 
     <string name="viewFriends_phone">Phone Number:</string>
     <string name="viewFriends_email">Email:</string>
@@ -130,4 +130,12 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="title_myChats">My Chats</string>
+    <string name="subtitle_refer_friend">Want to talk to a friend who doesn\'t have ChitChat? No problem! Enter their email
+    here and we will send them an invitation. Every referral you send that creates an account gets you one free month of ChitChat! We\'re
+    joking of course. ChitChat is always free!</string>
+    <string name="referFriend_friendsemail">Your Friend\'s Email</string>
+    <string name="referFriend_sendInvite">Send Invitation!</string>
+    <string name="referFriend_inviteSent">Invitation Sent!</string>
+    <string name="referFriend_friend_active">The user with this email already has an account, let\'s send them a friend request instead!</string>
+    <string name="referFriend_friend_inactive">The user with this email already exists, but is not verified. We\'ve sent them a reminder!</string>
 </resources>

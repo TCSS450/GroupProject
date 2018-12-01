@@ -38,13 +38,16 @@ public class AddUserFragment extends Fragment {
     private EditText searchView;
     private int entered = 0;
     private int entered2 = 0;
+    private String theEmail = "";
 
     public AddUserFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) { }
+        if (getArguments() != null) {
+            theEmail = getArguments().getString("email");
+        }
     }
 
     @Override
@@ -56,9 +59,13 @@ public class AddUserFragment extends Fragment {
         email = v.findViewById(R.id.emailbtn);
         fullname = v.findViewById(R.id.fullnamebtn);
         searchView = v.findViewById(R.id.searchView);
+        nickname.toggle();
+        if (theEmail.length() != 0) {
+            searchView.setText(theEmail);
+            email.setChecked(true);
+        }
         Button b = v.findViewById(R.id.searchbtn);
         b.setOnClickListener(view -> attemptSearch(searchView.getText().toString()));
-        nickname.toggle();
         return v;
     }
 

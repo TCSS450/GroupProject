@@ -3,7 +3,6 @@ package group3.tcss450.uw.edu.groupappproject.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -188,8 +187,8 @@ public class RegisterFragment extends Fragment {
             JSONObject resultsJSON = new JSONObject(result);
             int status = resultsJSON.getInt("status");
             if (status == 1) { // success, sends email and user must verify
+                duc.saveCreds(registerCreds);
                 registerCreds.setMemberId(resultsJSON.getInt("memberId"));
-                System.out.println("---------CHECKING MEMBER ID: " + registerCreds.getMemberId());
                 mListener.onWaitFragmentInteractionHide();
                 mListener.registeredUserSendToVerification(registerCreds);
             }  else if (status == 2) { // email exists without Verification
