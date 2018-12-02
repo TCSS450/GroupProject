@@ -37,6 +37,7 @@ public class Constants {
     public static final String WEATHER_HOUR_URL = "https://group3-backend.herokuapp.com/weather/24hour";
     public static final String CHANGE_DISPLAY_TYPE_URL = "https://group3-backend.herokuapp.com/update-display-type";
     public static final String GET_ALL_MESSAGES_URL = "https://group3-backend.herokuapp.com/messaging/getAll";
+    public static final String SEND_REFERRAL_URL = "https://group3-backend.herokuapp.com/send-referral";
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;

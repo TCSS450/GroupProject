@@ -43,6 +43,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangeDisplayName;
 import group3.tcss450.uw.edu.groupappproject.fragments.ChangePasswordFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChatsFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.ReferAFriendFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.chat.ChatFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.FriendsFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.Chats.MyChats_Main;
@@ -83,7 +84,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         HomeViewFragment.OnHomeViewFragmentListener,
         WeatherFragment.OnWeatherListFragmentInteractionListener,
         MyChatsFragment.OnListFragmentInteractionListener,
-        ChangeDisplayName.OnFragmentInteractionListener
+        ChangeDisplayName.OnFragmentInteractionListener,
+        ReferAFriendFragment.OnFragmentInteractionListener
 {
 
     /**
@@ -255,7 +257,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.home) {
             loadFragment(new HomeViewFragment());
         } else if (id == R.id.referral) {
-
+            loadFragment(new ReferAFriendFragment());
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -465,7 +467,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         args.putString("chatName", chatMemberCreds);
         args.putSerializable("members", creds);
         frag.setArguments(args);
-        System.out.println("first id gained is " + chatId);
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.homeActivityFrame, frag)
@@ -575,6 +576,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             textView.setText(s);
         }
         loadFragment(new HomeViewFragment());
+    }
+
+    @Override
+    public void sendToAddFriendPage(String theEmail) {
+        Bundle args = new Bundle();
+        AddUserFragment frag = new AddUserFragment();
+        args.putString("email", theEmail);
+        frag.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.homeActivityFrame, frag)
+                .addToBackStack(null);
+        transaction.commit();
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing

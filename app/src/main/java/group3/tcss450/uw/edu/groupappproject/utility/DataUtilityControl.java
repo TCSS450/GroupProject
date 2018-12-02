@@ -173,6 +173,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getChangeDisplayTypeURI() { return Uri.parse(Constants.CHANGE_DISPLAY_TYPE_URL); }
 
+    public Uri getFriendReferralURI() { return Uri.parse(Constants.SEND_REFERRAL_URL); }
+
     public int getWeatherDrawable(Context context, String iconCode) {
         return context.getResources().getIdentifier("group3.tcss450.uw.edu.groupappproject:drawable/" + iconCode, null, null);
     }
