@@ -1,5 +1,6 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -54,6 +55,10 @@ public class MapsActivity extends FragmentActivity implements
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Handle setting weather by searching for a zip code on the map.
+     * @param view the submit button clicked
+     */
     private void getLocByZip(View view) {
         final Geocoder geocoder = new Geocoder(this);
 
@@ -63,8 +68,15 @@ public class MapsActivity extends FragmentActivity implements
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 // Use the address as needed
-                String message = String.format("Latitude: %f, Longitude: %f",
-                        address.getLatitude(), address.getLongitude());
+                mCurrentLocation.setLatitude(address.getLatitude());
+                mCurrentLocation.setLongitude(address.getLongitude());
+
+                Constants.MY_CURRENT_LOCATION = mCurrentLocation;
+                String message = setCityText(mCurrentLocation);
+                mMap.moveCamera(CameraUpdateFactory
+                        .newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(),
+                                mCurrentLocation.getLongitude()), 15.0f));
+
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             } else {
                 // Display appropriate message when Geocoder services are not available
@@ -73,6 +85,28 @@ public class MapsActivity extends FragmentActivity implements
         } catch (IOException e) {
             // handle exception
         }
+    }
+
+    /**
+     * Return the city of the zip entered
+     */
+    private String setCityText(Location loc) {
+        Geocoder geoCoder = new Geocoder(this);
+        List<Address> list = null;
+        String result = "Weather set to ";
+        try {
+            list = geoCoder.getFromLocation(Constants.MY_CURRENT_LOCATION
+                    .getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (list != null & list.size() > 0) {
+            Address address = list.get(0);
+            result += address.getLocality();
+        }
+        Log.d("MapsActivity setCityText zip lat/long",
+                String.format("Latitude: %f, Longitude: %f", loc.getLatitude(), loc.getLongitude()));
+        return result;
     }
 
 
@@ -97,6 +131,10 @@ public class MapsActivity extends FragmentActivity implements
         mMap.setOnMapClickListener(this);
     }
 
+    /**
+     * Set new weather location by clicking on the map
+     * @param latLng
+     */
     @Override
     public void onMapClick(LatLng latLng) {
         Log.d("LAT/LONG", latLng.toString());
@@ -111,18 +149,8 @@ public class MapsActivity extends FragmentActivity implements
         loc.setLongitude(mMarker.getPosition().longitude);
         loc.setLatitude(mMarker.getPosition().latitude);
         Constants.MY_CURRENT_LOCATION = loc;
-    }
+        Toast.makeText(this, setCityText(loc), Toast.LENGTH_LONG).show();
 
-    // start to getting info window click to add new fragment
-//    @Override
-//    public boolean onMarkerClick(Marker marker) {
-//        if (marker == mMarker) {
-//            Log.d("MapsActivity marker", "clicked on the marker" + marker.toString());
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.homeActivityFrame, new WeatherContainer())
-//                    .addToBackStack(null).commit();
-//        }
-//        return false;
-//    }
+    }
 
 }
