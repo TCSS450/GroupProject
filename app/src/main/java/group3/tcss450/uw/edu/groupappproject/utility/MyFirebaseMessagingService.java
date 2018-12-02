@@ -67,6 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //create an Intent to broadcast a message.
             Intent i = new Intent(RECEIVED_NEW_MESSAGE);
             i.putExtra("DATA", obj.toString());
+            System.out.println("YOU GOT A MESSAGE");
             sendBroadcast(i);
         }
 

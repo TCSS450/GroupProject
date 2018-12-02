@@ -169,10 +169,9 @@ public class ChatFragment extends Fragment {
 
         JSONObject messageTypeJson = new JSONObject();
         try {
-
             messageTypeJson.put("chatid", newChatId);
-            messageTypeJson.put("membername", nickname);
-            messageTypeJson.put("memberid", memberId);
+            messageTypeJson.put("membername", duc.getUserCreds().getNickName());
+            messageTypeJson.put("memberid", duc.getUserCreds().getMemberId());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -184,15 +183,11 @@ public class ChatFragment extends Fragment {
     }
 
     private void endOfTypingMsgTask(final String result) {
-        try {
 
+        try {
             JSONObject typeJson = new JSONObject(result);
             String typingStatus = typeJson.getString("status");
             System.out.println("The typing status FIRST is: " + typingStatus);
-
-            //mType.setText(nickname);
-            //System.out.println("The typing status SECOND is: " + typingStatus);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -295,8 +290,8 @@ public class ChatFragment extends Fragment {
 
 //            Log.i("FCM Chat Frag", "start onRecieve");
             System.out.println("inside onRecieve!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            if (intent.hasExtra("type")) {
-                String data = intent.getStringExtra("type");
+            if (intent.hasExtra("DATA")) {
+                String data = intent.getStringExtra("DATA");
                 JSONObject jObj = null;
                 System.out.println("Inside Data");
 //                Log.d("Message data", data);
