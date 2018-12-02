@@ -5,6 +5,6 @@
   - **Marcus**
   - **Allen**
   - **Fasil**
-  - **Josh**
+  - **Josh Atherton**
   
 ### Objective is to build a chatting application for TCSS 450 Mobile Programming Class
