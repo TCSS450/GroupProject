@@ -2,12 +2,15 @@ package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.activities.PreLoginRegisterActivity;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -33,12 +37,16 @@ public class ChatFragment extends Fragment {
     private static final String TAG = "CHAT_FRAG";
     //private static final String CHAT_ID = "7";
     private EditText mMessageInputEditText;
+    //private TextView mType;
     private String mEmail;
     private String mSendUrl;
     private Credentials[] mMembers;
     private String mGetUrl;
+    private String mTypingUrl;
+    private String mTheOneTyping;
     private String oldMessages[];
-    private String nickName;
+    private int memberId;
+    private  String nickname;
     private DataUtilityControl duc;
 
     private RecyclerView mMessageRecycler;
@@ -72,11 +80,33 @@ public class ChatFragment extends Fragment {
             chatName = chatName.substring(0, 30) + "...";
         }
         TextView chatNameTextView = rootLayout.findViewById(R.id.textView_chat_chatName);
+        TextView mType =  rootLayout.findViewById(R.id.is_typing_name);
         chatNameTextView.setText(chatName);
         mMembers = (Credentials[]) bundle.getSerializable("members");
+        memberId = duc.getUserCreds().getMemberId();
+        nickname = duc.getUserCreds().getNickName();
         //String newNotifyId = getInt
         System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
         //String prefName[] = new String[3];
+
+        mMessageInputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //System.out.println("STEP 0 DONE");
+
+                checkTyping(mType);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         //System.out.println("The new chat id is " + newChatId);
 
@@ -99,7 +129,6 @@ public class ChatFragment extends Fragment {
                 .onPostExecute(this::endOfGetMsgTask)
                 .onCancelled(error -> Log.e(TAG, error))
                 .build().execute();
-
 
         rootLayout.findViewById(R.id.button_chat_send).setOnClickListener(this::handleSendClick);
         return rootLayout;
@@ -127,6 +156,49 @@ public class ChatFragment extends Fragment {
                 .toString();
     }
 
+    private void checkTyping(TextView text){
+        //System.out.println("STEP 1 DONE");
+        mTypingUrl = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_messaging_base))
+                .appendPath(getString(R.string.ep_is_typing))
+                .build()
+                .toString();
+
+        JSONObject messageTypeJson = new JSONObject();
+        try {
+
+            messageTypeJson.put("chatid", newChatId);
+            messageTypeJson.put("membername", nickname );
+            messageTypeJson.put("memberid", memberId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        new SendPostAsyncTask.Builder(mTypingUrl, messageTypeJson)
+                .onPostExecute(this::endOfTypingMsgTask)
+                .onCancelled(error -> Log.e(TAG, error))
+                .build().execute();
+        mTheOneTyping = duc.getmUserTyping();
+        System.out.println("THE ONE TYPING IS ACTUALLY: " + mTheOneTyping);
+        text.setText("YES YES YES");
+
+    }
+
+    private void endOfTypingMsgTask(final String result) {
+        try {
+
+            JSONObject typeJson = new JSONObject(result);
+            String typingStatus = typeJson.getString("status");
+            System.out.println("The typing status FIRST is: " + typingStatus);
+
+            //mType.setText(nickname);
+            //System.out.println("The typing status SECOND is: " + typingStatus);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     private void handleSendClick(final View theButton) {
 
         String msg = mMessageInputEditText.getText().toString();
@@ -145,6 +217,8 @@ public class ChatFragment extends Fragment {
                 .build().execute();
 
     }
+
+
     //Clear input after message sent
     private void endOfSendMsgTask(final String result) {
         try {
@@ -153,6 +227,7 @@ public class ChatFragment extends Fragment {
             if(res.has("success") && res.getBoolean("success")) {
                 //The web service got our message. Time to clear out the input EditText
                 mMessageInputEditText.setText("");
+                
                 //its up to you to decide if you want to send the message to the output here
                 //or wait for the message to come back from the web service.
                 Log.d("Send result", result);

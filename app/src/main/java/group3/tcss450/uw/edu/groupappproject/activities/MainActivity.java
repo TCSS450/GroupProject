@@ -16,8 +16,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public String checkNotify = "";
+    public String checkTyper = "";
     public int notificationID = 0;
     public Boolean checkNotification = false;
+    public int userTypingCheck;
     public int friendRequestCheck;
     public int friendAcceptedCheck;
     public String mOtherMembers;
@@ -49,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
                 if (getIntent().getExtras().getString("type").equals("accepted")){
                     friendAcceptedCheck = 33;
                     Constants.dataUtilityControl.setFriendAccept(friendAcceptedCheck);
+                }
+                if (getIntent().getExtras().getString("type").equals("typing")){
+                    //userTypingCheck = 33;
+                    checkTyper = getIntent().getExtras().getString("members");
+                    System.out.println("THE ONE TYPING IS: " + checkTyper);
+                    Constants.dataUtilityControl.setmUserTyping(checkTyper);
+
                 }
 
                 Log.d(TAG, "type of message: " + getIntent().getExtras().getString("type"));

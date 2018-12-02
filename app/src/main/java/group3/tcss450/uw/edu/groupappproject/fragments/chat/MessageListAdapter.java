@@ -96,6 +96,7 @@ public class MessageListAdapter extends RecyclerView.Adapter implements Serializ
         }
 
         void bind(MessageFromJsonString message) {
+            System.out.println("The message sent is: " + message.getMessage());
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
@@ -107,7 +108,9 @@ public class MessageListAdapter extends RecyclerView.Adapter implements Serializ
         TextView messageText, timeText, nameText;
 
         ReceivedMessageHolder(View itemView) {
+
             super(itemView);
+
 
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
@@ -115,6 +118,7 @@ public class MessageListAdapter extends RecyclerView.Adapter implements Serializ
         }
 
         void bind(MessageFromJsonString message) {
+
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.

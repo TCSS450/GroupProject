@@ -49,6 +49,7 @@ public class DataUtilityControl extends AppCompatActivity {
     private int tempId;
     private int mFriendRequest;
     private int mFriendAccept;
+    private String mUserTyping;
     private String mOtherMembersChatNotification;
 
 
@@ -72,6 +73,7 @@ public class DataUtilityControl extends AppCompatActivity {
         this.mFriendRequest = 0;
         this.mFriendAccept =0;
         this.mOtherMembersChatNotification = "";
+        this.mUserTyping = "";
         this.mStartChatWithNotification = false;
         this.friendRequests = new FriendRequests();
     }
@@ -105,11 +107,14 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public int getChAtId() { return this.tempId;}
 
+
     public int getFriendRequest() { return this.mFriendRequest;}
 
     public int getFriendAccept() { return this.mFriendAccept;}
 
     public String getmOtherMembersChatNotification() { return mOtherMembersChatNotification; }
+
+    public String getmUserTyping(){ return mUserTyping; }
 
     public ArrayList<Credentials> getCredFromFriendStatusList(ArrayList<FriendStatus> friendStatuses) {
         ArrayList<Credentials> toSend = new ArrayList<Credentials>();
@@ -184,6 +189,8 @@ public class DataUtilityControl extends AppCompatActivity {
     }
 
     public void setmOtherMembersChatNotification(String otherMembers) { mOtherMembersChatNotification = otherMembers; }
+
+    public void setmUserTyping(String type) {mUserTyping = type; }
 
     public void saveCreds(Credentials userCredentials){this.userCreds = userCredentials;}
 
