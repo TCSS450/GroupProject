@@ -70,6 +70,7 @@
     <string name="ep_get_all">getAll</string>
     <string name="ep_chat_all">create-chat</string>
     <string name="ep_is_typing">is-typing</string>
+    <string name="ep_done_typing">done-typing</string>
 
     <!--Activity menu_options drawer nav labels-->
     <string name="home_drawer_home">Home</string>

@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
@@ -55,6 +57,7 @@ public class ChatFragment extends Fragment {
 
     int newChatId;
     protected static int mChatId;
+    private ArrayList<String> mPeopleTalking;
 
     //private String nickName;
     public ChatFragment() {
@@ -73,6 +76,7 @@ public class ChatFragment extends Fragment {
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
+        mPeopleTalking = new ArrayList<>();
         Bundle bundle = this.getArguments();
         newChatId = bundle.getInt("chatId");
         mChatId = newChatId;
@@ -100,12 +104,16 @@ public class ChatFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //System.out.println("STEP 0 DONE");
 
-                checkTyping(mWhoseTypingTextView);
+//                startTyping();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if (mMessageInputEditText.getText().length() > 0) {
+                    startTyping();
+                } else {
+                    stopTyping();
+                }
             }
         });
 
@@ -157,13 +165,38 @@ public class ChatFragment extends Fragment {
                 .toString();
     }
 
-    private void checkTyping(TextView text){
+    private void startTyping(){
         //System.out.println("STEP 1 DONE");
         String mTypingUrl = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_messaging_base))
                 .appendPath(getString(R.string.ep_is_typing))
+                .build()
+                .toString();
+
+        JSONObject messageTypeJson = new JSONObject();
+        try {
+            messageTypeJson.put("chatid", newChatId);
+            messageTypeJson.put("membername", duc.getUserCreds().getNickName());
+            messageTypeJson.put("memberid", duc.getUserCreds().getMemberId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        new SendPostAsyncTask.Builder(mTypingUrl, messageTypeJson)
+                .onPostExecute(this::endOfTypingMsgTask)
+                .onCancelled(error -> Log.e(TAG, error))
+                .build().execute();
+        mTheOneTyping = duc.getmUserTyping();
+    }
+
+    private void stopTyping(){
+        //System.out.println("STEP 1 DONE");
+        String mTypingUrl = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_messaging_base))
+                .appendPath(getString(R.string.ep_done_typing))
                 .build()
                 .toString();
 
@@ -281,33 +314,45 @@ public class ChatFragment extends Fragment {
      * MyFirebaseMessagingService
      * that Android allows to run all the time.
      */
-    private class FirebaseMessageReciever extends BroadcastReceiver
-
-    {
+    private class FirebaseMessageReciever extends BroadcastReceiver    {
         //String duc.DataUtilityControl
         @Override
         public void onReceive(Context context, Intent intent) {
 
 //            Log.i("FCM Chat Frag", "start onRecieve");
-            System.out.println("inside onRecieve!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             if (intent.hasExtra("DATA")) {
                 String data = intent.getStringExtra("DATA");
-                JSONObject jObj = null;
-                System.out.println("Inside Data");
-//                Log.d("Message data", data);
+                Log.d("Message data", data);
                 try {
-                    jObj = new JSONObject(data);
+                    JSONObject jObj = new JSONObject(data);
                     if (jObj.has("type")) {
-                        System.out.println("Has type? " + jObj.has("type"));
-                        System.out.println("What is type? " + jObj.getString("type"));
                         if (jObj.getString("type").equals("typing")) {
-                            String sender = jObj.getString("members");
-                            System.out.println("Members = " + sender);
-
-                            String s = sender + " is typing";
-                            mWhoseTypingTextView.setText(s);
-                            System.out.println("--------------------------------- " + s);
-//                            Log.i("FCM Chat Frag", sender);
+                            System.out.println("MY CHAT ID + " + mChatId);
+                            if (jObj.getString("chatid").equals(Integer.toString(mChatId))) {
+                                String sender = jObj.getString("members");
+                                StringBuilder sb = new StringBuilder();
+                                sb.append(sender);
+                                mPeopleTalking.add(sender);
+                                for (int i = 0; i < mPeopleTalking.size(); i++) {
+                                    sb.append(" and " + mPeopleTalking.get(i));
+                                }
+                                sb.append(" is typing.");
+                                mWhoseTypingTextView.setText(sb.toString());
+//                                Log.i("FCM Chat Frag", sender);
+                            }
+                        } else if (jObj.getString("type").equals("done-typing")) {
+                            if (jObj.getString("chatid").equals(Integer.toString(mChatId))) {
+                                mPeopleTalking.remove(jObj.getString("members"));
+                                StringBuilder sb = new StringBuilder();
+                                if (mPeopleTalking.size() > 1) {
+                                    for (int i = 0; i < mPeopleTalking.size(); i++) {
+                                        sb.append(" and " + mPeopleTalking.get(i));
+                                    }
+                                    mWhoseTypingTextView.setText(sb.toString());
+                                } else {
+                                    mWhoseTypingTextView.setText("");
+                                }
+                            }
                         }
                     }
                 } catch (JSONException e) {
