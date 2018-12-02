@@ -24,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
@@ -57,7 +59,7 @@ public class ChatFragment extends Fragment {
 
     int newChatId;
     protected static int mChatId;
-    private ArrayList<String> mPeopleTalking;
+    private Map<String, String> mPeopleTalking;
 
     //private String nickName;
     public ChatFragment() {
@@ -76,7 +78,7 @@ public class ChatFragment extends Fragment {
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
-        mPeopleTalking = new ArrayList<>();
+        mPeopleTalking = new HashMap<>();
         Bundle bundle = this.getArguments();
         newChatId = bundle.getInt("chatId");
         mChatId = newChatId;
@@ -319,6 +321,7 @@ public class ChatFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+
 //            Log.i("FCM Chat Frag", "start onRecieve");
             if (intent.hasExtra("DATA")) {
                 String data = intent.getStringExtra("DATA");
@@ -330,28 +333,42 @@ public class ChatFragment extends Fragment {
                             System.out.println("MY CHAT ID + " + mChatId);
                             if (jObj.getString("chatid").equals(Integer.toString(mChatId))) {
                                 String sender = jObj.getString("members");
+                                String memberId = jObj.getString("memberid_whos_typing");
                                 StringBuilder sb = new StringBuilder();
                                 sb.append(sender);
-                                mPeopleTalking.add(sender);
-                                for (int i = 0; i < mPeopleTalking.size(); i++) {
-                                    sb.append(" and " + mPeopleTalking.get(i));
+                                mPeopleTalking.put(memberId, sender);
+                                for (HashMap.Entry<String, String> entry : mPeopleTalking.entrySet()) {
+                                    if (!entry.getKey().equals(memberId)) {
+                                        sb.append(", and " + entry.getValue());
+                                    }
                                 }
-                                sb.append(" is typing.");
-                                mWhoseTypingTextView.setText(sb.toString());
+                                System.out.println("SENTINAL: " + mPeopleTalking.toString());
+                                if (sb.length() > 20) {
+                                    String outPutString = sb.substring(0, 20) + " is typing.";
+                                    mWhoseTypingTextView.setText(outPutString);
+                                } else {
+                                    sb.append(" is typing.");
+                                    mWhoseTypingTextView.setText(sb.toString());
+                                }
 //                                Log.i("FCM Chat Frag", sender);
                             }
                         } else if (jObj.getString("type").equals("done-typing")) {
                             if (jObj.getString("chatid").equals(Integer.toString(mChatId))) {
-                                mPeopleTalking.remove(jObj.getString("members"));
+                                String memberId = jObj.getString("memberid_whos_typing");
+                                mPeopleTalking.remove(memberId);
                                 StringBuilder sb = new StringBuilder();
-                                if (mPeopleTalking.size() > 1) {
-                                    for (int i = 0; i < mPeopleTalking.size(); i++) {
-                                        sb.append(" and " + mPeopleTalking.get(i));
+                                if (mPeopleTalking.size() > 0) {
+                                    for (HashMap.Entry<String, String> entry : mPeopleTalking.entrySet()) {
+                                        if (!entry.getKey().equals(memberId)) {
+                                            sb.append(", and " + entry.getValue());
+                                        }
                                     }
-                                    mWhoseTypingTextView.setText(sb.toString());
+                                    String outPutString = sb.substring(0, 20) + " is typing.";
+                                    mWhoseTypingTextView.setText(outPutString);
                                 } else {
                                     mWhoseTypingTextView.setText("");
                                 }
+                                System.out.println("SENTINAL: " + mPeopleTalking.toString());
                             }
                         }
                     }
