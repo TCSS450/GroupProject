@@ -1,8 +1,9 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
-
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,10 +24,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import group3.tcss450.uw.edu.groupappproject.R;
-import group3.tcss450.uw.edu.groupappproject.activities.PreLoginRegisterActivity;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
@@ -41,8 +42,6 @@ public class ChatFragment extends Fragment {
     private String mEmail;
     private String mSendUrl;
     private Credentials[] mMembers;
-    private String mGetUrl;
-    private String mTypingUrl;
     private String mTheOneTyping;
     private String oldMessages[];
     private int memberId;
@@ -51,6 +50,8 @@ public class ChatFragment extends Fragment {
 
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
+    private FirebaseMessageReciever mFirebaseMessageReciever;
+    private TextView mWhoseTypingTextView;
 
     int newChatId;
     protected static int mChatId;
@@ -80,7 +81,7 @@ public class ChatFragment extends Fragment {
             chatName = chatName.substring(0, 30) + "...";
         }
         TextView chatNameTextView = rootLayout.findViewById(R.id.textView_chat_chatName);
-        TextView mType =  rootLayout.findViewById(R.id.is_typing_name);
+        mWhoseTypingTextView = rootLayout.findViewById(R.id.is_typing_name);
         chatNameTextView.setText(chatName);
         mMembers = (Credentials[]) bundle.getSerializable("members");
         memberId = duc.getUserCreds().getMemberId();
@@ -99,7 +100,7 @@ public class ChatFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //System.out.println("STEP 0 DONE");
 
-                checkTyping(mType);
+                checkTyping(mWhoseTypingTextView);
             }
 
             @Override
@@ -110,7 +111,7 @@ public class ChatFragment extends Fragment {
 
         //System.out.println("The new chat id is " + newChatId);
 
-        mGetUrl = new Uri.Builder()
+        String mGetUrl = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_messaging_base))
@@ -158,7 +159,7 @@ public class ChatFragment extends Fragment {
 
     private void checkTyping(TextView text){
         //System.out.println("STEP 1 DONE");
-        mTypingUrl = new Uri.Builder()
+        String mTypingUrl = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_messaging_base))
@@ -170,7 +171,7 @@ public class ChatFragment extends Fragment {
         try {
 
             messageTypeJson.put("chatid", newChatId);
-            messageTypeJson.put("membername", nickname );
+            messageTypeJson.put("membername", nickname);
             messageTypeJson.put("memberid", memberId);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -180,9 +181,6 @@ public class ChatFragment extends Fragment {
                 .onCancelled(error -> Log.e(TAG, error))
                 .build().execute();
         mTheOneTyping = duc.getmUserTyping();
-        System.out.println("THE ONE TYPING IS ACTUALLY: " + mTheOneTyping);
-        text.setText("YES YES YES");
-
     }
 
     private void endOfTypingMsgTask(final String result) {
@@ -265,4 +263,62 @@ public class ChatFragment extends Fragment {
         transaction.replace(container, fragment).commit();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
+    }
+
+    /**
+     * A BroadcastReceiver setup to listen for messages sent from
+     * MyFirebaseMessagingService
+     * that Android allows to run all the time.
+     */
+    private class FirebaseMessageReciever extends BroadcastReceiver
+
+    {
+        //String duc.DataUtilityControl
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+//            Log.i("FCM Chat Frag", "start onRecieve");
+            System.out.println("inside onRecieve!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            if (intent.hasExtra("type")) {
+                String data = intent.getStringExtra("type");
+                JSONObject jObj = null;
+                System.out.println("Inside Data");
+//                Log.d("Message data", data);
+                try {
+                    jObj = new JSONObject(data);
+                    if (jObj.has("type")) {
+                        System.out.println("Has type? " + jObj.has("type"));
+                        System.out.println("What is type? " + jObj.getString("type"));
+                        if (jObj.getString("type").equals("typing")) {
+                            String sender = jObj.getString("members");
+                            System.out.println("Members = " + sender);
+
+                            String s = sender + " is typing";
+                            mWhoseTypingTextView.setText(s);
+                            System.out.println("--------------------------------- " + s);
+//                            Log.i("FCM Chat Frag", sender);
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSON PARSE", e.toString());
+                }
+            }
+        }
+    }
 }
