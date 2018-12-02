@@ -34,6 +34,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * TODO: NOT EVEN USED ANYMORE? REPLACED WITH WeatherContainer
  */
 public class MainWeatherFragment extends Fragment {
 

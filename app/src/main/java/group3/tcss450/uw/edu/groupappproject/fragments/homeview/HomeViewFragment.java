@@ -16,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -28,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.DatagramSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +71,7 @@ public class HomeViewFragment extends Fragment {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
     private OnHomeViewFragmentListener mListener;
+    private GoogleApiClient mGoogleApiClient;
 
     public HomeViewFragment() {
         // Required empty public constructor
@@ -83,38 +87,6 @@ public class HomeViewFragment extends Fragment {
             mCredentials = (Credentials[]) getArguments().getSerializable(ARG_CRED_LIST);
         }
 
-        // ask user for permission
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        //check permission user has given and take appropriate actions
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION
-                            , Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_LOCATIONS);
-        } else {
-            //The user has already allowed the use of Locations. Get the current location.
-            requestLocation();
-        }
-
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    //setLocation(location);
-                    Log.d("LOCATION UPDATE!", location.toString());
-                }
-            };
-        };
-
-        createLocationRequest();
     }
 
     @Override
@@ -136,7 +108,7 @@ public class HomeViewFragment extends Fragment {
 
         //set a floating action button
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setVisibility(View.VISIBLE);
+        fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(this::fabButtonClicked);
         insertNestedFragment(R.id.homeView_bestFriend_frame, new MyChats_Main());
         return view;
@@ -155,7 +127,18 @@ public class HomeViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //call async task to get the weather before loading fragment
-
+        JSONObject latLong = new JSONObject();
+        try {
+            latLong.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+            latLong.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+            latLong.put("days", 10);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        new SendPostAsyncTask.Builder(Constants.WEATHER_END_POINT, latLong)
+                .onPreExecute(this::onPreGetWeather)
+                .onPostExecute(this::onPostGetWeather)
+                .build().execute();
     }
 
     private void onPostGetWeather(String result) {
@@ -175,14 +158,14 @@ public class HomeViewFragment extends Fragment {
                             MiniWeatherFragment.newInstance(todaysWeather.toString()));
 
                 } else { //failed to get weather
-                    duc.makeToast(getContext(),"Failed to get weather");
+                    Toast.makeText(getContext(), "Failed to get weather", Toast.LENGTH_LONG).show();
                 }
             } else { // wrong info sent up or something went wrong
-                duc.makeToast(getContext(),"We can not get the weather");
+                Toast.makeText(getContext(), "We can not get the weather", Toast.LENGTH_LONG).show();
             }
         } catch (JSONException e) { // todo: set text in frag instead
             Log.e("JSON_PARSE_ERROR", result);
-            duc.makeToast(getActivity(), "OOPS! Something went wrong!");
+            Toast.makeText(getContext(), "OOPS! Something went wrong!", Toast.LENGTH_LONG).show();
         }
         mListener.onWaitFragmentInteractionHide();
     }
@@ -206,6 +189,9 @@ public class HomeViewFragment extends Fragment {
                     .onPostExecute(this::handleGetFriendsOnPost)
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
+        }
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
         }
     }
 
@@ -257,13 +243,31 @@ public class HomeViewFragment extends Fragment {
         transaction.replace(container, fragment).commit();
     }
 
-    /* ****** Location request & get user location Code below *************************************/
+    private void onPreGetWeather() { mListener.onHomeViewWaitShow(R.id.homeView_weather_frame); }
 
-    /**
-     * See if the user has granted permission to access their location. If not
-     * ask the user for permission.
-     */
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_LOCATIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // locations-related task you need to do.
+                    requestLocation();
+                } else {
+                    Log.d("PERMISSION DENIED", "Nothing to see or do here.");
+                    getActivity().finishAndRemoveTask();
+                }
+                return;
+            }
+        }
+    }
+
     private void requestLocation() {
+        System.out.println("INSIDE REQUEST LOCATION");
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -277,9 +281,9 @@ public class HomeViewFragment extends Fragment {
                         public void onSuccess(Location location) {
                             // Got last known location. In some rare situations this can be null.
                             if (location != null) {
-                                Constants.MY_CURRENT_LOCATION = location;
-                                //setLocation(location);
                                 Log.d("LOCATION", location.toString());
+                                mCurrentLocation = location;
+                                Constants.MY_CURRENT_LOCATION = mCurrentLocation;
                             }
                         }
                     });
@@ -287,87 +291,6 @@ public class HomeViewFragment extends Fragment {
     }
 
 
-    /**
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_LOCATIONS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // locations-related task you need to do.
-                    requestLocation();
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Log.d("PERMISSION DENIED", "Nothing to see or do here.");
-
-                    //Shut down the app. In production release, you would let the user
-                    //know why the app is shutting down...maybe ask for permission again?
-                    getActivity().finishAndRemoveTask();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
-
-    /**
-     * Create and configure a Location Request used when retrieving location updates
-     */
-    protected void createLocationRequest() {
-        mLocationRequest = LocationRequest.create();
-
-        // Sets the desired interval for active location updates. This interval is
-        // inexact. You may not receive updates at all if no location sources are available, or
-        // you may receive them slower than requested. You may also receive updates faster than
-        // requested if other applications are requesting location at a faster interval.
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-
-        // Sets the fastest rate for active location updates. This interval is exact, and your
-        // application will never receive updates faster than this value.
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    /**
-     * Set the textview to have the current location.
-     * @param
-     */
-//    private void setLocation(final Location location) {
-//        mCurrentLocation = location;
-//        Constants.MY_CURRENT_LOCATION = mCurrentLocation;
-//        //call async task to get the weather before loading fragment
-//        JSONObject jsonLocation = new JSONObject();
-//        try {
-//            jsonLocation.put("lat", mCurrentLocation.getLatitude());
-//            jsonLocation.put("lon", mCurrentLocation.getLongitude());
-//            jsonLocation.put("days", 1);
-//        } catch (JSONException e) {
-//            Log.wtf("JSON ERROR", "Error creating JSON: " + e.getMessage());
-//        }
-//        Log.d("LOCATION: ",mCurrentLocation.getLatitude() +
-//                                " " + mCurrentLocation.getLongitude());
-//        new SendPostAsyncTask.Builder(Constants.WEATHER_END_POINT, jsonLocation)
-//                .onPreExecute(this::onPreGetWeather)
-//                .onPostExecute(this::onPostGetWeather)
-//                .build().execute();
-//    }
-
-    private void onPreGetWeather() { mListener.onHomeViewWaitShow(R.id.homeView_weather_frame); }
 
     @Override
     public void onAttach(Context context) {

@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +110,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private DataUtilityControl duc;
     private Credentials[] mTempFriendCredentials;
+    private GoogleApiClient mGoogleApiClient;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +204,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
         }
+        Constants.MY_CURRENT_LOCATION = mCurrentLocation;
     }
 
     @Override
@@ -295,8 +307,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                     String icon = innerWeather.getString("icon");
 
-
-
                     Weather weatherObject = new Weather(temp,date, description, wind, pressure, humidity, icon);
 
                     weatherArrayList.add(weatherObject);
@@ -379,7 +389,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int[] members = {duc.getUserCreds().getMemberId(),
                            credentials.getMemberId()};
 
-
         try {
             msg.put("chatmembers", new JSONArray(members));
             msg.put("chatname", "Friends Chat");
@@ -393,23 +402,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onListFragmentInteraction(Credentials item) {
-
-    }
+    public void onListFragmentInteraction(Credentials item) { }
 
     private void handleErrorsInTask(String result) {
         Log.e("ASYNCT_TASK_ERROR",  result);
     }
 
     @Override
-    public void onAcceptListFragmentInteraction(JSONObject msg) {
-
-    }
+    public void onAcceptListFragmentInteraction(JSONObject msg) { }
 
     @Override
-    public void onDenyListFragmentInteraction(JSONObject msg) {
-
-    }
+    public void onDenyListFragmentInteraction(JSONObject msg) { }
 
     @Override
     public void onStartChatFragmentInteraction(int chatId, Credentials[] creds) {
@@ -481,9 +484,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         loadFragment(duc.getLoginFragment());
     }
 
-
-
-
     @Override
     public void onWeatherListFragmentInteraction(Weather weather) {
 
@@ -527,14 +527,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     String time = weather.getString("timestamp_local");
                     String temp = weather.getString("temp");
 
-
                     JSONObject innerWeatherDetails = weather.getJSONObject("weather");
 
                     String description = innerWeatherDetails.getString("description");
 
                     String icon = innerWeatherDetails.getString("icon");
-
-
 
                     WeatherDetails weatherDetailsObject = new WeatherDetails(temp,time, description, icon);
 
@@ -554,9 +551,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     + e.getMessage());
 
         }
-
-
-
     }
 
     @Override
@@ -729,6 +723,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             duc.makeToast(this, getString(R.string.request_error));
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -777,6 +772,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             if (location != null) {
                                 Log.d("LOCATION", location.toString());
                                 mCurrentLocation = location;
+                                Constants.MY_CURRENT_LOCATION = mCurrentLocation;
                             }
                         }
                     });

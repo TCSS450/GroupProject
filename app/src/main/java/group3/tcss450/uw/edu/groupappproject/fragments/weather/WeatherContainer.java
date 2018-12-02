@@ -1,21 +1,30 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.weather;
 
 
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.activities.MapsActivity;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
@@ -154,8 +163,44 @@ public class WeatherContainer extends Fragment {
         View v = inflater.inflate(R.layout.fragment_weather_container, container, false);
         // Inflate the layout for this fragment
 
+        TextView cityText = v.findViewById(R.id.textView_weather_city_title);
+        setCityText(cityText);
+
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.WeatherContainer_floatingActionButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Constants.MY_CURRENT_LOCATION == null) {
+                    Snackbar.make(view, "Please wait for location to enable", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    Intent i = new Intent(getActivity(), MapsActivity.class);
+                    //pass the current location on to the MapActivity when it is loaded
+                    i.putExtra("LOCATION", Constants.MY_CURRENT_LOCATION);
+                    startActivity(i);
+                }
+            }
+        });
 
         return v;
+    }
+
+    private void setCityText(TextView text) {
+        Geocoder geoCoder = new Geocoder(getContext());
+        List<Address> list = null;
+        String result = "Weather in ";
+        try {
+            list = geoCoder.getFromLocation(Constants.MY_CURRENT_LOCATION
+                    .getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (list != null & list.size() > 0) {
+            Address address = list.get(0);
+            result += address.getLocality();
+        }
+        text.setText(result);
+        Log.d("MapsActivity getLoc", result);
     }
 
     private void load10DaysFragment(Fragment frag) {

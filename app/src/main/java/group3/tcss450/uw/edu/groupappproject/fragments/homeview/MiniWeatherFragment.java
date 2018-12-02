@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.WeatherFromJsonString;
 
 /**
@@ -75,7 +77,9 @@ public class MiniWeatherFragment extends Fragment {
             description.setText(mWeatherJava.getWeatherDescription());
 
             //set the icon eventually
-
+            ImageView weatherIcon = view.findViewById(R.id.miniWeather_icon_image);
+            weatherIcon.setImageResource(Constants.dataUtilityControl
+                            .getWeatherDrawable(getContext(), mWeatherJava.getWeatherIcon()));
         }
 
         return view;
