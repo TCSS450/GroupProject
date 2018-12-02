@@ -1,12 +1,12 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
+import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +32,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +51,7 @@ public class ChatFragment extends Fragment {
     private int memberId;
     private  String nickname;
     private DataUtilityControl duc;
+    private GifImageView mGif;
 
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
@@ -74,7 +75,8 @@ public class ChatFragment extends Fragment {
 
         //set up the recycler view
         RecyclerView mMessageRecycler = (RecyclerView) rootLayout.findViewById(R.id.chatFrag_message_recycler);
-
+        mGif = rootLayout.findViewById(R.id.gifImageView);
+        mGif.setVisibility(View.INVISIBLE);
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
@@ -350,6 +352,8 @@ public class ChatFragment extends Fragment {
                                     sb.append(" is typing.");
                                     mWhoseTypingTextView.setText(sb.toString());
                                 }
+                                mGif.setVisibility(View.VISIBLE);
+
 //                                Log.i("FCM Chat Frag", sender);
                             }
                         } else if (jObj.getString("type").equals("done-typing")) {
@@ -365,8 +369,10 @@ public class ChatFragment extends Fragment {
                                     }
                                     String outPutString = sb.substring(0, 20) + " is typing.";
                                     mWhoseTypingTextView.setText(outPutString);
+                                    mGif.setVisibility(View.VISIBLE);
                                 } else {
                                     mWhoseTypingTextView.setText("");
+                                    mGif.setVisibility(View.INVISIBLE);
                                 }
                                 System.out.println("SENTINAL: " + mPeopleTalking.toString());
                             }
