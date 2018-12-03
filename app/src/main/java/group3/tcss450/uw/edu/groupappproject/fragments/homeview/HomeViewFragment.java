@@ -128,6 +128,8 @@ public class HomeViewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //call async task to get the weather before loading fragment
         JSONObject latLong = new JSONObject();
+
+
         try {
             latLong.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
             latLong.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
@@ -140,6 +142,7 @@ public class HomeViewFragment extends Fragment {
                 .onPostExecute(this::onPostGetWeather)
                 .build().execute();
     }
+
 
     private void onPostGetWeather(String result) {
         Log.d("HomeViewFragment Weather post execute result: ", result);

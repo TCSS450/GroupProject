@@ -91,35 +91,6 @@ public class WeatherContainer extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
-        JSONObject msg = new JSONObject();
-        //requestLocation();
-        try {
-            msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-            msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
-            msg.put("days", 10);
-        }catch (JSONException e) {
-            Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
-        }
-        new SendPostAsyncTask.Builder(this.duc.getWeatherDateURI().toString(), msg)
-                .onPostExecute(this::handleOnPostWeatherDate)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
-
-
-        JSONObject msg2 = new JSONObject();
-
-        try {
-            msg2.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-            msg2.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
-        }catch (JSONException e) {
-            Log.wtf("WEATHER", "Error: " + e.getMessage());
-        }
-
-        new SendPostAsyncTask.Builder(this.duc.getWeatherHourURI().toString(), msg2)
-                .onPostExecute(this::handleONPostWeatherHour)
-                .onPreExecute(this::onWaitFragmentInteractionShow)
-                .onCancelled(this::handleErrorsInTask)
-                .build().execute();
 
 
 
@@ -321,6 +292,36 @@ public class WeatherContainer extends Fragment {
 //                builder.show();
             }
         });
+        JSONObject msg = new JSONObject();
+        //requestLocation();
+        try {
+            msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+            msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+            msg.put("days", 10);
+        }catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(this.duc.getWeatherDateURI().toString(), msg)
+                .onPostExecute(this::handleOnPostWeatherDate)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+
+
+        JSONObject msg2 = new JSONObject();
+
+        try {
+            msg2.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+            msg2.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+        }catch (JSONException e) {
+            Log.wtf("WEATHER", "Error: " + e.getMessage());
+        }
+
+        new SendPostAsyncTask.Builder(this.duc.getWeatherHourURI().toString(), msg2)
+                .onPostExecute(this::handleONPostWeatherHour)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+
 
         return v;
     }
@@ -394,6 +395,7 @@ public class WeatherContainer extends Fragment {
     }
 
     private void insertNestedFragment(int container, Fragment fragment) {
+
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(container, fragment).commit();
     }

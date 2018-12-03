@@ -66,7 +66,7 @@ public class MapsActivity extends FragmentActivity implements
             JSONArray jsonArray2 = new JSONArray(sharedPreferences.getString("location", "[]"));
 
             for (int i = 0 ;i <jsonArray2.length(); i++) {
-                Log.d("your JSON Array", jsonArray2.getString(i));
+                Log.d("your JSON Array", jsonArray2.get(i).toString());
 
             }
         } catch (JSONException e) {
@@ -177,7 +177,6 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onBackPressed() {
         Constants.refreshLocation = true;
-
 
         super.onBackPressed();
 
