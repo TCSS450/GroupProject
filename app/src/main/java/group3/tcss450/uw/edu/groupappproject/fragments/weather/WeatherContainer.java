@@ -3,9 +3,11 @@ package group3.tcss450.uw.edu.groupappproject.fragments.weather;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
@@ -21,9 +23,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,9 +36,11 @@ import java.util.zip.Inflater;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 import group3.tcss450.uw.edu.groupappproject.activities.MapsActivity;
+import group3.tcss450.uw.edu.groupappproject.fragments.AddFriend.AddUserFragment;
 import group3.tcss450.uw.edu.groupappproject.fragments.homeview.MiniWeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
@@ -54,9 +55,9 @@ public class WeatherContainer extends Fragment {
     private String mParam2;
     private DataUtilityControl duc;
     private TextView mainTV;
+    private FirebaseMessageReciever mFirebaseMessageReciever;
 
     private SharedPreferences sharedPreferences;
-
 
     public WeatherContainer() {
         // Required empty public constructor
@@ -211,8 +212,13 @@ public class WeatherContainer extends Fragment {
             ft.detach(this).attach(this).commit();
             Constants.refreshLocation = false;
         }
-
         super.onResume();
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
+
 
     }
     @Override
@@ -358,5 +364,47 @@ public class WeatherContainer extends Fragment {
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(container, fragment).commit();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
+    }
+
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        //String duc.DataUtilityControl
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            System.out.println("IS THIS WORKING");
+            Log.i("FCM Chat Frag", "start onRecieve");
+            if (intent.hasExtra("DATA")) {
+                System.out.println("THERE IS AN INTENT");
+                String data = intent.getStringExtra("DATA");
+                Log.d("Message data", data);
+                try {
+                    System.out.println("PARSING");
+                    JSONObject jObj = new JSONObject(data);
+                    if (jObj.has("type")) {
+                        if (jObj.getString("type").equals("contact")) {
+                            String contact = jObj.getString("sender");
+                            String message = jObj.getString("message");
+                            duc.makeToast(getActivity(), "New Message from " + contact + " \nMessage: " + message);
+                        } else if (jObj.getString("type").equals("sent")) {
+                            String contact = jObj.getString("senderString") ;
+                            duc.makeToast(getActivity(), "New Friend Request from " + contact);
+                        } else if (jObj.getString("type").equals("accepted")) {
+                            String contact = jObj.getString("senderString");
+                            duc.makeToast(getActivity(), contact + " accepted your friend request");
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSON PARSE", e.toString());
+                }
+            }
+        }
     }
 }

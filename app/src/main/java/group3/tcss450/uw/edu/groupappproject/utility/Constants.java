@@ -65,6 +65,7 @@ public class Constants {
     public static ArrayList<WeatherDetails> weatherDetails = null;
     public static boolean myLoadHomeFragChats = true;
     public static List<Address> previousLocation = new ArrayList<>();
+    public static int myCurrentChat = 0;
 
     public static SendPostAsyncTask saveAsunc = null;
 

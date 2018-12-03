@@ -1,7 +1,9 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -38,6 +40,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
@@ -70,8 +73,6 @@ import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
-
-import static java.lang.Integer.parseInt;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnListFragmentInteractionListener,
@@ -112,6 +113,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DataUtilityControl duc;
     private Credentials[] mTempFriendCredentials;
     private GoogleApiClient mGoogleApiClient;
+
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
     @Override
     protected void onStart() {
@@ -386,6 +389,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .add(container, new WaitFragment(), "WAIT")
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onNewMessage() {
+        Constants.myLoadHomeFragChats = true;
+        getMyChats();
     }
 
     @Override
@@ -833,4 +842,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     });
         }
     }
+
 }

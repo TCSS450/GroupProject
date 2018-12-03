@@ -2,7 +2,10 @@ package group3.tcss450.uw.edu.groupappproject.fragments.homeview;
 
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -11,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +44,7 @@ import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
@@ -55,6 +60,8 @@ public class HomeViewFragment extends Fragment {
     private List<Credentials> mCreds;
     private Credentials[] mCredentials;
     private Credentials myCredentials;
+    private FirebaseMessageReciever mFirebaseMessageReciever;
+
 
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 
@@ -317,5 +324,63 @@ public class HomeViewFragment extends Fragment {
             extends WaitFragment.OnWaitFragmentInteractionListener
     {
         public void onHomeViewWaitShow(int container);
+        void onNewMessage();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
+    }
+
+    /**
+     * A BroadcastReceiver setup to listen for messages sent from
+     * MyFirebaseMessagingService
+     * that Android allows to run all the time.
+     */
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        //String duc.DataUtilityControl
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            System.out.println("IS THIS WORKING");
+            Log.i("FCM Chat Frag", "start onRecieve");
+            if (intent.hasExtra("DATA")) {
+                System.out.println("THERE IS AN INTENT");
+                String data = intent.getStringExtra("DATA");
+                Log.d("Message data", data);
+                try {
+                    System.out.println("PARSING");
+                    JSONObject jObj = new JSONObject(data);
+                    if (jObj.has("type")) {
+                        if (jObj.getString("type").equals("contact")) {
+                            String contact = jObj.getString("sender");
+                            String message = jObj.getString("message");
+                            duc.makeToast(getActivity(), "New Message from " + contact + " \nMessage: " + message);
+                            mListener.onNewMessage();
+                        } else if (jObj.getString("type").equals("sent")) {
+                                String contact = jObj.getString("senderString") ;
+                                duc.makeToast(getActivity(), "New Friend Request from " + contact);
+                        } else if (jObj.getString("type").equals("accepted")) {
+                                String contact = jObj.getString("senderString");
+                                duc.makeToast(getActivity(), contact + " accepted your friend request");
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSON PARSE", e.toString());
+                }
+            }
+        }
     }
 }
