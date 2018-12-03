@@ -3,6 +3,7 @@ package group3.tcss450.uw.edu.groupappproject.fragments.weather;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.Inflater;
 
 import group3.tcss450.uw.edu.groupappproject.R;
@@ -48,9 +53,7 @@ public class WeatherContainer extends Fragment {
     private String mParam1;
     private String mParam2;
     private DataUtilityControl duc;
-    private LayoutInflater inflater;
-    private ViewGroup viewGroup;
-    private Bundle bundle;
+    private TextView mainTV;
 
     private SharedPreferences sharedPreferences;
 
@@ -63,12 +66,16 @@ public class WeatherContainer extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.duc = Constants.dataUtilityControl;
-        this.bundle = savedInstanceState;
+        makeDayWeatherCall(Constants.MY_CURRENT_LOCATION.getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude());
+        makeHourWeatherCall(Constants.MY_CURRENT_LOCATION.getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude());
+    }
+
+    private void makeDayWeatherCall(double lat, double lon) {
         JSONObject msg = new JSONObject();
         //requestLocation();
         try {
-            msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-            msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+            msg.put("lat", lat);
+            msg.put("lon", lon);
             msg.put("days", 10);
         }catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
@@ -77,17 +84,17 @@ public class WeatherContainer extends Fragment {
                 .onPostExecute(this::handleOnPostWeatherDate)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
+    }
 
-        JSONObject msg2 = new JSONObject();
-
+    private void makeHourWeatherCall(double lat, double lon) {
+        JSONObject msg = new JSONObject();
         try {
-            msg2.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-            msg2.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+            msg.put("lat", lat);
+            msg.put("lon", lon);
         }catch (JSONException e) {
             Log.wtf("WEATHER", "Error: " + e.getMessage());
         }
-
-        new SendPostAsyncTask.Builder(this.duc.getWeatherHourURI().toString(), msg2)
+        new SendPostAsyncTask.Builder(this.duc.getWeatherHourURI().toString(), msg)
                 .onPostExecute(this::handleONPostWeatherHour)
                 .onPreExecute(this::onWaitFragmentInteractionShow)
                 .onCancelled(this::handleErrorsInTask)
@@ -211,15 +218,13 @@ public class WeatherContainer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.inflater = inflater;
-        this.viewGroup = container;
-        this.bundle = savedInstanceState;
-
         View v = inflater.inflate(R.layout.fragment_weather_container, container, false);
+        this.mainTV = v.findViewById(R.id.textView_weather_city_title);
+
         // Inflate the layout for this fragment
 
-        TextView cityText = v.findViewById(R.id.textView_weather_city_title);
-        setCityText(cityText);
+        //TextView cityText = v.findViewById(R.id.textView_weather_city_title);
+        setCityText(mainTV);
 
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.WeatherContainer_floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -245,21 +250,7 @@ public class WeatherContainer extends Fragment {
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Dialog d = onCreateDialog();
-                d.show();
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                System.out.println("outside DIALOG");
-//
-//                builder.setTitle("TEST")
-//                        .setItems(arr, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                System.out.println("INSIDE DIALOG");
-//                            }
-//                        });
-//                builder.create();
-//
-//                builder.show();
+                onCreateDialog().show();
             }
         });
         JSONObject msg = new JSONObject();
@@ -275,10 +266,7 @@ public class WeatherContainer extends Fragment {
                 .onPostExecute(this::handleOnPostWeatherDate)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
-
-
         JSONObject msg2 = new JSONObject();
-
         try {
             msg2.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
             msg2.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
@@ -291,27 +279,43 @@ public class WeatherContainer extends Fragment {
                 .onPreExecute(this::onWaitFragmentInteractionShow)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
-
-
         return v;
     }
 
     public Dialog onCreateDialog() {
+
+        sharedPreferences = getActivity().getSharedPreferences(
+                getString(R.string.keys_shared_prefs), Context.MODE_PRIVATE);
+        try {
+            JSONArray jsonArray2 = new JSONArray(sharedPreferences.getString("location", "[]"));
+            System.out.println(jsonArray2.length());
+            for (int i = 0 ; i <jsonArray2.length(); i++) {
+                System.out.println("TEST " + jsonArray2.get(i));
+                String[] parts = jsonArray2.get(i).toString().split(",");
+                for (int j = 0; j < parts.length; j++) {
+                    System.out.println(parts[j]);
+                }
+                //System.out.println("TEST2 " + jsonObject.toString().split(","));
+
+                //Address address = new Address(Locale.ENGLISH);
+                //address.set
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         String[] arr = new String[Constants.previousLocation.size()];
         for(int i = 0; i<Constants.previousLocation.size();i++) {
             arr[i] = Constants.previousLocation.get(i).getLocality() + ", " + Constants.previousLocation.get(i).getPostalCode();
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select Location")
-                .setItems(arr , new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-//                        insertNestedFragment(R.layout.fragment_weather_container, new WeatherFragment());
-//                        onCreateView(inflater, viewGroup, bundle);
-//                        load24hoursFragment(new WeatherDetailListFragment());
-//                        load10DaysFragment(new WeatherFragment());
-//                        onCreate(bundle);
-
-                    }
+                .setItems(arr , (dialog, which) -> {
+                    makeDayWeatherCall(Constants.previousLocation.get(which).getLatitude(),
+                            Constants.previousLocation.get(which).getLongitude());
+                    makeHourWeatherCall(Constants.previousLocation.get(which).getLatitude(),
+                            Constants.previousLocation.get(which).getLongitude());
+                    mainTV.setText("Weather in " +Constants.previousLocation.get(which).getLocality());
                 });
         return builder.create();
     }
@@ -350,50 +354,9 @@ public class WeatherContainer extends Fragment {
         transaction.commit();
     }
 
-    private void loadFragment(Fragment frag, int id) {
-        FragmentTransaction transaction =
-                getChildFragmentManager()
-                        .beginTransaction()
-                        .replace(id, frag)
-                        .addToBackStack(null);
-        transaction.commit();
-    }
-
     private void insertNestedFragment(int container, Fragment fragment) {
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(container, fragment).commit();
     }
-
-    private void onPostGetWeather(String result) {
-        Log.d("HomeViewFragment Weather post execute result: ", result);
-        try {
-            JSONObject data = new JSONObject(result);
-            if (data.has("success")) {
-                boolean success = data.getBoolean("success");
-                if (success) {
-                    JSONArray weather = data.getJSONArray("weather");
-                    Log.d("HomeView json weather --", weather.toString());
-                    JSONObject todaysWeather = new JSONObject(weather.getJSONObject(0).toString());
-                    Log.d("HomeView json todays weather", todaysWeather.toString());
-
-                    // instantiate this with factory method
-                    insertNestedFragment(R.id.homeView_weather_frame,
-                            MiniWeatherFragment.newInstance(todaysWeather.toString()));
-
-                } else { //failed to get weather
-                    Toast.makeText(getContext(), "Failed to get weather", Toast.LENGTH_LONG).show();
-                }
-            } else { // wrong info sent up or something went wrong
-                Toast.makeText(getContext(), "We can not get the weather", Toast.LENGTH_LONG).show();
-            }
-        } catch (JSONException e) { // todo: set text in frag instead
-            Log.e("JSON_PARSE_ERROR", result);
-            Toast.makeText(getContext(), "OOPS! Something went wrong!", Toast.LENGTH_LONG).show();
-        }
-//        mListener.onWaitFragmentInteractionHide();
-    }
-
-
-
 }

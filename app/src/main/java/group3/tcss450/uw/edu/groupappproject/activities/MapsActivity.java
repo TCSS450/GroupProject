@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,23 +62,11 @@ public class MapsActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        sharedPreferences = this.getSharedPreferences(
-                getString(R.string.keys_shared_prefs), this.MODE_PRIVATE);
-        System.out.println("INSIDE ONCREATE IN MAPS ACTIVITY");
-        try {
-            JSONArray jsonArray2 = new JSONArray(sharedPreferences.getString("location", "[]"));
-            System.out.println(jsonArray2.length());
-            for (int i = 0 ; i <jsonArray2.length(); i++) {
-                Log.d("your JSON Array", jsonArray2.getString(i));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         mCurrentLocation = (Location) getIntent().getParcelableExtra("LOCATION");
         mZipCode = findViewById(R.id.maps_activity_enter_zip_text);
         mSubmitButton = findViewById(R.id.maps_activity_submitZip_button);
         mSubmitButton.setOnClickListener(this::getLocByZip);
+        sharedPreferences = this.getSharedPreferences(getString(R.string.keys_shared_prefs), this.MODE_PRIVATE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -132,13 +121,8 @@ public class MapsActivity extends FragmentActivity implements
                 Constants.previousLocation.add(list.get(i));
             }
 
-
-
-
             JSONArray jsonArray = new JSONArray();
             jsonArray.put(Constants.previousLocation);
-
-
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
             editor.putString("location", jsonArray.toString());
             editor.commit();

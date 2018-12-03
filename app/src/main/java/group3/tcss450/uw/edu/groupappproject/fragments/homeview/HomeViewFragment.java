@@ -204,7 +204,6 @@ public class HomeViewFragment extends Fragment {
     }
 
     private void handleGetFriendsOnPost(String result) {
-
         //parse JSON
         Log.d("ViewFriends post execute result: ", result);
         try {
