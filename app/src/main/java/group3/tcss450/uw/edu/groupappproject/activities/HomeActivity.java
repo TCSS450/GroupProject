@@ -251,20 +251,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.requests) {
             loadFragment(new FriendRequests());
         } else if (id == R.id.weather) {
-            JSONObject msg = new JSONObject();
-            //requestLocation();
-            try {
-                msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-                msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
-                msg.put("days", 10);
-            }catch (JSONException e) {
-                Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
-            }
+           loadFragment(new WeatherContainer());
 
-            new SendPostAsyncTask.Builder(this.duc.getWeatherDateURI().toString(), msg)
-                    .onPostExecute(this::handleOnPostWeatherDate)
-                    .onCancelled(this::handleErrorsInTask)
-                    .build().execute();
 
         } else if (id == R.id.home) {
             loadFragment(new HomeViewFragment());
@@ -334,6 +322,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.homeActivityFrame, frag)
                 .addToBackStack(null).commit();
     }
+
     private void logout() {
 
         SharedPreferences prefs =

@@ -44,7 +44,7 @@ public class MyWeatherDetailListRecyclerViewAdapter extends RecyclerView.Adapter
         holder.mItem = mValues.get(position);
         holder.mTemp.setText(mValues.get(position).temp);
         holder.mDes.setText(mValues.get(position).description);
-//        holder.mTime.setText(mValues.get(position).time);
+        holder.mTime.setText(mValues.get(position).time);
         holder.mIcon.setImageResource(duc.getWeatherDrawable(holder.mView.getContext(),mValues.get(position).icon));
 
 
@@ -68,7 +68,7 @@ public class MyWeatherDetailListRecyclerViewAdapter extends RecyclerView.Adapter
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mTime = (TextView) view.findViewById(R.id.weather_date);
+            mTime = (TextView) view.findViewById(R.id.weather_timeInHour);
             mTemp = (TextView) view.findViewById(R.id.weather_temp);
             mDes = (TextView) view.findViewById(R.id.weather_description);
 

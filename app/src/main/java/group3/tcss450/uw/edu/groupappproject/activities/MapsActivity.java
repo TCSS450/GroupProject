@@ -1,11 +1,15 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,12 +24,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.Weather;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherContainer;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetailListFragment;
+import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
+import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -37,12 +52,26 @@ public class MapsActivity extends FragmentActivity implements
     private Marker mMarker;
     private EditText mZipCode;
     private Button mSubmitButton;
+    private SharedPreferences sharedPreferences;
+    private DataUtilityControl duc = Constants.dataUtilityControl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        try {
+            JSONArray jsonArray2 = new JSONArray(sharedPreferences.getString("location", "[]"));
+
+            for (int i = 0 ;i <jsonArray2.length(); i++) {
+                Log.d("your JSON Array", jsonArray2.getString(i));
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         mCurrentLocation = (Location) getIntent().getParcelableExtra("LOCATION");
 
         mZipCode = findViewById(R.id.maps_activity_enter_zip_text);
@@ -92,11 +121,26 @@ public class MapsActivity extends FragmentActivity implements
      */
     private String setCityText(Location loc) {
         Geocoder geoCoder = new Geocoder(this);
-        List<Address> list = null;
+        List<Address> list = Constants.previousLocation;
         String result = "Weather set to ";
         try {
             list = geoCoder.getFromLocation(Constants.MY_CURRENT_LOCATION
                     .getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude(), 1);
+
+            for (int i =0; i < list.size(); i++) {
+                Constants.previousLocation.add(list.get(i));
+            }
+
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(Constants.previousLocation);
+
+
+            SharedPreferences.Editor editor = this.sharedPreferences.edit();
+
+            editor.putString("location", jsonArray.toString());
+            editor.commit();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,6 +174,18 @@ public class MapsActivity extends FragmentActivity implements
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 15.0f));
         mMap.setOnMapClickListener(this);
     }
+    @Override
+    public void onBackPressed() {
+        Constants.refreshLocation = true;
+
+
+        super.onBackPressed();
+
+
+    }
+    private void handleErrorsInTask(String result) {
+        Log.e("ASYNCT_TASK_ERROR",  result);
+    }
 
     /**
      * Set new weather location by clicking on the map
@@ -152,5 +208,63 @@ public class MapsActivity extends FragmentActivity implements
         Toast.makeText(this, setCityText(loc), Toast.LENGTH_LONG).show();
 
     }
+    private void handleOnPostWeatherDate(String result) {
+
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+
+
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) { // success
+
+                JSONArray weatherArray = resultsJSON.getJSONArray("weather");
+
+                ArrayList<Weather> weatherArrayList = new ArrayList<>();
+
+                for (int i = 0 ;i < weatherArray.length(); i++ ) {
+                    JSONObject weather = weatherArray.getJSONObject(i);
+
+                    String date = weather.getString("valid_date");
+                    String temp = weather.getString("temp");
+                    String wind = weather.getString("wind_spd");
+                    String humidity = weather.getString("rh");
+                    String pressure = weather.getString("pres");
+                    humidity = humidity + "%";
+                    temp = temp + "°F";
+                    wind = wind + "m/s";
+
+                    JSONObject innerWeather = weather.getJSONObject("weather");
+
+                    String description = innerWeather.getString("description");
+
+                    String icon = innerWeather.getString("icon");
+
+                    Weather weatherObject = new Weather(temp,date, description, wind, pressure, humidity, icon);
+
+                    weatherArrayList.add(weatherObject);
+
+                }
+                Constants.weatherSearch = weatherArrayList;
+                loadFragment(new WeatherContainer());
+
+//                loadFragment(new MainWeatherFragment());
+
+            }  else {
+                this.duc.makeToast(getApplicationContext(), "END_POINT_ERROR");
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR",  result
+                    + System.lineSeparator()
+                    + e.getMessage());
+
+        }
+    }
+    private void loadFragment(Fragment frag) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.homeActivityFrame, frag)
+                .addToBackStack(null).commit();
+    }
+
 
 }

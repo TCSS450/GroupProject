@@ -1,9 +1,16 @@
 package group3.tcss450.uw.edu.groupappproject.utility;
 
+import android.content.SharedPreferences;
+import android.location.Address;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.widget.CheckBox;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.Weather;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetails;
@@ -38,6 +45,8 @@ public class Constants {
     public static final String CHANGE_DISPLAY_TYPE_URL = "https://group3-backend.herokuapp.com/update-display-type";
     public static final String GET_ALL_MESSAGES_URL = "https://group3-backend.herokuapp.com/messaging/getAll";
     public static final String SEND_REFERRAL_URL = "https://group3-backend.herokuapp.com/send-referral";
+    public static final String SHARE_PREF_LOCATION = "SP-Location";
+
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;
@@ -53,6 +62,10 @@ public class Constants {
     public static ArrayList<Weather> weatherSearch = null;
     public static ArrayList<WeatherDetails> weatherDetails = null;
     public static boolean myLoadHomeFragChats = true;
+    public static List<Address> previousLocation = new ArrayList<>();
 
+    public static SendPostAsyncTask saveAsunc = null;
+
+    public static boolean refreshLocation = false;
 
 }
