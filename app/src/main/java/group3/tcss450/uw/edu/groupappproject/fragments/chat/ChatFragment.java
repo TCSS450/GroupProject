@@ -97,6 +97,9 @@ public class ChatFragment extends Fragment {
         // Get Chat ID from the bundle
         Bundle bundle = this.getArguments();
         newChatId = bundle.getInt("chatId");
+        if (getArguments() != null) {
+            mMembers = (Credentials[]) bundle.getSerializable("members");
+        }
         mChatId = newChatId;
         String chatName = bundle.getString("chatName");
         if (chatName.length() > 30) {
@@ -105,8 +108,6 @@ public class ChatFragment extends Fragment {
         TextView chatNameTextView = rootLayout.findViewById(R.id.textView_chat_chatName);
         mWhoseTypingTextView = rootLayout.findViewById(R.id.is_typing_name);
         chatNameTextView.setText(chatName);
-        mMembers = (Credentials[]) bundle.getSerializable("members");
-        System.out.println("Size of MEMBERS ARRAY " + mMembers.length);
         memberId = duc.getUserCreds().getMemberId();
         nickname = duc.getUserCreds().getNickName();
         System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
@@ -375,8 +376,8 @@ public class ChatFragment extends Fragment {
                                     }
                                 }
                                 System.out.println("SENTINAL: " + mPeopleTalking.toString());
-                                if (sb.length() > 20) {
-                                    String outPutString = sb.substring(0, 20) + " is typing.";
+                                if (sb.length() > 25) {
+                                    String outPutString = sb.substring(0, 25) + " is typing.";
                                     mWhoseTypingTextView.setText(outPutString);
                                 } else {
                                     sb.append(" is typing.");
@@ -397,9 +398,11 @@ public class ChatFragment extends Fragment {
                                             sb.append(", and " + entry.getValue());
                                         }
                                     }
-                                    String outPutString = sb.substring(0, 20) + " is typing.";
-                                    mWhoseTypingTextView.setText(outPutString);
-                                    mGif.setVisibility(View.VISIBLE);
+                                    if (sb.length() > 25) {
+                                        String outPutString = sb.substring(0, 25) + " is typing.";
+                                        mWhoseTypingTextView.setText(outPutString);
+                                        mGif.setVisibility(View.VISIBLE);
+                                    }
                                 } else {
                                     mWhoseTypingTextView.setText("");
                                     mGif.setVisibility(View.INVISIBLE);

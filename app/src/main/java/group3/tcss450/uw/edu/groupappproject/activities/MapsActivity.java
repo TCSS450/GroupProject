@@ -64,9 +64,10 @@ public class MapsActivity extends FragmentActivity implements
 
         sharedPreferences = this.getSharedPreferences(
                 getString(R.string.keys_shared_prefs), this.MODE_PRIVATE);
-        System.out.println("INSIDE ONCREATE IN MAPSACTIVITY");
+        System.out.println("INSIDE ONCREATE IN MAPS ACTIVITY");
         try {
             JSONArray jsonArray2 = new JSONArray(sharedPreferences.getString("location", "[]"));
+            System.out.println(jsonArray2.length());
             for (int i = 0 ; i <jsonArray2.length(); i++) {
                 Log.d("your JSON Array", jsonArray2.getString(i));
             }
