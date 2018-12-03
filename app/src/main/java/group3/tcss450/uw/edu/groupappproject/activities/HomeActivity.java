@@ -602,6 +602,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         loadFragment(frag);
     }
 
+    @Override
+    public void onLeftChatFragmentInteraction(int chatId) {
+        Uri leaveChatUri = duc.getLeaveChatURI();
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("memberid", duc.getUserCreds().getMemberId());
+            msg.put("chatid", chatId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new SendPostAsyncTask.Builder(leaveChatUri.toString(), msg)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onPostExecute(this::handleLeaveChatOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+
+    }
+
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing
     // we have something that allows us to do that.
     class DeleteTokenAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -663,6 +682,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     + System.lineSeparator()
                     + e.getMessage());
             duc.makeToast(this, getString(R.string.request_error));
+        }
+    }
+
+    private void handleLeaveChatOnPost(String result) {
+        /* 1 - Success. You left the chat.
+           2 - Error
+         */
+        try {
+            Log.d("JSON result", result);
+            JSONObject resultsJSON = new JSONObject(result);
+            int status = resultsJSON.getInt("status");
+            if (status == 1) {
+                duc.makeToast(this, "You have left the chat.");
+                getMyChats();
+            }  else {
+                duc.makeToast(this, "There was an error in leaving the chat");
+            }
+        } catch (JSONException e) {
+
         }
     }
 

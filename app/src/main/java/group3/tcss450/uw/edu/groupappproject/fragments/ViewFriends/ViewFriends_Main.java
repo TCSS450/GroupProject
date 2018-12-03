@@ -136,7 +136,6 @@ public class ViewFriends_Main extends Fragment {
     }
 
     private void handleErrorsInTask(String result) {
-        System.out.println("INSIDE ERRORS");
         Log.e("ASYNCT_TASK_ERROR",  result);
     }
 

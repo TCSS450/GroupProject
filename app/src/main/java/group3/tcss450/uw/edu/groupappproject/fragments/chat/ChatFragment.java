@@ -1,5 +1,8 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.chat;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,15 +14,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
@@ -66,7 +67,7 @@ public class ChatFragment extends Fragment {
     private ImageButton mLeaveChatButton;
     int newChatId;
     protected static int mChatId;
-    private Map<String, String> mPeopleTalking;
+    private Map<String, String> mPeopleTyping;
 
     private OnFragmentInteractionListener mListener;
 
@@ -89,10 +90,11 @@ public class ChatFragment extends Fragment {
         mGif.setVisibility(View.INVISIBLE);
         mAddToChatButton = rootLayout.findViewById(R.id.imageButton_chat_addFriend);
         mAddToChatButton.setOnClickListener(this::addFriendToChat);
-        mAddToChatButton = rootLayout.findViewById(R.id.imageButton_chat_leave);
+        mLeaveChatButton = rootLayout.findViewById(R.id.imageButton_chat_leave);
+        mLeaveChatButton.setOnClickListener(this::leaveChat);
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
         this.duc = Constants.dataUtilityControl;
-        mPeopleTalking = new HashMap<>();
+        mPeopleTyping = new HashMap<>();
 
         // Get Chat ID from the bundle
         Bundle bundle = this.getArguments();
@@ -160,6 +162,25 @@ public class ChatFragment extends Fragment {
     private void addFriendToChat(View v) {
         mListener.onGoToFriendsFragmentInteraction(mMembers);
     }
+
+    private void leaveChat(View v) {
+        Dialog d = onCreateDialog();
+        d.show();
+    }
+
+    public Dialog onCreateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Are you sure you wish to leave this chat")
+                .setMessage("You will lose all messages within this chat.")
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .setPositiveButton("Leave Chat", (dialog, which) -> {
+                    dialog.cancel();
+                    mListener.onLeftChatFragmentInteraction(newChatId);
+
+                });
+        return builder.create();
+    }
+
 
     @Override
     public void onStart() {
@@ -369,13 +390,13 @@ public class ChatFragment extends Fragment {
                                 String memberId = jObj.getString("memberid_whos_typing");
                                 StringBuilder sb = new StringBuilder();
                                 sb.append(sender);
-                                mPeopleTalking.put(memberId, sender);
-                                for (HashMap.Entry<String, String> entry : mPeopleTalking.entrySet()) {
+                                mPeopleTyping.put(memberId, sender);
+                                for (HashMap.Entry<String, String> entry : mPeopleTyping.entrySet()) {
                                     if (!entry.getKey().equals(memberId)) {
                                         sb.append(", and " + entry.getValue());
                                     }
                                 }
-                                System.out.println("SENTINAL: " + mPeopleTalking.toString());
+                                System.out.println("SENTINAL: " + mPeopleTyping.toString());
                                 if (sb.length() > 25) {
                                     String outPutString = sb.substring(0, 25) + " is typing.";
                                     mWhoseTypingTextView.setText(outPutString);
@@ -390,10 +411,10 @@ public class ChatFragment extends Fragment {
                         } else if (jObj.getString("type").equals("done-typing")) {
                             if (jObj.getString("chatid").equals(Integer.toString(mChatId))) {
                                 String memberId = jObj.getString("memberid_whos_typing");
-                                mPeopleTalking.remove(memberId);
+                                mPeopleTyping.remove(memberId);
                                 StringBuilder sb = new StringBuilder();
-                                if (mPeopleTalking.size() > 0) {
-                                    for (HashMap.Entry<String, String> entry : mPeopleTalking.entrySet()) {
+                                if (mPeopleTyping.size() > 0) {
+                                    for (HashMap.Entry<String, String> entry : mPeopleTyping.entrySet()) {
                                         if (!entry.getKey().equals(memberId)) {
                                             sb.append(", and " + entry.getValue());
                                         }
@@ -407,7 +428,7 @@ public class ChatFragment extends Fragment {
                                     mWhoseTypingTextView.setText("");
                                     mGif.setVisibility(View.INVISIBLE);
                                 }
-                                System.out.println("SENTINAL: " + mPeopleTalking.toString());
+                                System.out.println("SENTINAL: " + mPeopleTyping.toString());
                             }
                         }
                     }
@@ -428,9 +449,10 @@ public class ChatFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnFragmentInteractionListener extends WaitFragment.OnWaitFragmentInteractionListener {
         // TODO: Update argument type and name
         void onGoToFriendsFragmentInteraction(Credentials[] members);
+        void onLeftChatFragmentInteraction(int chatId);
     }
 
 }
