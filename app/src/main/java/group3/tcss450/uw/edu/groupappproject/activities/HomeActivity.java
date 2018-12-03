@@ -87,7 +87,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         WeatherFragment.OnWeatherListFragmentInteractionListener,
         MyChatsFragment.OnListFragmentInteractionListener,
         ChangeDisplayName.OnFragmentInteractionListener,
-        ReferAFriendFragment.OnFragmentInteractionListener
+        ReferAFriendFragment.OnFragmentInteractionListener,
+        ChatFragment.OnFragmentInteractionListener
 {
 
     /**
@@ -242,25 +243,43 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        String title = "";
         if (id == R.id.addFriend) {
             loadFragment(new AddUserFragment());
+            title = "Add a Friend";
         } else if (id == R.id.viewChats) {
             getMyChats();
+            title = "My Chats";
         } else if (id == R.id.connections) {
             loadFragment(new ViewFriends_Main());
+            title = "My Friends";
         } else if (id == R.id.requests) {
             loadFragment(new FriendRequests());
+            title = "My Friend Requests";
         } else if (id == R.id.weather) {
+            title = "Weather";
+            JSONObject msg = new JSONObject();
+            //requestLocation();
+            try {
+                msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+                msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+                msg.put("days", 10);
+            }catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
+            }
            loadFragment(new WeatherContainer());
 
 
         } else if (id == R.id.home) {
             loadFragment(new HomeViewFragment());
+            title = "Home";
         } else if (id == R.id.referral) {
+            title = "Refer-a-Friend";
             loadFragment(new ReferAFriendFragment());
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        getSupportActionBar().setTitle(title);
         return true;
     }
 
@@ -572,6 +591,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.homeActivityFrame, frag)
                 .addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onGoToFriendsFragmentInteraction(Credentials[] members) {
+        Bundle args = new Bundle();
+        ViewFriends_Main frag = new ViewFriends_Main();
+        args.putSerializable("members", members);
+        frag.setArguments(args);
+        loadFragment(frag);
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing

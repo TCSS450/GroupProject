@@ -14,9 +14,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -57,10 +62,13 @@ public class ChatFragment extends Fragment {
     private MessageListAdapter mMessageAdapter;
     private FirebaseMessageReciever mFirebaseMessageReciever;
     private TextView mWhoseTypingTextView;
-
+    private ImageButton mAddToChatButton;
+    private ImageButton mLeaveChatButton;
     int newChatId;
     protected static int mChatId;
     private Map<String, String> mPeopleTalking;
+
+    private OnFragmentInteractionListener mListener;
 
     //private String nickName;
     public ChatFragment() {
@@ -75,12 +83,18 @@ public class ChatFragment extends Fragment {
 
         //set up the recycler view
         RecyclerView mMessageRecycler = (RecyclerView) rootLayout.findViewById(R.id.chatFrag_message_recycler);
+
+        // Set up variables/textViews/buttons/etc.
         mGif = rootLayout.findViewById(R.id.gifImageView);
         mGif.setVisibility(View.INVISIBLE);
+        mAddToChatButton = rootLayout.findViewById(R.id.imageButton_chat_addFriend);
+        mAddToChatButton.setOnClickListener(this::addFriendToChat);
+        mAddToChatButton = rootLayout.findViewById(R.id.imageButton_chat_leave);
         mMessageInputEditText = rootLayout.findViewById(R.id.edit_chat_message_input);
-        //assignName(this.duc.getUserCreds().getNickName());
         this.duc = Constants.dataUtilityControl;
         mPeopleTalking = new HashMap<>();
+
+        // Get Chat ID from the bundle
         Bundle bundle = this.getArguments();
         newChatId = bundle.getInt("chatId");
         mChatId = newChatId;
@@ -92,12 +106,10 @@ public class ChatFragment extends Fragment {
         mWhoseTypingTextView = rootLayout.findViewById(R.id.is_typing_name);
         chatNameTextView.setText(chatName);
         mMembers = (Credentials[]) bundle.getSerializable("members");
+        System.out.println("Size of MEMBERS ARRAY " + mMembers.length);
         memberId = duc.getUserCreds().getMemberId();
         nickname = duc.getUserCreds().getNickName();
-        //String newNotifyId = getInt
         System.out.println("----------------------NEW CHAT ID " + newChatId + "---------------------------");
-        //String prefName[] = new String[3];
-
         mMessageInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -121,8 +133,6 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        //System.out.println("The new chat id is " + newChatId);
-
         String mGetUrl = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -133,7 +143,6 @@ public class ChatFragment extends Fragment {
 
         JSONObject messageGetJson = new JSONObject();
         try {
-            System.out.println("the notification without id is " + newChatId);
             messageGetJson.put("chatId", newChatId);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -145,6 +154,10 @@ public class ChatFragment extends Fragment {
 
         rootLayout.findViewById(R.id.button_chat_send).setOnClickListener(this::handleSendClick);
         return rootLayout;
+    }
+
+    private void addFriendToChat(View v) {
+        mListener.onGoToFriendsFragmentInteraction(mMembers);
     }
 
     @Override
@@ -182,7 +195,13 @@ public class ChatFragment extends Fragment {
         JSONObject messageTypeJson = new JSONObject();
         try {
             messageTypeJson.put("chatid", newChatId);
-            messageTypeJson.put("membername", duc.getUserCreds().getNickName());
+            if (duc.getUserCreds().getDisplayPref() == 1) {
+                messageTypeJson.put("membername", duc.getUserCreds().getNickName());
+            } else if (duc.getUserCreds().getDisplayPref() == 2) {
+                messageTypeJson.put("membername", duc.getUserCreds().getFullName());
+            } else {
+                messageTypeJson.put("membername", duc.getUserCreds().getEmail());
+            }
             messageTypeJson.put("memberid", duc.getUserCreds().getMemberId());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -313,6 +332,17 @@ public class ChatFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnBestFriendInteractionListener");
+        }
+    }
+
     /**
      * A BroadcastReceiver setup to listen for messages sent from
      * MyFirebaseMessagingService
@@ -384,4 +414,20 @@ public class ChatFragment extends Fragment {
             }
         }
     }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onGoToFriendsFragmentInteraction(Credentials[] members);
+    }
+
 }

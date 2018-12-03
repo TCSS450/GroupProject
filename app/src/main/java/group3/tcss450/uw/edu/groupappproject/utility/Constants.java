@@ -47,13 +47,14 @@ public class Constants {
     public static final String SEND_REFERRAL_URL = "https://group3-backend.herokuapp.com/send-referral";
     public static final String SHARE_PREF_LOCATION = "SP-Location";
 
+    public static final String LEAVE_CHAT_URL = "https://group3-backend.herokuapp.com/remove-member-from-chat";
 
     //VARIABLES
     public static DataUtilityControl dataUtilityControl = null;
     public static ArrayList<FriendStatus> searchResults = null;
     public static ArrayList<Credentials> receivedRequests = null;
     public static ArrayList<Credentials> sentRequests = null;
-    public static ArrayList<Credentials> temporaryCreds = new ArrayList<>();
+    public static ArrayList<Credentials> temporaryCreds = null;
     public static ArrayList<Credentials> myFriends = null;
     public static ArrayList<Integer> myChatIds = null;
     public static ArrayList<Credentials[]> myChatMembers = null;

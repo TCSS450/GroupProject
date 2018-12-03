@@ -33,6 +33,7 @@ public class ViewFriends_Main extends Fragment {
     private EditText mChatName;
     private OnFragmentInteractionListener mListener;
     private Credentials[] mFriends;
+    private Credentials[] passedCredentials;
 
     public ViewFriends_Main() {}
 
@@ -48,6 +49,16 @@ public class ViewFriends_Main extends Fragment {
         return v;
     }
 
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (getArguments() != null) {
+                Log.d("ViewFriends", "getArgs not null");
+                passedCredentials = (Credentials[]) getArguments().getSerializable("members");
+                System.out.println(passedCredentials.length);
+            }
+        }
+
     public void startChat() {
         ArrayList<Integer> members = new ArrayList<>();
         for (int i = 0; i < Constants.chatCheckBoxes.size(); i++) {
@@ -58,6 +69,13 @@ public class ViewFriends_Main extends Fragment {
         if (members.size() == 0) {
             duc.makeToast(getActivity(), "Why not invite others to your chat?");
         } else {
+            if (passedCredentials != null) {
+                for (int i = 0; i < passedCredentials.length; i++) {
+                    if (passedCredentials[i].getMemberId() != duc.getUserCreds().getMemberId()) {
+                        members.add(passedCredentials[i].getMemberId());
+                    }
+                }
+            }
             members.add(duc.getUserCreds().getMemberId());
             int[] membersArray = new int[members.size()];
 
@@ -93,6 +111,27 @@ public class ViewFriends_Main extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (passedCredentials != null) {
+            for (int i = 0; i < passedCredentials.length; i++) {
+                for (int j = 0; j < Constants.myFriends.size(); j++) {
+                    if (Constants.myFriends.get(j).getMemberId() == passedCredentials[i].getMemberId()) {
+                        Constants.myFriends.remove(j);
+                    }
+                }
+            }
+        } else {
+            Uri getFriendsURI = this.duc.getAllFriendsURI();
+            JSONObject msg = new JSONObject();
+            try {
+                msg.put("user", duc.getUserCreds().getEmail());
+            } catch (JSONException e) {
+                Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
+            }
+            new SendPostAsyncTask.Builder(getFriendsURI.toString(), msg)
+                    .onPostExecute(this::handleGetFriendsOnPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
+            }
         loadFriendsFragment(new ViewFriends());
     }
 
@@ -137,6 +176,7 @@ public class ViewFriends_Main extends Fragment {
                 }
                 mFriends = new Credentials[creds.size()];
                 mFriends = creds.toArray(mFriends);
+
             } else {
                 duc.makeToast(getActivity(), getString(R.string.request_error));
             }
@@ -180,6 +220,43 @@ public class ViewFriends_Main extends Fragment {
                         .replace(R.id.FrameLayout_viewFriends_listFrame, frag)
                         .addToBackStack(null);
         transaction.commit();
+    }
+
+    private void handleGetFriendsOnPost(String result) {
+
+        //parse JSON
+        Log.d("ViewFriends post execute result: ", result);
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            if (resultsJSON.has("error")) {
+                boolean error = resultsJSON.getBoolean("error");
+                if (!error) {
+                    if (resultsJSON.has("friends")) {
+                        JSONArray friendsArray = resultsJSON.getJSONArray("friends");
+                        ArrayList<Credentials> creds = new ArrayList<>();
+                        for (int i = 0; i < friendsArray.length(); i++) {
+                            JSONObject jsonFriend = friendsArray.getJSONObject(i);
+                            Log.d("ViewFriends post execute friend: ", jsonFriend.toString());
+                            creds.add(new Credentials.Builder(jsonFriend.getString("email"), "")
+                                    .addNickName(jsonFriend.getString("nickname"))
+                                    .addFirstName(jsonFriend.getString("firstname"))
+                                    .addLastName(jsonFriend.getString("lastname"))
+                                    .addPhoneNumber(jsonFriend.getString("phone"))
+                                    .addMemberId(jsonFriend.getInt("memberid"))
+                                    .build());
+                        }
+                        Constants.myFriends = creds;
+                        // insert the friends list view
+//                        insertNestedFragment(R.id.homeView_bestFriend_frame, new BestFriendsFragment());
+                    }
+                } else {
+                    duc.makeToast(getActivity(), "Oops! An Error has occurred");
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("JSON_PARSE_ERROR", result);
+            duc.makeToast(getActivity(), "OOPS! Something went wrong!");
+        }
     }
 
 

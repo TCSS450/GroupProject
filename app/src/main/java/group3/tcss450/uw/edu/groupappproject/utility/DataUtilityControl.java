@@ -175,6 +175,8 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Uri getFriendReferralURI() { return Uri.parse(Constants.SEND_REFERRAL_URL); }
 
+    public Uri getLeaveChatURI() { return Uri.parse(Constants.LEAVE_CHAT_URL); }
+
     public int getWeatherDrawable(Context context, String iconCode) {
         return context.getResources().getIdentifier("group3.tcss450.uw.edu.groupappproject:drawable/" + iconCode, null, null);
     }

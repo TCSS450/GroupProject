@@ -1,5 +1,6 @@
 package group3.tcss450.uw.edu.groupappproject.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
@@ -60,20 +61,19 @@ public class MapsActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        sharedPreferences = this.getSharedPreferences(
+                getString(R.string.keys_shared_prefs), this.MODE_PRIVATE);
+        System.out.println("INSIDE ONCREATE IN MAPSACTIVITY");
         try {
             JSONArray jsonArray2 = new JSONArray(sharedPreferences.getString("location", "[]"));
-
-            for (int i = 0 ;i <jsonArray2.length(); i++) {
-                Log.d("your JSON Array", jsonArray2.get(i).toString());
-
+            for (int i = 0 ; i <jsonArray2.length(); i++) {
+                Log.d("your JSON Array", jsonArray2.getString(i));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         mCurrentLocation = (Location) getIntent().getParcelableExtra("LOCATION");
-
         mZipCode = findViewById(R.id.maps_activity_enter_zip_text);
         mSubmitButton = findViewById(R.id.maps_activity_submitZip_button);
         mSubmitButton.setOnClickListener(this::getLocByZip);
@@ -131,12 +131,14 @@ public class MapsActivity extends FragmentActivity implements
                 Constants.previousLocation.add(list.get(i));
             }
 
+
+
+
             JSONArray jsonArray = new JSONArray();
             jsonArray.put(Constants.previousLocation);
 
 
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
-
             editor.putString("location", jsonArray.toString());
             editor.commit();
 

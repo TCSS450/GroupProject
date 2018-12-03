@@ -39,14 +39,10 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link WeatherContainer#newInstance} factory method to
+ * Use the {@link WeatherContainer#} factory method to
  * create an instance of this fragment.
  */
 public class WeatherContainer extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,39 +57,41 @@ public class WeatherContainer extends Fragment {
 
     public WeatherContainer() {
         // Required empty public constructor
-        this.duc = Constants.dataUtilityControl;
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WeatherContainer.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WeatherContainer newInstance(String param1, String param2) {
-        WeatherContainer fragment = new WeatherContainer();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.duc = Constants.dataUtilityControl;
         this.bundle = savedInstanceState;
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        JSONObject msg = new JSONObject();
+        //requestLocation();
+        try {
+            msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+            msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+            msg.put("days", 10);
+        }catch (JSONException e) {
+            Log.wtf("CREDENTIALS", "Error: " + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(this.duc.getWeatherDateURI().toString(), msg)
+                .onPostExecute(this::handleOnPostWeatherDate)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
 
+        JSONObject msg2 = new JSONObject();
+
+        try {
+            msg2.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+            msg2.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+        }catch (JSONException e) {
+            Log.wtf("WEATHER", "Error: " + e.getMessage());
         }
 
-
-
+        new SendPostAsyncTask.Builder(this.duc.getWeatherHourURI().toString(), msg2)
+                .onPostExecute(this::handleONPostWeatherHour)
+                .onPreExecute(this::onWaitFragmentInteractionShow)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
     }
 
     private void handleOnPostWeatherDate(String result) {
@@ -153,47 +151,25 @@ public class WeatherContainer extends Fragment {
 
     private void handleONPostWeatherHour(String result) {
         onWaitFragmentInteractionHide();
-
         try {
             JSONObject resultsJSON = new JSONObject(result);
-
-
             boolean success = resultsJSON.getBoolean("success");
             if (success) { // success
-
                 JSONArray weatherArray = resultsJSON.getJSONArray("weather");
-
                 ArrayList<WeatherDetails> weatherDetailsArrayList = new ArrayList<>();
-
                 for (int i = 0 ;i < weatherArray.length(); i++ ) {
                     JSONObject weather = weatherArray.getJSONObject(i);
-
                     String time = weather.getString("timestamp_local");
-
-
                     String substr = time.substring(time.indexOf("T")+ 1);
                     String temp = weather.getString("temp");
-
-
-
                     temp = temp + "ºF";
-
                     JSONObject innerWeatherDetails = weather.getJSONObject("weather");
-
                     String description = innerWeatherDetails.getString("description");
-
                     String icon = innerWeatherDetails.getString("icon");
-
-
-
                     WeatherDetails weatherDetailsObject = new WeatherDetails(temp,substr, description, icon);
-
                     weatherDetailsArrayList.add(weatherDetailsObject);
-
                 }
                 Constants.weatherDetails = weatherDetailsArrayList;
-
-
                 load24hoursFragment(new WeatherDetailListFragment());
                 load10DaysFragment(new WeatherFragment());
 //                loadFragment(new WeatherContainer(), R.id.weather_container_id);
@@ -224,15 +200,9 @@ public class WeatherContainer extends Fragment {
             System.out.println("CAME FROM MAP ACTIVITY");
 //            insertNestedFragment(R.id.frameLayout6, new WeatherDetailListFragment());
 //            insertNestedFragment(R.id.days_frame, new WeatherFragment());
-
-
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.detach(this).attach(this).commit();
-
-
             Constants.refreshLocation = false;
-
-
         }
 
         super.onResume();
@@ -327,15 +297,10 @@ public class WeatherContainer extends Fragment {
     }
 
     public Dialog onCreateDialog() {
-
         String[] arr = new String[Constants.previousLocation.size()];
-
-
-
         for(int i = 0; i<Constants.previousLocation.size();i++) {
             arr[i] = Constants.previousLocation.get(i).getLocality() + ", " + Constants.previousLocation.get(i).getPostalCode();
         }
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select Location")
                 .setItems(arr , new DialogInterface.OnClickListener() {
@@ -399,6 +364,7 @@ public class WeatherContainer extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(container, fragment).commit();
     }
+
     private void onPostGetWeather(String result) {
         Log.d("HomeViewFragment Weather post execute result: ", result);
         try {

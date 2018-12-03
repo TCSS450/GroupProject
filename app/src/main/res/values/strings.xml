@@ -104,6 +104,11 @@
     <string name="change_display_name">Change Display Name</string>
     <string name="change_display_apply">Apply</string>
 
+    <!--chat fragment menu -->
+    <string name="chatmenu_add">Add Friend to Chat</string>
+    <string name="chatmenu_leave">Leave Chat</string>
+    <string name="chatmenu_remove">Remove Friend from Chat</string>
+
 
     <!--password Requirements-->
     <string name="passwordRequirements">
@@ -140,4 +145,5 @@
     <string name="referFriend_inviteSent">Invitation Sent!</string>
     <string name="referFriend_friend_active">The user with this email already has an account, let\'s send them a friend request instead!</string>
     <string name="referFriend_friend_inactive">The user with this email already exists, but is not verified. We\'ve sent them a reminder!</string>
+
 </resources>
