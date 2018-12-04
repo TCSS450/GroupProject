@@ -89,7 +89,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         MyChatsFragment.OnListFragmentInteractionListener,
         ChangeDisplayName.OnFragmentInteractionListener,
         ReferAFriendFragment.OnFragmentInteractionListener,
-        ChatFragment.OnFragmentInteractionListener
+        ChatFragment.OnFragmentInteractionListener,
+        FriendRequests.OnFragmentInteractionListener,
+        MyChats_Main.OnFragmentInteractionListener
 {
 
     /**
@@ -495,6 +497,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public void onRestartFriends_mainFragmentInteraction() {
+        loadFragment(new ViewFriends_Main());
+    }
+
+    @Override
     public void onChangePasswordSubmit() {
         //log the user out to home screen
         Log.d("PreLoginActivity", "successful password change");
@@ -628,6 +635,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
 
+    }
+
+    @Override
+    public void onResetFriendRequestInteraction() {
+        loadFragment(new FriendRequests());
+    }
+
+    @Override
+    public void onReloadMyChatsFragmentInteraction() {
+        Constants.myLoadHomeFragChats = false;
+        getMyChats();
     }
 
     // Deleting the InstanceId (Firebase token) must be done asynchronously. Good thing

@@ -89,8 +89,6 @@ public class DataUtilityControl extends AppCompatActivity {
 
     public Fragment getWaitFragment() { return this.waitFragment;}
 
-    public Fragment getViewWeatherFragment() { return this.viewWeatherFragment;}
-
     public Fragment getVerificationFragment() { return this.verificationFragment;}
 
     public Fragment getNewFriendFragment() { return new FriendsFragment(); }

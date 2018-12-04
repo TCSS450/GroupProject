@@ -1,6 +1,10 @@
 package group3.tcss450.uw.edu.groupappproject.fragments.ViewFriendRequests;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,9 +28,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import group3.tcss450.uw.edu.groupappproject.R;
+import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
+import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
@@ -35,7 +41,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 public class FriendRequests extends Fragment {
 
     private DataUtilityControl duc;
-
+    private FirebaseMessageReciever mFirebaseMessageReciever;
+    private OnFragmentInteractionListener mListener;
 
     public FriendRequests() {
         // Required empty public constructor
@@ -182,5 +189,78 @@ public class FriendRequests extends Fragment {
                         .replace(R.id.FrameLayout_SentRequests, frag)
                         .addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnChatFragmentListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
+    }
+
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        //String duc.DataUtilityControl
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("FCM Chat Frag", "start onRecieve");
+            if (intent.hasExtra("DATA")) {
+                String data = intent.getStringExtra("DATA");
+                Log.d("Message data", data);
+                try {
+                    JSONObject jObj = new JSONObject(data);
+                    if (jObj.has("type")) {
+                        if (jObj.getString("type").equals("contact")) {
+                            String contact = jObj.getString("sender");
+                            String message = jObj.getString("message");
+                            duc.makeToast(getActivity(), "New Message from " + contact + " \nMessage: " + message);
+                        } else if (jObj.getString("type").equals("sent")) {
+                            String contact = jObj.getString("senderString") ;
+                            duc.makeToast(getActivity(), "New Friend Request from " + contact);
+                            mListener.onResetFriendRequestInteraction();
+                        } else if (jObj.getString("type").equals("accepted")) {
+                            String contact = jObj.getString("senderString");
+                            duc.makeToast(getActivity(), contact + " accepted your friend request");
+                            mListener.onResetFriendRequestInteraction();
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSON PARSE", e.toString());
+                }
+            }
+        }
+    }
+
+    public interface OnFragmentInteractionListener
+            extends WaitFragment.OnWaitFragmentInteractionListener{
+        // notify successful of password change
+        void onResetFriendRequestInteraction();
     }
 }

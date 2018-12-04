@@ -139,13 +139,10 @@ public class MessagesListFragment extends Fragment
         //String duc.DataUtilityControl
         @Override
         public void onReceive(Context context, Intent intent) {
-
             Log.i("FCM Chat Frag", "start onRecieve");
-
             if (intent.hasExtra("DATA")) {
                 String data = intent.getStringExtra("DATA");
                 JSONObject jObj = null;
-
                 Log.d("Message data", data);
                 //JSONObject userPref
                 try {
@@ -153,21 +150,24 @@ public class MessagesListFragment extends Fragment
                     if (jObj.has("message") && jObj.has("sender")) {
                         String sender = jObj.getString("sender");
                         String msg = jObj.getString("message");
+                        String chatId = jObj.getString("chatId");
+                        System.out.println(chatId + " == " + ChatFragment.mChatId);
+                        if (chatId.equals(Integer.toString(ChatFragment.mChatId))) {
+                            JSONObject messageGetJson = new JSONObject();
+                            try {
+                                messageGetJson.put("chatId", ChatFragment.mChatId);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            new SendPostAsyncTask.Builder(Constants.GET_ALL_MESSAGES_URL, messageGetJson)
+                                    .onPostExecute(this::endOfGetMsgTask)
+                                    .build().execute();
 
-                        JSONObject messageGetJson = new JSONObject();
-                        try {
-                            messageGetJson.put("chatId", ChatFragment.mChatId);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.d("Message return", data);
+
+                            //System.out.println("THE SECOND PASS");
+                            Log.i("FCM Chat Frag", sender + " " + msg);
                         }
-                        new SendPostAsyncTask.Builder(Constants.GET_ALL_MESSAGES_URL, messageGetJson)
-                                .onPostExecute(this::endOfGetMsgTask)
-                                .build().execute();
-
-                        Log.d("Message return", data);
-
-                        //System.out.println("THE SECOND PASS");
-                        Log.i("FCM Chat Frag", sender + " " + msg);
                     }
                 } catch (JSONException e) {
                     Log.e("JSON PARSE", e.toString());

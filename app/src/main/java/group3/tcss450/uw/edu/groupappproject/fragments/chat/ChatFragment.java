@@ -430,6 +430,20 @@ public class ChatFragment extends Fragment {
                                 }
                                 System.out.println("SENTINAL: " + mPeopleTyping.toString());
                             }
+                        } else if (jObj.has("type")) {
+                            if (jObj.getString("type").equals("contact")) {
+                                if (!jObj.getString("chatId").equals(Integer.toString(mChatId))) {
+                                    String contact = jObj.getString("sender");
+                                    String message = jObj.getString("message");
+                                    duc.makeToast(getActivity(), "New Message from " + contact + " \nMessage: " + message);
+                                }
+                            } else if (jObj.getString("type").equals("sent")) {
+                                String contact = jObj.getString("senderString") ;
+                                duc.makeToast(getActivity(), "New Friend Request from " + contact);
+                            } else if (jObj.getString("type").equals("accepted")) {
+                                String contact = jObj.getString("senderString");
+                                duc.makeToast(getActivity(), contact + " accepted your friend request");
+                            }
                         }
                     }
                 } catch (JSONException e) {
