@@ -140,8 +140,13 @@ public class HomeViewFragment extends Fragment {
 
 
         try {
-            latLong.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-            latLong.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+            if (Constants.MY_CURRENT_LOCATION != null) {
+                latLong.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+                latLong.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+            } else {
+                latLong.put("lat", 47.2529);
+                latLong.put("lon", 122.4443);
+            }
             latLong.put("days", 10);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -266,8 +266,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             JSONObject msg = new JSONObject();
             //requestLocation();
             try {
-                msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-                msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+                if (Constants.MY_CURRENT_LOCATION != null) {
+                    msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+                    msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
+                } else {
+                    msg.put("lat", 47.2529);
+                    msg.put("lon", 122.4443);
+                }
                 msg.put("days", 10);
             }catch (JSONException e) {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());

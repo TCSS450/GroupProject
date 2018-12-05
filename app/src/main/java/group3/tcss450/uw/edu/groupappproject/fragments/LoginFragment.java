@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -197,8 +198,9 @@ public class LoginFragment extends Fragment {
                 mListener.OnLogin(this.loginCreds);
             }  else if (status == 2) { // email does not exist in DB, prompt to register
                 mListener.onWaitFragmentInteractionHide();
-                this.duc.makeToast(getContext(),
-                        "Email not in our system/unrecognized nickname, please register");
+                Toast.makeText(getContext(),
+                        "Email not in our system/unrecognized nickname, please register",
+                        Toast.LENGTH_LONG).show();
             } else if (status == 3) { // Email/NN exists in DB, but password was incorrect (tell user to re-enter pass)
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.passwordInput))
