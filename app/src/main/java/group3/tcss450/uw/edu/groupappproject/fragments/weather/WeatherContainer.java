@@ -67,8 +67,13 @@ public class WeatherContainer extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.duc = Constants.dataUtilityControl;
-        makeDayWeatherCall(Constants.MY_CURRENT_LOCATION.getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude());
-        makeHourWeatherCall(Constants.MY_CURRENT_LOCATION.getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude());
+        if (Constants.MY_CURRENT_LOCATION != null) {
+            makeDayWeatherCall(Constants.MY_CURRENT_LOCATION.getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude());
+            makeHourWeatherCall(Constants.MY_CURRENT_LOCATION.getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude());
+        } else {
+            makeDayWeatherCall(47.2529, 122.4443);
+            makeDayWeatherCall(47.2529, 122.4443);
+        }
     }
 
     private void makeDayWeatherCall(double lat, double lon) {
@@ -326,21 +331,23 @@ public class WeatherContainer extends Fragment {
         return builder.create();
     }
     private void setCityText(TextView text) {
-        Geocoder geoCoder = new Geocoder(getContext());
-        List<Address> list = null;
-        String result = "Weather in ";
-        try {
-            list = geoCoder.getFromLocation(Constants.MY_CURRENT_LOCATION
-                    .getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude(), 1);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(Constants.MY_CURRENT_LOCATION != null) {
+            Geocoder geoCoder = new Geocoder(getContext());
+            List<Address> list = null;
+            String result = "Weather in ";
+            try {
+                list = geoCoder.getFromLocation(Constants.MY_CURRENT_LOCATION
+                        .getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude(), 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (list != null & list.size() > 0) {
+                Address address = list.get(0);
+                result += address.getLocality();
+            }
+            text.setText(result);
+            Log.d("MapsActivity getLoc", result);
         }
-        if (list != null & list.size() > 0) {
-            Address address = list.get(0);
-            result += address.getLocality();
-        }
-        text.setText(result);
-        Log.d("MapsActivity getLoc", result);
     }
 
     private void load10DaysFragment(Fragment frag) {

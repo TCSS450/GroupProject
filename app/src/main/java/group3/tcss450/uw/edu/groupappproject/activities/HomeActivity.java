@@ -29,6 +29,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -169,6 +170,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             //The user has already allowed the use of Locations. Get the current location.
             requestLocation();
         }
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    // Update UI with location data
+                    Constants.MY_CURRENT_LOCATION = location;
+                    Log.d("LOCATION UPDATE!", location.toString());
+                }
+            };
+        };
         if (duc.getBooleanId()) {
             ChatFragment frag = new ChatFragment();
             Bundle args = new Bundle();
@@ -210,6 +225,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
         }
+        mCurrentLocation = new Location("default");
+        mCurrentLocation.setLongitude(122.4443);
+        mCurrentLocation.setLatitude(47.2529);
         Constants.MY_CURRENT_LOCATION = mCurrentLocation;
     }
 

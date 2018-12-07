@@ -148,6 +148,7 @@ public class HomeViewFragment extends Fragment {
                 latLong.put("lon", 122.4443);
             }
             latLong.put("days", 10);
+            Log.d("Location Weather", latLong.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -15,7 +15,6 @@
         android:layout_height="94dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/weather_icon_rounded_square"
         android:src="@drawable/r03n"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

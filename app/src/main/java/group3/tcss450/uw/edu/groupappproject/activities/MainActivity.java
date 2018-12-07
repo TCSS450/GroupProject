@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
         System.out.println("check notify id is " + notificationID);
 
-        Constants.dataUtilityControl = new DataUtilityControl();
         Constants.dataUtilityControl.setNotifyId(notificationID);
         Constants.dataUtilityControl.setBooleanNotify(checkNotification);
         Constants.dataUtilityControl.setFriendRequests(friendRequestCheck);
