@@ -26,12 +26,11 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
+/**
+ * Log a user in if valid username and pass entered.
+ */
 public class LoginFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
-
-    // TODO: Rename and change types of parameters
     private DataUtilityControl duc;
     private Credentials loginCreds;
     private EditText mEmail;
@@ -305,13 +304,8 @@ public class LoginFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnLoginWaitFragmentInteractionListener extends WaitFragment.OnWaitFragmentInteractionListener{
-        // TODO: Update argument type and name
         void OnLogin(Credentials credentials);
         void onRegisterClickedFromLogin();
         void registeredUserSendToVerification(Credentials credentials);

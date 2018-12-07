@@ -21,6 +21,9 @@ import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 
+/**
+ * Display the chatrooms that the user is currently in.
+ */
 public class MyChats_Main extends Fragment {
 
     private DataUtilityControl duc;

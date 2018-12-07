@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 
-
+/**
+ * An overlay fragment that sits on top and is transparent.
+ */
 public class WaitFragment extends Fragment {
 
     private OnWaitFragmentInteractionListener mListener;

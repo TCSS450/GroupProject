@@ -23,6 +23,9 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
+/**
+ * Screen to control user registration.
+ */
 public class RegisterFragment extends Fragment {
     private Credentials registerCreds;
     private int mDisplayPref;
@@ -238,7 +241,7 @@ public class RegisterFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnWaitRegisterFragmentInteractionListener extends WaitFragment.OnWaitFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void registeredUserSendToVerification(Credentials credentials);
     }
 }

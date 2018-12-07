@@ -23,7 +23,6 @@ import java.util.List;
  */
 public class WeatherDetailListFragment extends Fragment {
 
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
 

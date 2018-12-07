@@ -22,6 +22,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Holds a list of friends that the user has.
  */
 public class ViewFriends extends Fragment {
 

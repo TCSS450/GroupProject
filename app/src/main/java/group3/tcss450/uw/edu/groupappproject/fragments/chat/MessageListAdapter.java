@@ -16,6 +16,9 @@ import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.MessageFromJsonString;
 
+/**
+ * Adapter to parse the messages for a list.
+ */
 public class MessageListAdapter extends RecyclerView.Adapter implements Serializable {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;

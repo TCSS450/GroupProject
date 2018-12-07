@@ -27,7 +27,7 @@ import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
 /**
- *
+ * Hold the list of messages on the chat fragment.
  */
 public class MessagesListFragment extends Fragment
 {

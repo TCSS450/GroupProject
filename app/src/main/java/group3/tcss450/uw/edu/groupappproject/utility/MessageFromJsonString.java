@@ -5,6 +5,9 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Parse a message in json format into a java object.
+ */
 public class MessageFromJsonString {
 
     private JSONObject mJsonMessage;

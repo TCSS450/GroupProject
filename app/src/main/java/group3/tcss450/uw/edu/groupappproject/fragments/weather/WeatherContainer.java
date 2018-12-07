@@ -47,10 +47,11 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
  * A simple {@link Fragment} subclass.
  * Use the {@link WeatherContainer#} factory method to
  * create an instance of this fragment.
+ *
+ * Controls the weather menu item.
  */
 public class WeatherContainer extends Fragment {
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private DataUtilityControl duc;
@@ -331,23 +332,22 @@ public class WeatherContainer extends Fragment {
         return builder.create();
     }
     private void setCityText(TextView text) {
-        if(Constants.MY_CURRENT_LOCATION != null) {
-            Geocoder geoCoder = new Geocoder(getContext());
-            List<Address> list = null;
-            String result = "Weather in ";
-            try {
-                list = geoCoder.getFromLocation(Constants.MY_CURRENT_LOCATION
-                        .getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude(), 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (list != null & list.size() > 0) {
-                Address address = list.get(0);
-                result += address.getLocality();
-            }
-            text.setText(result);
-            Log.d("MapsActivity getLoc", result);
+
+        Geocoder geoCoder = new Geocoder(getContext());
+        List<Address> list = null;
+        String result = "Weather in ";
+        try {
+            list = geoCoder.getFromLocation(Constants.MY_CURRENT_LOCATION
+                    .getLatitude(), Constants.MY_CURRENT_LOCATION.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        if (list != null & list.size() > 0) {
+            Address address = list.get(0);
+            result += address.getLocality();
+        }
+        text.setText(result);
+        Log.d("MapsActivity getLoc", result);
     }
 
     private void load10DaysFragment(Fragment frag) {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.weather.MainWeatherFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
 
     <FrameLayout
         android:id="@+id/mainWeather_frameLayout_container"

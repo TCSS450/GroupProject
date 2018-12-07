@@ -26,6 +26,9 @@ import group3.tcss450.uw.edu.groupappproject.fragments.weather.ViewWeatherFragme
 import group3.tcss450.uw.edu.groupappproject.fragments.WaitFragment;
 
 
+/**
+ * Getters and setters to control and manipulate runtime data.
+ */
 public class DataUtilityControl extends AppCompatActivity {
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;

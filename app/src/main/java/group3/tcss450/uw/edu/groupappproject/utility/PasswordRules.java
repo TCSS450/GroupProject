@@ -5,6 +5,9 @@ import android.widget.EditText;
 
 import group3.tcss450.uw.edu.groupappproject.R;
 
+/**
+ * Methods to validate user password selections.
+ */
 public class PasswordRules {
 
 

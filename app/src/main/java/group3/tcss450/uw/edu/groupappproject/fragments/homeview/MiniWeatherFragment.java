@@ -39,7 +39,7 @@ public class MiniWeatherFragment extends Fragment {
      * @param todaysWeatherJSONString a string representing a json object of todays weather
      * @return A new instance of fragment MiniWeatherFragment.
      */
-    public static MiniWeatherFragment newInstance(String todaysWeatherJSONString) { //todo: implement
+    public static MiniWeatherFragment newInstance(String todaysWeatherJSONString) {
         MiniWeatherFragment fragment = new MiniWeatherFragment();
         Bundle args = new Bundle();
         args.putString(TAG_TODAYS_WEATHER, todaysWeatherJSONString);

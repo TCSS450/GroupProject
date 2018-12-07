@@ -75,6 +75,9 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
+/**
+ * Controls all actions and fragments once the user is logged in.
+ */
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnListFragmentInteractionListener,
         WaitFragment.OnWaitFragmentInteractionListener,
@@ -130,6 +133,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.duc = Constants.dataUtilityControl;
+        mCurrentLocation = new Location("default");
+        mCurrentLocation.setLatitude(47.174049);
+        mCurrentLocation.setLongitude(-122.17027569999999);
+        Constants.MY_CURRENT_LOCATION = mCurrentLocation;
         System.out.println(duc.getUserCreds().getDisplayPref());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -225,10 +232,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .onCancelled(this::handleErrorsInTask)
                     .build().execute();
         }
-        mCurrentLocation = new Location("default");
-        mCurrentLocation.setLongitude(122.4443);
-        mCurrentLocation.setLatitude(47.2529);
-        Constants.MY_CURRENT_LOCATION = mCurrentLocation;
     }
 
     @Override
@@ -284,13 +287,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             JSONObject msg = new JSONObject();
             //requestLocation();
             try {
-                if (Constants.MY_CURRENT_LOCATION != null) {
-                    msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-                    msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
-                } else {
-                    msg.put("lat", 47.2529);
-                    msg.put("lon", 122.4443);
-                }
+                msg.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+                msg.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
                 msg.put("days", 10);
             }catch (JSONException e) {
                 Log.wtf("CREDENTIALS", "Error: " + e.getMessage());

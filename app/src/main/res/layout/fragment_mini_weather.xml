@@ -7,7 +7,7 @@
     android:background="@color/primary_dark_background"
     tools:context=".fragments.homeview.MiniWeatherFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
 
     <ImageView
         android:id="@+id/miniWeather_icon_image"

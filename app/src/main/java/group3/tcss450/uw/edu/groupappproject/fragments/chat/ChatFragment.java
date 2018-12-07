@@ -42,6 +42,8 @@ import pl.droidsonroids.gif.GifImageView;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * This displays the messages that users send and recieve.
  */
 public class ChatFragment extends Fragment {
 
@@ -458,13 +460,8 @@ public class ChatFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener extends WaitFragment.OnWaitFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onGoToFriendsFragmentInteraction(Credentials[] members);
         void onLeftChatFragmentInteraction(int chatId);
     }

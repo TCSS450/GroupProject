@@ -1,5 +1,8 @@
 package group3.tcss450.uw.edu.groupappproject.utility;
 
+/**
+ * Store the status of friends.
+ */
 public class FriendStatus {
     private Credentials cred;
     private int relationship;

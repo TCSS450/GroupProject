@@ -17,6 +17,9 @@ import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
+/**
+ * Controls the login, register, forgot password fragments.
+ */
 public class PreLoginRegisterActivity extends AppCompatActivity implements
         LoginFragment.OnLoginWaitFragmentInteractionListener,
         RegisterFragment.OnWaitRegisterFragmentInteractionListener,

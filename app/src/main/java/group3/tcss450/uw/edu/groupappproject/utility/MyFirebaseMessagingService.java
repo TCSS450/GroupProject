@@ -25,6 +25,9 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONObject;
 
+/**
+ * Recieve and send Firebase to integrate into the app.
+ */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCM: MyFirebaseMsgService";
@@ -110,7 +113,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+
         Log.i("FCM NEW TOKEN: ", token.substring(100));
     }
 

@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Weather} and makes a call to the
  * specified {@link OnWeatherListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MyWeatherRecyclerViewAdapter extends RecyclerView.Adapter<MyWeatherRecyclerViewAdapter.ViewHolder> {
 

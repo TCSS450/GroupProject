@@ -15,12 +15,12 @@ import java.util.List;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.Weather;
 import group3.tcss450.uw.edu.groupappproject.fragments.weather.WeatherDetails;
 
+/**
+ * Class to store data utilized while application is running.
+ */
 public class Constants {
 
-
-    //Add constants used across CODE here, NOT application
-
-    //CONSTANTS
+    //Endpoint constants
     public static final String PASSWORD_CHANGE_END_POINT_URL = "https://group3-backend.herokuapp.com/password-change";
     public static final String PASSWORD_FORGOT_END_POINT_URL = "https://group3-backend.herokuapp.com/password-forgot";
     public static final String REGISTER_END_POINT_URL = "https://group3-backend.herokuapp.com/register";

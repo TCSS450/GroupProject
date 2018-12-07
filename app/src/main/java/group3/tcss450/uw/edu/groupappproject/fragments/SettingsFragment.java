@@ -29,6 +29,9 @@ import group3.tcss450.uw.edu.groupappproject.utility.MyFirebaseMessagingService;
  * to handle interaction events.
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * In right upper corner options menu that allows users to change and
+ * select settings. 
  */
 public class SettingsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -15,6 +15,8 @@ import group3.tcss450.uw.edu.groupappproject.utility.Credentials;
  * A simple {@link Fragment} subclass.
  * Use the {@link CreateChatFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ * Create a chat with a user.
  */
 public class CreateChatFragment extends Fragment {
 
@@ -35,7 +37,6 @@ public class CreateChatFragment extends Fragment {
      * @param creds Parameter 1.
      * @return A new instance of fragment CreateChatFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CreateChatFragment newInstance(Credentials creds) {
         CreateChatFragment fragment = new CreateChatFragment();
         Bundle args = new Bundle();

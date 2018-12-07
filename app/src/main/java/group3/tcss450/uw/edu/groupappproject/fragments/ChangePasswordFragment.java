@@ -73,7 +73,6 @@ public class ChangePasswordFragment extends Fragment {
         //verify the password satisfies rules
         if (!PasswordRules.isValidPasswords(this, password1, password2)) {
             //start the async task to change password
-            // todo: do this better .... clean up and refactor
             JSONObject msg = new JSONObject();
             SharedPreferences settings =
                     getActivity().getSharedPreferences(getString(R.string.keys_shared_prefs),
@@ -107,7 +106,7 @@ public class ChangePasswordFragment extends Fragment {
             if (status == 1) { // success
                 mListener.onWaitFragmentInteractionHide();
                 mListener.onChangePasswordSubmit();
-                duc.makeToast(getContext(), "password change success. Please login with new password"); // Todo make this a resourse
+                duc.makeToast(getContext(), "password change success. Please login with new password");
             }  else if (status == 2) { // Wrong Credentials
                 mListener.onWaitFragmentInteractionHide();
                 ((TextView) getView().findViewById(R.id.editText_verify_code))

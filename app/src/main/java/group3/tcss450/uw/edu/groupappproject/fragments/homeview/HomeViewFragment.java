@@ -53,10 +53,12 @@ import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
+ *
+ * Controls the home page landing screen.
+ * holds three framelayouts.
  */
 public class HomeViewFragment extends Fragment {
 
-    // TODO: Rename and change types of parameters
     private DataUtilityControl duc;
     private String username;
     public static final String ARG_CRED_LIST = "creds lists";
@@ -138,15 +140,9 @@ public class HomeViewFragment extends Fragment {
         //call async task to get the weather before loading fragment
         JSONObject latLong = new JSONObject();
 
-
         try {
-            if (Constants.MY_CURRENT_LOCATION != null) {
-                latLong.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
-                latLong.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
-            } else {
-                latLong.put("lat", 47.2529);
-                latLong.put("lon", 122.4443);
-            }
+            latLong.put("lat", Constants.MY_CURRENT_LOCATION.getLatitude());
+            latLong.put("lon", Constants.MY_CURRENT_LOCATION.getLongitude());
             latLong.put("days", 10);
             Log.d("Location Weather", latLong.toString());
         } catch (JSONException e) {
@@ -181,7 +177,7 @@ public class HomeViewFragment extends Fragment {
             } else { // wrong info sent up or something went wrong
                 Toast.makeText(getContext(), "We can not get the weather", Toast.LENGTH_LONG).show();
             }
-        } catch (JSONException e) { // todo: set text in frag instead
+        } catch (JSONException e) {
             Log.e("JSON_PARSE_ERROR", result);
             Toast.makeText(getContext(), "OOPS! Something went wrong!", Toast.LENGTH_LONG).show();
         }

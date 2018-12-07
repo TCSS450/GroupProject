@@ -11,6 +11,9 @@ import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 
 import static java.lang.Integer.parseInt;
 
+/**
+ * Controls which activity and is launched on startup and initialized constants.
+ */
 public class MainActivity extends AppCompatActivity {
     private boolean mLoadFromChatNotification = false;
 

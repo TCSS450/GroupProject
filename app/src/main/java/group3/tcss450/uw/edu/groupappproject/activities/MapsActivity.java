@@ -44,6 +44,10 @@ import group3.tcss450.uw.edu.groupappproject.utility.Constants;
 import group3.tcss450.uw.edu.groupappproject.utility.DataUtilityControl;
 import group3.tcss450.uw.edu.groupappproject.utility.SendPostAsyncTask;
 
+/**
+ * A map activity which allows users to select new locations by map
+ * and search by name or zip.
+ */
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMapClickListener
