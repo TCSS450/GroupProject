@@ -77,14 +77,14 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        Button b = view.findViewById(R.id.settingsFrag_changeNickname_button);
-        b.setOnClickListener(this::changeNickname);
+//        Button b = view.findViewById(R.id.settingsFrag_changeNickname_button);
+//        b.setOnClickListener(this::changeNickname);
 
-        b = view.findViewById(R.id.settingsFrag_changePassword_button);
+        Button b = view.findViewById(R.id.settingsFrag_changePassword_button);
         b.setOnClickListener(this::changePassword);
 
-        b = view.findViewById(R.id.settingsFrag_changeTheme_button);
-        b.setOnClickListener(this::changeTheme);
+//        b = view.findViewById(R.id.settingsFrag_changeTheme_button);
+//        b.setOnClickListener(this::changeTheme);
 
         b= view.findViewById(R.id.settingsFrag_changeDisplayType);
         b.setOnClickListener(this::changeDisplayName);
